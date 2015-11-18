@@ -6,4 +6,9 @@ package io.github.craftedcart.MFF.proxy;
 
 public class ServerProxy extends CommonProxy {
 
+    @Override
+    public void registerRenders() {
+        //No-Op
+    }
+
 }

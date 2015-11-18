@@ -5,4 +5,7 @@ package io.github.craftedcart.MFF.proxy;
  */
 
 public interface IProxy {
+
+    void registerRenders();
+
 }

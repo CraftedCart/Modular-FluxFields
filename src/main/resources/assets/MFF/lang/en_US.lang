@@ -1,0 +1,8 @@
+#Creative Tabs
+itemGroup.MFF=Modular FluxFields
+
+#Items
+item.mff:prism.name=Prism
+
+#Blocks
+tile.mff:forcefield.name=Forcefield

@@ -1,5 +1,8 @@
 package io.github.craftedcart.MFF;
 
+import io.github.craftedcart.MFF.init.ModBlocks;
+import io.github.craftedcart.MFF.init.ModItems;
+import io.github.craftedcart.MFF.init.ModTileEntities;
 import io.github.craftedcart.MFF.proxy.IProxy;
 import io.github.craftedcart.MFF.reference.Reference;
 import io.github.craftedcart.MFF.utility.LogHelper;
@@ -26,9 +29,9 @@ public class ModMFF
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
-//        ModItems.init();
-//        ModBlocks.init();
-//        ModTileEntities.init();
+        ModItems.init();
+        ModBlocks.init();
+        ModTileEntities.init();
 
         LogHelper.info("Pre-Init Complete");
 
@@ -37,7 +40,7 @@ public class ModMFF
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
-//        proxy.registerRenders();
+        proxy.registerRenders();
 //        CommonProxy.init();
 
         LogHelper.info("Init Complete");
