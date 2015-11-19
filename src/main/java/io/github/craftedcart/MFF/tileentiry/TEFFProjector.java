@@ -16,6 +16,13 @@ import java.lang.reflect.Field;
 
 public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
+    private int minX = -5;
+    private int maxX = 5;
+    private int minY = -5;
+    private int maxY = 5;
+    private int minZ = -5;
+    private int maxZ = 5;
+
     private int updateTime = 1;
 
     @Override
@@ -27,10 +34,10 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
             BlockPos pos = this.getPos();
 
-            for (int x = -5; x < 6; x++) {
-                for (int y = -5; y < 6; y++) {
-                    BlockPos ffPos = pos.add(x, y, 5);
-                    BlockPos ffNegativePos = pos.add(x, y, 5 * -1);
+            for (int x = minX; x <= maxX; x++) {
+                for (int y = minX; y <= maxY; y++) {
+                    BlockPos ffPos = pos.add(x, y, minZ);
+                    BlockPos ffNegativePos = pos.add(x, y, maxZ);
 
                     if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
                         worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
@@ -46,10 +53,10 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
                 }
             }
 
-            for (int z = -5; z < 6; z++) {
-                for (int y = -5; y < 6; y++) {
-                    BlockPos ffPos = pos.add(5, y, z);
-                    BlockPos ffNegativePos = pos.add(5 * -1, y, z);
+            for (int z = minZ; z <= maxZ; z++) {
+                for (int y = minY; y <= maxY; y++) {
+                    BlockPos ffPos = pos.add(minX, y, z);
+                    BlockPos ffNegativePos = pos.add(maxX, y, z);
 
                     if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
                         worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
@@ -78,7 +85,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-            LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString());
+            LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString() + " - Make sure that the chunk is loaded!");
         } catch (Exception e) {
             e.printStackTrace();
         }
