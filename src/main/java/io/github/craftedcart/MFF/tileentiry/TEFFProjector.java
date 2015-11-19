@@ -3,7 +3,6 @@ package io.github.craftedcart.MFF.tileentiry;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.utility.MathUtils;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
@@ -17,14 +16,14 @@ import java.lang.reflect.Field;
 
 public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
-    private int updateTime = 99;
+    private int updateTime = 1;
 
     @Override
     public void update() {
         updateTime--;
 
-        if (updateTime == 0) {
-            updateTime = 99;
+        if (updateTime <= 0) {
+            updateTime = 99; //4.95s (99t)
 
             BlockPos pos = this.getPos();
 
@@ -60,7 +59,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
                     if (worldObj.getBlockState(ffNegativePos) == Blocks.air.getDefaultState()) {
                         worldObj.setBlockState(ffNegativePos, ModBlocks.forcefield.getDefaultState());
-                    } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
+                    } else if (worldObj.getBlockState(ffNegativePos) == ModBlocks.forcefield.getDefaultState()) {
                         refreshFFTimer(ffNegativePos);
                     }
                 }
@@ -78,10 +77,10 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString());
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString());
         }
 
     }

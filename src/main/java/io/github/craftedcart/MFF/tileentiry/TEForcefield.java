@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.tileentiry;
 
-import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
@@ -12,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TEForcefield extends TileEntity implements IUpdatePlayerListBox {
 
-    public int decayTimer = MathUtils.randInt(100, 200); //Random decay time between 5s and 10s (100t and 200t)
+    public int decayTimer = MathUtils.randInt(100, 200); //5s - 10s
 
     @Override
     public void update() {
