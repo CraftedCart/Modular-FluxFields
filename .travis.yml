@@ -1,4 +1,1 @@
 language: java
-script:
-  - ./gradlew setupDevWorkspace
-  - ./gradlew assemble
