@@ -1,7 +1,6 @@
-## gradle
+## Gradle
 /.gradle
 /build
-/gradle
 
 ## ForgeGradle
 /run
