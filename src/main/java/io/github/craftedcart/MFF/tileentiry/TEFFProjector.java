@@ -2,13 +2,21 @@ package io.github.craftedcart.MFF.tileentiry;
 
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.utility.LogHelper;
-import io.github.craftedcart.MFF.utility.MathUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -16,6 +24,7 @@ import java.lang.reflect.Field;
 
 public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
+    //Config-y stuff
     private int minX = -5;
     private int maxX = 5;
     private int minY = -5;
@@ -23,63 +32,116 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
     private int minZ = -5;
     private int maxZ = 5;
 
-    private int updateTime = 1;
+    private int power = 1000000000; //1 Billion
+
+    //Not so config-y stuff
+    private int updateTime = 100;
+    private boolean doSetup = true;
+    List<BlockPos> blockList = new ArrayList<BlockPos>();
+
+    private void getBlocks() {
+
+        BlockPos pos = this.getPos();
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                blockList.add(pos.add(x, y, minZ));
+                blockList.add(pos.add(x, y, maxZ));
+            }
+        }
+
+        for (int z = minZ + 1; z <= maxZ - 1; z++) {
+            for (int y = minY; y <= maxY; y++) {
+                blockList.add(pos.add(minX, y, z));
+                blockList.add(pos.add(maxX, y, z));
+            }
+        }
+
+        for (int x = minZ + 1; x <= maxZ - 1; x++) {
+            for (int z = minY; z <= maxY; z++) {
+                blockList.add(pos.add(x, maxY, z));
+                blockList.add(pos.add(x, minY, z));
+            }
+        }
+
+    }
 
     @Override
     public void update() {
+
+        if (doSetup) {
+            getBlocks();
+
+            //Warn the player of incoming lag!
+            BlockPos pos = this.getPos();
+            List playerList = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.fromBounds(pos.getX() - 256, pos.getY() - 256, pos.getZ() - 256,
+                    pos.getX() + 256, pos.getY() + 256, pos.getZ() + 256));
+            for (Object objPlayer : playerList) {
+                EntityPlayer player = (EntityPlayer) objPlayer;
+                if (!player.worldObj.isRemote) {
+                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: A nearby forcefield is being generated in §c5s"));
+                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: The forcefield size is §c" + blockList.size()));
+                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: Expect some lag for a few moments"));
+                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: It is normal for Minecraft to freeze"));
+                }
+            }
+
+            doSetup = false;
+        }
+
         updateTime--;
+
+        if (power >= 10 * blockList.size()) {
+            power -= 10 * blockList.size();
+        }
 
         if (updateTime <= 0) {
             updateTime = 99; //4.95s (99t)
 
-            BlockPos pos = this.getPos();
+            //Send info to client
+            worldObj.markBlockForUpdate(this.getPos());
+            markDirty();
 
-            for (int x = minX; x <= maxX; x++) {
-                for (int y = minX; y <= maxY; y++) {
-                    BlockPos ffPos = pos.add(x, y, minZ);
-                    BlockPos ffNegativePos = pos.add(x, y, maxZ);
 
-                    if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
+            for (BlockPos ffPos : blockList) {
+
+                if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
+                    if (power >= 500) {
                         worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
-                    } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
-                        refreshFFTimer(ffPos);
+                        power -= 500;
                     }
-
-                    if (worldObj.getBlockState(ffNegativePos) == Blocks.air.getDefaultState()) {
-                        worldObj.setBlockState(ffNegativePos, ModBlocks.forcefield.getDefaultState());
-                    } else if (worldObj.getBlockState(ffNegativePos) == ModBlocks.forcefield.getDefaultState()) {
-                        refreshFFTimer(ffNegativePos);
+                } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
+                    if (power >= 50) {
+                        refreshFFTimer(ffPos);
+                        power -= 50;
                     }
                 }
+
             }
 
-            for (int z = minZ; z <= maxZ; z++) {
-                for (int y = minY; y <= maxY; y++) {
-                    BlockPos ffPos = pos.add(minX, y, z);
-                    BlockPos ffNegativePos = pos.add(maxX, y, z);
-
-                    if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
-                        worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
-                    } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
-                        refreshFFTimer(ffPos);
-                    }
-
-                    if (worldObj.getBlockState(ffNegativePos) == Blocks.air.getDefaultState()) {
-                        worldObj.setBlockState(ffNegativePos, ModBlocks.forcefield.getDefaultState());
-                    } else if (worldObj.getBlockState(ffNegativePos) == ModBlocks.forcefield.getDefaultState()) {
-                        refreshFFTimer(ffNegativePos);
-                    }
-                }
-            }
         }
+
+        //Tell nearby players of the current power level
+        //Debugging!
+        BlockPos pos = this.getPos();
+        List playerList = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.fromBounds(pos.getX() - 256, pos.getY() - 256, pos.getZ() - 256,
+                pos.getX() + 256, pos.getY() + 256, pos.getZ() + 256));
+        for (Object objPlayer : playerList) {
+            EntityPlayer player = (EntityPlayer) objPlayer;
+            //if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentText("§ePower: §b" + power));
+            //}
+        }
+
     }
 
+    //Refresh the forcefield decay timer
     private void refreshFFTimer(BlockPos ffPos) {
 
         TileEntity te = worldObj.getTileEntity(ffPos);
         try {
             Field f = te.getClass().getField("decayTimer");
-            f.setInt(te, MathUtils.randInt(100, 200)); //5s - 10s
+            f.setInt(te, 100); //5s
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
@@ -90,6 +152,49 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tagCompound)
+    {
+        super.writeToNBT(tagCompound);
+
+        writeSyncableDataToNBT(tagCompound);
+
+        // ... Continue writing non-syncable data
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tagCompound)
+    {
+        super.readFromNBT(tagCompound);
+
+        readSyncableDataFromNBT(tagCompound);
+
+        // ... Continue reading non-syncable data
+    }
+
+    void writeSyncableDataToNBT(NBTTagCompound tagCompound) {
+        tagCompound.setInteger("power", power);
+    }
+
+    void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
+        power = tagCompound.getInteger("power");
+
+    }
+
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        NBTTagCompound syncData = new NBTTagCompound();
+        this.writeSyncableDataToNBT(syncData);
+        return new S35PacketUpdateTileEntity(this.getPos(), 1, syncData);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
+    {
+        readSyncableDataFromNBT(pkt.getNbtCompound());
     }
 
 }

@@ -21,7 +21,6 @@ public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-
         return new TEFFProjector();
     }
 
