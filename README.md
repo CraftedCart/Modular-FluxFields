@@ -1,6 +1,8 @@
 Modular FluxFields
 ==================
 
+[![Build Status](https://travis-ci.org/CraftedCart/Modular-FluxFields.svg)](https://travis-ci.org/CraftedCart/Modular-FluxFields)
+
 A Minecraft Mod that adds forcefields to protect your base!
 
 ## Found something wrong?
