@@ -1,7 +1,7 @@
 package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.reference.Names;
-import io.github.craftedcart.MFF.tileentiry.TEForcefield;
+import io.github.craftedcart.MFF.tileentity.TEForcefield;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
@@ -48,7 +48,6 @@ public class BlockForcefield extends ModBlock implements ITileEntityProvider {
         return super.shouldSideBeRendered(world,pos, side);
     }
 
-    @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TEForcefield();
     }

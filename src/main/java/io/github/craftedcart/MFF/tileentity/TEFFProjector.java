@@ -1,6 +1,7 @@
-package io.github.craftedcart.MFF.tileentiry;
+package io.github.craftedcart.MFF.tileentity;
 
 import io.github.craftedcart.MFF.init.ModBlocks;
+import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -32,7 +33,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
     private int minZ = -5;
     private int maxZ = 5;
 
-    private int power = 1000000000; //1 Billion
+    private int power = 0;
 
     //Not so config-y stuff
     private int updateTime = 100;
@@ -72,29 +73,23 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         if (doSetup) {
             getBlocks();
 
-            //Warn the player of incoming lag!
-            BlockPos pos = this.getPos();
-            List playerList = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.fromBounds(pos.getX() - 256, pos.getY() - 256, pos.getZ() - 256,
-                    pos.getX() + 256, pos.getY() + 256, pos.getZ() + 256));
-            for (Object objPlayer : playerList) {
-                EntityPlayer player = (EntityPlayer) objPlayer;
-                if (!player.worldObj.isRemote) {
-                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: A nearby forcefield is being generated in §c5s"));
-                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: The forcefield size is §c" + blockList.size()));
-                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: Expect some lag for a few moments"));
-                    player.addChatMessage(new ChatComponentText("§eMFF WARNING: It is normal for Minecraft to freeze"));
-                }
-            }
-
             doSetup = false;
         }
 
         updateTime--;
 
-        if (power >= 10 * blockList.size()) {
-            power -= 10 * blockList.size();
+        //Use 2 power/block/t
+        if (power >= 2 * blockList.size()) {
+            power -= 2 * blockList.size();
         }
 
+        if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
+            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerSphere) {
+                drawPower((TEPowerSphere) worldObj.getTileEntity(this.getPos().add(0, 1, 0)));
+            }
+        }
+
+        //Executed every 4.5s (99t)
         if (updateTime <= 0) {
             updateTime = 99; //4.95s (99t)
 
@@ -121,18 +116,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
         }
 
-        //Tell nearby players of the current power level
-        //Debugging!
-        BlockPos pos = this.getPos();
-        List playerList = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.fromBounds(pos.getX() - 256, pos.getY() - 256, pos.getZ() - 256,
-                pos.getX() + 256, pos.getY() + 256, pos.getZ() + 256));
-        for (Object objPlayer : playerList) {
-            EntityPlayer player = (EntityPlayer) objPlayer;
-            //if (!player.worldObj.isRemote) {
-                player.addChatMessage(new ChatComponentText("§ePower: §b" + power));
-            //}
-        }
-
     }
 
     //Refresh the forcefield decay timer
@@ -150,6 +133,51 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString() + " - Make sure that the chunk is loaded!");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+    }
+
+    //Draw power from a Power Sphere
+    private void drawPower(TEPowerSphere powerSphere) {
+
+        int powerDrawRate = PowerConf.ffProjectorDrawRate;
+        int powerMax = PowerConf.ffProjectorMaxPower;
+
+        if (power < powerMax) {
+
+            int psPower; //Power Sphere Power
+
+            try {
+
+                Field f = powerSphere.getClass().getField("power");
+                psPower = f.getInt(powerSphere);
+
+                if (psPower > 0) {
+                    if (psPower < powerDrawRate) {
+                        if (power + psPower <= powerMax) {
+                            power += psPower;
+                            f.setInt(powerSphere, 0);
+                        } else {
+                            f.setInt(powerSphere, powerMax - power);
+                            power = powerMax;
+                        }
+                    } else {
+                        if (power + powerDrawRate <= powerMax) {
+                            power += powerDrawRate;
+                            f.setInt(powerSphere, psPower - powerDrawRate);
+                        } else {
+                            f.setInt(powerSphere, psPower - (powerMax - power));
+                            power = powerMax;
+                        }
+                    }
+                }
+
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }

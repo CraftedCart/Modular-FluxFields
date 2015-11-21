@@ -1,8 +1,9 @@
 package io.github.craftedcart.MFF.init;
 
 import io.github.craftedcart.MFF.reference.Names;
-import io.github.craftedcart.MFF.tileentiry.TEFFProjector;
-import io.github.craftedcart.MFF.tileentiry.TEForcefield;
+import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.tileentity.TEForcefield;
+import io.github.craftedcart.MFF.tileentity.TEPowerSphere;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -15,6 +16,7 @@ public class ModTileEntities {
 
         GameRegistry.registerTileEntity(TEForcefield.class, Names.TEForcefield);
         GameRegistry.registerTileEntity(TEFFProjector.class, Names.TEFFProjector);
+        GameRegistry.registerTileEntity(TEPowerSphere.class, Names.TEPowerSphere);
 
     }
 

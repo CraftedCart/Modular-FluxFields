@@ -1,7 +1,7 @@
 package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.reference.Names;
-import io.github.craftedcart.MFF.tileentiry.TEFFProjector;
+import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -19,7 +19,6 @@ public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
 
     }
 
-    @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TEFFProjector();
     }

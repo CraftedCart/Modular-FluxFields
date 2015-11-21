@@ -1,4 +1,4 @@
-package io.github.craftedcart.MFF.tileentiry;
+package io.github.craftedcart.MFF.tileentity;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
