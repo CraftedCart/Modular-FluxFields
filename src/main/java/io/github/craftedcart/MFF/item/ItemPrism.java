@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.item;
 
-import io.github.craftedcart.MFF.item.ModItem;
 import io.github.craftedcart.MFF.reference.Names;
 
 /**

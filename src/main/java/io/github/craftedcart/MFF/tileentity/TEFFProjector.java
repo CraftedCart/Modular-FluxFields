@@ -3,7 +3,6 @@ package io.github.craftedcart.MFF.tileentity;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.utility.LogHelper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,9 +10,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
