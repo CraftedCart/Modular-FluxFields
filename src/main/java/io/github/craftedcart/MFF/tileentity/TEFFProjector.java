@@ -86,7 +86,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             }
         }
 
-        //Executed every 4.5s (99t)
+        //Executed every 4.95s (99t)
         if (updateTime <= 0) {
             updateTime = 99; //4.95s (99t)
 

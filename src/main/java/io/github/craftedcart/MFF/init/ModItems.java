@@ -3,6 +3,7 @@ package io.github.craftedcart.MFF.init;
 import io.github.craftedcart.MFF.item.ItemPrism;
 import io.github.craftedcart.MFF.item.ModItem;
 import io.github.craftedcart.MFF.reference.Names;
+import io.github.craftedcart.MFF.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;

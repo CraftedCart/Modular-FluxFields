@@ -6,6 +6,7 @@ import io.github.craftedcart.MFF.block.BlockPowerSphere;
 import io.github.craftedcart.MFF.block.ModBlock;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerSphere;
 import io.github.craftedcart.MFF.reference.Names;
+import io.github.craftedcart.MFF.reference.Reference;
 import io.github.craftedcart.MFF.tileentity.TEPowerSphere;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -41,7 +42,7 @@ public class ModBlocks {
         //Register Block Renders
         registerRender(forcefield);
         registerRender(ffProjector);
-        registerRender(powerSphere);
+        registerBlockAsItem(powerSphere, Names.BlockPowerSphere);
 
     }
 
@@ -53,6 +54,12 @@ public class ModBlocks {
                 0,
                 new ModelResourceLocation(block.getUnlocalizedName().substring(5),
                 "inventory"));
+
+    }
+
+    private static void registerBlockAsItem(ModBlock block, String itemID) {
+
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + itemID, "inventory"));
 
     }
 

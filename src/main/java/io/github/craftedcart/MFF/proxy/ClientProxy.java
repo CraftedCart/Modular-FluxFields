@@ -44,8 +44,8 @@ public class ClientProxy extends CommonProxy {
         ResourceLocation rL = new ResourceLocation(Reference.MOD_ID+":textures/blocks/powerSphere.png");
         Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
         //The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
-        //control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
-        sphere.draw(0.5F, 32, 32);
+        //control the detail, but have a massive impact on performance.
+        sphere.draw(0.5F, 8, 8);
         GL11.glEndList();
 
         //Now make the call list for the inside of the sphere
@@ -54,7 +54,7 @@ public class ClientProxy extends CommonProxy {
         //Create a new list to hold our sphere data.
         GL11.glNewList(sphereIdInside, GL11.GL_COMPILE);
         Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
-        sphere.draw(0.5F, 32, 32);
+        sphere.draw(0.5F, 8, 8);
         GL11.glEndList();
 
     }

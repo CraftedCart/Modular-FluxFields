@@ -3,12 +3,17 @@ package io.github.craftedcart.MFF.client.render.blocks;
 import io.github.craftedcart.MFF.proxy.ClientProxy;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEPowerSphere;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
@@ -50,11 +55,52 @@ public class TERendererPowerSphere extends TileEntitySpecialRenderer {
         GL11.glCallList(ClientProxy.sphereIdOutside);
         GL11.glCallList(ClientProxy.sphereIdInside);
 
+        //Render line between spheres
+        GL11.glScalef(1.0f, 1.0f, 1.0f);
+        GlStateManager.rotate(0f, 0f, 0f, 0f);
+        GL11.glColor4f(244 / 255, 67 / 255, 54 / 255, 0.5f);
+        try {
+
+            Field f = te.getClass().getField("powerSphereLinks");
+            List powerSphereLinks = (List) f.get(te);
+
+            for (Object obj : powerSphereLinks) {
+
+                BlockPos pos = (BlockPos) obj;
+                BlockPos thisPos = te.getPos();
+                pos = pos.add(-thisPos.getX(), -thisPos.getY(), -thisPos.getZ());
+
+                WorldRenderer wr = Tessellator.getInstance().getWorldRenderer();
+                wr.startDrawingQuads();
+
+                wr.setNormal(1, 0, 0);
+                wr.addVertex(-0.1, 0, 0.1);
+                wr.addVertex(pos.getX() - 0.1, pos.getZ(), -pos.getY() + 0.1);
+                wr.addVertex(pos.getX() + 0.1, pos.getZ(), -pos.getY() - 0.1);
+                wr.addVertex(0.1, 0, -0.1);
+
+                wr.setNormal(-1, 0, 0);
+                wr.addVertex(-0.1, 0, -0.1);
+                wr.addVertex(pos.getX() - 0.1, pos.getZ(), -pos.getY() - 0.1);
+                wr.addVertex(pos.getX() + 0.1, pos.getZ(), -pos.getY() - 0.1);
+                wr.addVertex(0.1, 0, 0.1);
+
+                Tessellator.getInstance().draw();
+
+            }
+
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         GL11.glScalef(1.0f * powerPercent, 1.0f * powerPercent, 1.0f * powerPercent);
         GL11.glColor4f(0.9568627451f, 0.262745098f, 2.16f, 0.5f);
 
         GL11.glCallList(ClientProxy.sphereIdOutside);
         GL11.glCallList(ClientProxy.sphereIdInside);
+
 
         GlStateManager.popMatrix();
 
