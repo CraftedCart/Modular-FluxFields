@@ -9,7 +9,7 @@ public final class Names {
     //Blocks
     public static final String BlockForcefield = "forcefield";
     public static final String BlockFFProjector = "ffProjector";
-    public static final String BlockPowerSphere = "powerSphere";
+    public static final String BlockPowerCube = "powerCube";
 
     //Items
     public static final String ItemPrism = "prism";
@@ -17,5 +17,5 @@ public final class Names {
     //Tile Entities
     public static final String TEForcefield = "teForcefield";
     public static final String TEFFProjector = "teFFProjector";
-    public static final String TEPowerSphere = "tePowerSphere";
+    public static final String TEPowerCube = "tePowerCube";
 }

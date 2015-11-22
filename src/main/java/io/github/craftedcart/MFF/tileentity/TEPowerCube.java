@@ -1,6 +1,7 @@
 package io.github.craftedcart.MFF.tileentity;
 
 import io.github.craftedcart.MFF.reference.PowerConf;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -11,18 +12,19 @@ import net.minecraft.util.BlockPos;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
  */
 
-public class TEPowerSphere extends TileEntity implements IUpdatePlayerListBox {
+public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
 
-    public int power = 100000000;
+    public double power = 100000000;
 
     private int updateTime = 1;
-    public List powerSphereLinks = new ArrayList<BlockPos>();
+    public List powerCubeLinks = new ArrayList<BlockPos>();
 
     @Override
     public void update() {
@@ -37,15 +39,15 @@ public class TEPowerSphere extends TileEntity implements IUpdatePlayerListBox {
             markDirty();
 
             //Fetch nearby Power Spheres
-            powerSphereLinks.clear();
+            powerCubeLinks.clear();
             for (int x = -16; x <= 16; x++) {
                 for (int y = -16; y <= 16; y++) {
                     for (int z = -16; z <= 16; z++) {
                         if (worldObj.getTileEntity(this.getPos().add(x, y, z)) != null &&
                                 new BlockPos(x, y, z).add(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()) != this.getPos()) {
-                            if (worldObj.getTileEntity(this.getPos().add(x, y, z)) instanceof TEPowerSphere) {
+                            if (worldObj.getTileEntity(this.getPos().add(x, y, z)) instanceof TEPowerCube) {
                                 //We found another Power Sphere in a radius of 32 blocks
-                                powerSphereLinks.add(this.getPos().add(x, y, z));
+                                powerCubeLinks.add(this.getPos().add(x, y, z));
                             }
                         }
                     }
@@ -54,47 +56,53 @@ public class TEPowerSphere extends TileEntity implements IUpdatePlayerListBox {
 
         }
 
-        for (Object obj : powerSphereLinks) {
-
-            BlockPos pos = (BlockPos) obj;
-
+        //Get total power of connected Power Cubes
+        double powerCubeLinksTotalPower = 0;
+        List powerCubeLinksToTransferEnergyTo = new ArrayList<BlockPos>();
+        for (Iterator<Object> obj = powerCubeLinks.listIterator(); obj.hasNext();) {
+            BlockPos pos = (BlockPos) obj.next();
             if (worldObj.getTileEntity(pos) != null) {
-                if (worldObj.getTileEntity(pos) instanceof TEPowerSphere) {
-
-                    TEPowerSphere ps = (TEPowerSphere) worldObj.getTileEntity(pos);
-
+                if (worldObj.getTileEntity(pos) instanceof TEPowerCube) {
+                    TEPowerCube pc = (TEPowerCube) worldObj.getTileEntity(pos);
                     try {
+                        Field f = pc.getClass().getField("power");
+                        double pcPower = f.getDouble(pc);
+                        if (pcPower < power) {
+                            powerCubeLinksTotalPower += pcPower;
+                            powerCubeLinksToTransferEnergyTo.add(pos);
+                        }
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                obj.remove();
+            }
+        }
 
-                        Field f = ps.getClass().getField("power");
-                        int psPower = f.getInt(ps);
-                        int powerDiff = power - psPower;
+        double averagePower = (powerCubeLinksTotalPower + power) / (powerCubeLinksToTransferEnergyTo.size() + 1);
 
-                        if (powerDiff > 0) {
-                            //Send some power
-
-                            if (psPower + power / 10 > PowerConf.powerSphereMaxPower) {
-                                power -= psPower - power;
-                                f.setInt(ps, PowerConf.powerSphereMaxPower);
-                            } else {
-                                f.setInt(ps, psPower + power / 10);
-                                power -= power / 10;
-                            }
-
-                        } //TODO: Better power balancing system
-
-                        if (power < 0) {
-                            power = 0;
-                        } //TODO: This is a workaround for a bug D:
+        for (Iterator<Object> obj = powerCubeLinksToTransferEnergyTo.listIterator(); obj.hasNext();) {
+            BlockPos pos = (BlockPos) obj.next();
+            if (worldObj.getTileEntity(pos) != null) {
+                if (worldObj.getTileEntity(pos) instanceof TEPowerCube) {
+                    TEPowerCube pc = (TEPowerCube) worldObj.getTileEntity(pos);
+                    try {
+                        Field f = pc.getClass().getField("power");
+                        power = averagePower;
+                        f.setDouble(pc, averagePower);
 
                     } catch (NoSuchFieldException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
-
                 }
+            } else {
+                obj.remove();
             }
-
         }
 
     }
@@ -120,11 +128,11 @@ public class TEPowerSphere extends TileEntity implements IUpdatePlayerListBox {
     }
 
     void writeSyncableDataToNBT(NBTTagCompound tagCompound) {
-        tagCompound.setInteger("power", power);
+        tagCompound.setDouble("power", power);
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
-        power = tagCompound.getInteger("power");
+        power = tagCompound.getDouble("power");
 
     }
 

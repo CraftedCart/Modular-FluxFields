@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "mff:items/energySphere"
+        "layer0": "mff:items/powerCube"
     },
     "display": {
         "thirdperson": {

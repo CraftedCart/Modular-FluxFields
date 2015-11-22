@@ -1,6 +1,6 @@
 package io.github.craftedcart.MFF.block;
 
-import io.github.craftedcart.MFF.tileentity.TEPowerSphere;
+import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -14,12 +14,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
  */
 
-public class BlockPowerSphere extends ModBlock implements ITileEntityProvider {
+public class BlockPowerCube extends ModBlock implements ITileEntityProvider {
 
-    public BlockPowerSphere() {
+    public BlockPowerCube() {
 
         super();
-        this.setUnlocalizedName("powerSphere");
+        this.setUnlocalizedName("powerCube");
 
     }
 
@@ -36,7 +36,7 @@ public class BlockPowerSphere extends ModBlock implements ITileEntityProvider {
     }
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TEPowerSphere();
+        return new TEPowerCube();
     }
 
 }

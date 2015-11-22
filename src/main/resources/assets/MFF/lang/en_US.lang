@@ -7,4 +7,4 @@ item.mff:prism.name=Prism
 #Blocks
 tile.mff:forcefield.name=Forcefield
 tile.mff:ffProjector.name=Forcefield Projector
-tile.mff:powerSphere.name=Power Sphere
+tile.mff:powerCube.name=Power Cube

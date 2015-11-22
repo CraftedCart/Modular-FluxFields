@@ -6,9 +6,10 @@ package io.github.craftedcart.MFF.reference;
 
 public final class PowerConf {
 
-    public static final int powerSphereMaxPower = 100000000;
-    public static final int ffProjectorMaxPower = 100000000;
+    public static final double powerCubeMaxPower = 100000000;
+    public static final double ffProjectorMaxPower = 100000000;
 
-    public static final int ffProjectorDrawRate = 50000;
+    public static final double powerCubeTransferRate = 50000;
+    public static final double ffProjectorDrawRate = 50000;
 
 }

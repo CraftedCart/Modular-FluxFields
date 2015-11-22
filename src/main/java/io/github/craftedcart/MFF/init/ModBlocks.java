@@ -2,12 +2,12 @@ package io.github.craftedcart.MFF.init;
 
 import io.github.craftedcart.MFF.block.BlockFFProjector;
 import io.github.craftedcart.MFF.block.BlockForcefield;
-import io.github.craftedcart.MFF.block.BlockPowerSphere;
+import io.github.craftedcart.MFF.block.BlockPowerCube;
 import io.github.craftedcart.MFF.block.ModBlock;
-import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerSphere;
+import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerCube;
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.reference.Reference;
-import io.github.craftedcart.MFF.tileentity.TEPowerSphere;
+import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -24,7 +24,7 @@ public class ModBlocks {
     //Reference Blocks
     public static final ModBlock forcefield = new BlockForcefield();
     public static final ModBlock ffProjector = new BlockFFProjector();
-    public static final ModBlock powerSphere = new BlockPowerSphere();
+    public static final ModBlock powerCube = new BlockPowerCube();
 
 
     public static void init() {
@@ -32,8 +32,8 @@ public class ModBlocks {
         //Register Blocks
         GameRegistry.registerBlock(forcefield, Names.BlockForcefield);
         GameRegistry.registerBlock(ffProjector, Names.BlockFFProjector);
-        GameRegistry.registerBlock(powerSphere, Names.BlockPowerSphere);
-        ClientRegistry.bindTileEntitySpecialRenderer(TEPowerSphere.class, new TERendererPowerSphere());
+        GameRegistry.registerBlock(powerCube, Names.BlockPowerCube);
+        ClientRegistry.bindTileEntitySpecialRenderer(TEPowerCube.class, new TERendererPowerCube());
 
     }
 
@@ -42,7 +42,7 @@ public class ModBlocks {
         //Register Block Renders
         registerRender(forcefield);
         registerRender(ffProjector);
-        registerBlockAsItem(powerSphere, Names.BlockPowerSphere);
+        registerBlockRenderAsItem(powerCube, Names.BlockPowerCube);
 
     }
 
@@ -57,7 +57,7 @@ public class ModBlocks {
 
     }
 
-    private static void registerBlockAsItem(ModBlock block, String itemID) {
+    private static void registerBlockRenderAsItem(ModBlock block, String itemID) {
 
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(Reference.MOD_ID + ":" + itemID, "inventory"));
 
