@@ -181,7 +181,7 @@ public class GuiFFProjector extends GuiScreen {
             z1++;
         } else if (button == this.z1Add16 && z1 + 15 < z2) {
             z1 += 16;
-        } else if (button == this.z1Add32 && z1 + 32 < z2) {
+        } else if (button == this.z1Add32 && z1 + 31 < z2) {
             z1 += 32;
         } else if (button == this.z1Take1) {
             z1--;
