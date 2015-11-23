@@ -55,8 +55,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             }
         }
 
-        for (int x = minZ + 1; x <= maxZ - 1; x++) {
-            for (int z = minY; z <= maxY; z++) {
+        for (int x = minX + 1; x <= maxX - 1; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
                 blockList.add(pos.add(x, maxY, z));
                 blockList.add(pos.add(x, minY, z));
             }
