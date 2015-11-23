@@ -153,11 +153,11 @@ public class GuiFFProjector extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if (button == this.x1Add1) {
+        if (button == this.x1Add1 && x1 < x2) {
             x1++;
-        } else if (button == this.x1Add16) {
+        } else if (button == this.x1Add16 && x1 + 15 < x2) {
             x1 += 16;
-        } else if (button == this.x1Add32) {
+        } else if (button == this.x1Add32  && x1 + 31 < x2) {
             x1 += 32;
         } else if (button == this.x1Take1) {
             x1--;
@@ -165,11 +165,11 @@ public class GuiFFProjector extends GuiScreen {
             x1 -= 16;
         } else if (button == this.x1Take32) {
             x1 -= 32;
-        } else if (button == this.y1Add1) {
+        } else if (button == this.y1Add1 && y1 < y2) {
             y1++;
-        } else if (button == this.y1Add16) {
+        } else if (button == this.y1Add16 && y1 + 15 < y2) {
             y1 += 16;
-        } else if (button == this.y1Add32) {
+        } else if (button == this.y1Add32 && y1 + 31 < y2) {
             y1 += 32;
         } else if (button == this.y1Take1) {
             y1--;
@@ -177,11 +177,11 @@ public class GuiFFProjector extends GuiScreen {
             y1 -= 16;
         } else if (button == this.y1Take32) {
             y1 -= 32;
-        } else if (button == this.z1Add1) {
+        } else if (button == this.z1Add1 && z1 < z2) {
             z1++;
-        } else if (button == this.z1Add16) {
+        } else if (button == this.z1Add16 && z1 + 15 < z2) {
             z1 += 16;
-        } else if (button == this.z1Add32) {
+        } else if (button == this.z1Add32 && z1 + 32 < z2) {
             z1 += 32;
         } else if (button == this.z1Take1) {
             z1--;
@@ -197,9 +197,9 @@ public class GuiFFProjector extends GuiScreen {
             x2 += 32;
         } else if (button == this.x2Take1 && x2 > x1) {
             x2--;
-        } else if (button == this.x2Take16 && x2 > x1) {
+        } else if (button == this.x2Take16 && x2 - 15 > x1) {
             x2 -= 16;
-        } else if (button == this.x2Take32 && x2 > x1) {
+        } else if (button == this.x2Take32 && x2 - 31 > x1) {
             x2 -= 32;
         } else if (button == this.y2Add1) {
             y2++;
@@ -207,11 +207,11 @@ public class GuiFFProjector extends GuiScreen {
             y2 += 16;
         } else if (button == this.y2Add32) {
             y2 += 32;
-        } else if (button == this.y2Take1 && x2 > x1) {
+        } else if (button == this.y2Take1 && y2 > y1) {
             y2--;
-        } else if (button == this.y2Take16 && x2 > x1) {
+        } else if (button == this.y2Take16 && y2 - 15 > y1) {
             y2 -= 16;
-        } else if (button == this.y2Take32 && x2 > x1) {
+        } else if (button == this.y2Take32 && y2 - 32 > y1) {
             y2 -= 32;
         } else if (button == this.z2Add1) {
             z2++;
@@ -219,11 +219,11 @@ public class GuiFFProjector extends GuiScreen {
             z2 += 16;
         } else if (button == this.z2Add32) {
             z2 += 32;
-        } else if (button == this.z2Take1 && x2 > x1) {
+        } else if (button == this.z2Take1 && z2 > z1) {
             z2--;
-        } else if (button == this.z2Take16 && x2 > x1) {
+        } else if (button == this.z2Take16 && z2 - 15 > z1) {
             z2 -= 16;
-        } else if (button == this.z2Take32 && x2 > x1) {
+        } else if (button == this.z2Take32 && z2 - 32 > z1) {
             z2 -= 32;
         } else if (button == this.save) {
 
