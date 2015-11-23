@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF;
 
+import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.init.ModTileEntities;
@@ -32,6 +33,7 @@ public class ModMFF
         ModItems.init();
         ModBlocks.init();
         ModTileEntities.init();
+        NetworkHandler.init();
 
         LogHelper.info("Pre-Init Complete");
 
@@ -41,7 +43,7 @@ public class ModMFF
     public void init(FMLInitializationEvent event) {
 
         proxy.registerRenders();
-//        CommonProxy.init();
+        proxy.init();
 
         LogHelper.info("Init Complete");
 

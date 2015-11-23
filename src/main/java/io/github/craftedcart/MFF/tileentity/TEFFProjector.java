@@ -23,23 +23,23 @@ import java.util.List;
 public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
     //Config-y stuff
-    private int minX = -5;
-    private int maxX = 5;
-    private int minY = -5;
-    private int maxY = 5;
-    private int minZ = -5;
-    private int maxZ = 5;
+    public int minX = -5;
+    public int maxX = 5;
+    public int minY = -5;
+    public int maxY = 5;
+    public int minZ = -5;
+    public int maxZ = 5;
 
     private double power = 0;
 
     //Not so config-y stuff
     private int updateTime = 100;
-    private boolean doSetup = true;
     List<BlockPos> blockList = new ArrayList<BlockPos>();
 
-    private void getBlocks() {
+    public void getBlocks() {
 
         BlockPos pos = this.getPos();
+        blockList.clear();
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
@@ -67,12 +67,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
     @Override
     public void update() {
 
-        if (doSetup) {
-            getBlocks();
-
-            doSetup = false;
-        }
-
         updateTime--;
 
         //Use 2 power/block/t
@@ -94,6 +88,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             worldObj.markBlockForUpdate(this.getPos());
             markDirty();
 
+            getBlocks();
 
             for (BlockPos ffPos : blockList) {
 
@@ -201,10 +196,24 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
     void writeSyncableDataToNBT(NBTTagCompound tagCompound) {
         tagCompound.setDouble("power", power);
+
+        tagCompound.setInteger("x1", minX);
+        tagCompound.setInteger("y1", minY);
+        tagCompound.setInteger("z1", minZ);
+        tagCompound.setInteger("x2", maxX);
+        tagCompound.setInteger("y2", maxY);
+        tagCompound.setInteger("z2", maxZ);
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
         power = tagCompound.getDouble("power");
+
+        minX = tagCompound.getInteger("x1");
+        minY = tagCompound.getInteger("y1");
+        minZ = tagCompound.getInteger("z1");
+        maxX = tagCompound.getInteger("x2");
+        maxY = tagCompound.getInteger("y2");
+        maxZ = tagCompound.getInteger("z2");
 
     }
 
