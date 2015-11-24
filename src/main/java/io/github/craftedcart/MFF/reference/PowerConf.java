@@ -12,4 +12,7 @@ public final class PowerConf {
     public static final double powerCubeTransferRate = 50000;
     public static final double ffProjectorDrawRate = 50000;
 
+    public static final double ffProjectorUsagePerBlock = 0.21;
+    public static final double ffProjectorUsagePerBlockToGenerate = 150;
+
 }

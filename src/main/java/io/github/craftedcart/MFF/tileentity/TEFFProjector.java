@@ -56,7 +56,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         }
 
         for (int x = minX + 1; x <= maxX - 1; x++) {
-            for (int z = minZ; z <= maxZ; z++) {
+            for (int z = minZ + 1; z <= maxZ - 1; z++) {
                 blockList.add(pos.add(x, maxY, z));
                 blockList.add(pos.add(x, minY, z));
             }
@@ -70,8 +70,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         updateTime--;
 
         //Use 2 power/block/t
-        if (power >= 0.21 * blockList.size()) {
-            power -= 0.21 * blockList.size();
+        if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
+            power -= PowerConf.ffProjectorUsagePerBlock * blockList.size();
         }
 
         if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
@@ -93,12 +93,12 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             for (BlockPos ffPos : blockList) {
 
                 if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
-                    if (power >= 150) {
+                    if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) {
                         worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
-                        power -= 150;
+                        power -= PowerConf.ffProjectorUsagePerBlockToGenerate;
                     }
                 } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
-                    if (power >= 0.21) {
+                    if (power >= PowerConf.ffProjectorUsagePerBlock) {
                         refreshFFTimer(ffPos);
                     }
                 }

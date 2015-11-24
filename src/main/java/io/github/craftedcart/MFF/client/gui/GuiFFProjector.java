@@ -94,12 +94,24 @@ public class GuiFFProjector extends GuiScreen {
         this.fontRendererObj.drawString("Y2: " + y2, this.width / 2 - 112, this.height / 2 + 34, 0xFAFAFA, false);
         this.fontRendererObj.drawString("Z2: " + z2, this.width / 2 - 112, this.height / 2 + 58, 0xFAFAFA, false);
 
-        //Draw power text
         try {
 
+            //Draw power value
             Field f = projector.getClass().getField("power");
             double power = f.getDouble(projector);
-            this.fontRendererObj.drawString("Power: " + String.format("%.2f", power) + " / " + String.format("%.2f", PowerConf.ffProjectorMaxPower), this.width / 2 - 112, this.height / 2 + 90, 0xFAFAFA, false);
+            double usage = ((x2 - x1) * (y2 - y1) + (z2 - z1 - 2) * (y2 - y1) + (x2 - x1 - 2) * (z2 - z1 - 2)) * 2 * PowerConf.ffProjectorUsagePerBlock;
+            double generateUsage = ((x2 - x1) * (y2 - y1) + (z2 - z1 - 2) * (y2 - y1) + (x2 - x1 - 2) * (z2 - z1 - 2)) * 2 * PowerConf.ffProjectorUsagePerBlockToGenerate;
+
+            this.drawRect(this.width / 2 - 113, this.height / 2 + 99, this.width / 2 + 180, this.height / 2 + 101, 0xFF212121);
+            this.drawRect(this.width / 2 - 113, this.height / 2 + 99, (int) Math.min(this.width / 2 - 113 + generateUsage / PowerConf.ffProjectorMaxPower * 293, this.width / 2 + 180), this.height / 2 + 101, 0xFFFFC107);
+            this.drawRect(this.width / 2 - 113, this.height / 2 + 99, (int) (this.width / 2 - 113 + power / PowerConf.ffProjectorMaxPower * 293), this.height / 2 + 101, 0xFF2196F3);
+
+            this.fontRendererObj.drawString("Power: " + String.format("%012.2f", power) + " / " + String.format("%012.2f", PowerConf.ffProjectorMaxPower) + " FE",
+                    this.width / 2 - 112, this.height / 2 + 90, 0xFAFAFA, false);
+
+            //Draw power usage
+            this.fontRendererObj.drawString("Usage to sustain: " + String.format("%.2f", usage) + " FE / t", this.width / 2 - 112, this.height / 2 + 104, 0xFAFAFA, false);
+            this.fontRendererObj.drawString("Usage to generate: " + String.format("%.2f", generateUsage) + " FE", this.width / 2 - 112, this.height / 2 + 113, 0xFAFAFA, false);
 
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
