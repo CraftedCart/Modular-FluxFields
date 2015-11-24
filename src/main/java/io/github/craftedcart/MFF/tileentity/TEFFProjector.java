@@ -70,8 +70,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         updateTime--;
 
         //Use 2 power/block/t
-        if (power >= 2 * blockList.size()) {
-            power -= 2 * blockList.size();
+        if (power >= 0.21 * blockList.size()) {
+            power -= 0.21 * blockList.size();
         }
 
         if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
@@ -93,14 +93,13 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
             for (BlockPos ffPos : blockList) {
 
                 if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
-                    if (power >= 500) {
+                    if (power >= 150) {
                         worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
-                        power -= 500;
+                        power -= 150;
                     }
                 } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
-                    if (power >= 50) {
+                    if (power >= 0.21) {
                         refreshFFTimer(ffPos);
-                        power -= 50;
                     }
                 }
 
