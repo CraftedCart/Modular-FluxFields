@@ -113,17 +113,20 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
     private void refreshFFTimer(BlockPos ffPos) {
 
         TileEntity te = worldObj.getTileEntity(ffPos);
-        try {
-            Field f = te.getClass().getField("decayTimer");
-            f.setInt(te, 100); //5s
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString() + " - Make sure that the chunk is loaded!");
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (te != null) {
+            try {
+                Field f = te.getClass().getField("decayTimer");
+                f.setInt(te, 100); //5s
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
