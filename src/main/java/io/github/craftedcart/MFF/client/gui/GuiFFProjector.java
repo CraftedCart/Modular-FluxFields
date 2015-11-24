@@ -2,11 +2,14 @@ package io.github.craftedcart.MFF.client.gui;
 
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSave;
+import io.github.craftedcart.MFF.reference.PowerConf;
+import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 /**
  * Created by CraftedCart on 22/11/2015 (DD/MM/YYYY)
@@ -14,6 +17,7 @@ import java.io.IOException;
 
 public class GuiFFProjector extends GuiScreen {
 
+    TEFFProjector projector;
     BlockPos pos;
 
     int x1;
@@ -67,7 +71,8 @@ public class GuiFFProjector extends GuiScreen {
 
     GuiButton save;
 
-    public GuiFFProjector(BlockPos pos, int x1, int y1, int z1, int x2, int y2, int z2) {
+    public GuiFFProjector(TEFFProjector projector, BlockPos pos, int x1, int y1, int z1, int x2, int y2, int z2) {
+        this.projector = projector;
         this.pos = pos;
         this.x1 = x1;
         this.y1 = y1;
@@ -81,12 +86,26 @@ public class GuiFFProjector extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
 
+        //Draw XYZ 1/2 Pos Text
         this.fontRendererObj.drawString("X1: " + x1, this.width / 2 - 112, this.height / 2 - 62, 0xFAFAFA, false);
         this.fontRendererObj.drawString("Y1: " + y1, this.width / 2 - 112, this.height / 2 - 38, 0xFAFAFA, false);
         this.fontRendererObj.drawString("Z1: " + z1, this.width / 2 - 112, this.height / 2 - 14, 0xFAFAFA, false);
         this.fontRendererObj.drawString("X2: " + x2, this.width / 2 - 112, this.height / 2 + 8, 0xFAFAFA, false);
         this.fontRendererObj.drawString("Y2: " + y2, this.width / 2 - 112, this.height / 2 + 34, 0xFAFAFA, false);
         this.fontRendererObj.drawString("Z2: " + z2, this.width / 2 - 112, this.height / 2 + 58, 0xFAFAFA, false);
+
+        //Draw power text
+        try {
+
+            Field f = projector.getClass().getField("power");
+            double power = f.getDouble(projector);
+            this.fontRendererObj.drawString("Power: " + String.format("%.2f", power) + " / " + String.format("%.2f", PowerConf.ffProjectorMaxPower), this.width / 2 - 112, this.height / 2 + 90, 0xFAFAFA, false);
+
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

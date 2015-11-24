@@ -46,7 +46,7 @@ public class GuiHandler implements IGuiHandler {
                 int y2 = fY2.getInt(te);
                 int z2 = fZ2.getInt(te);
 
-                return new GuiFFProjector(pos, x1, y1, z1, x2, y2, z2);
+                return new GuiFFProjector(te, pos, x1, y1, z1, x2, y2, z2);
 
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();

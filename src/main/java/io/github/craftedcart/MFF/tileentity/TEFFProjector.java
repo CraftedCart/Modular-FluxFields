@@ -30,7 +30,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
     public int minZ = -5;
     public int maxZ = 5;
 
-    private double power = 0;
+    public double power = 0;
 
     //Not so config-y stuff
     private int updateTime = 100;
