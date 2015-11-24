@@ -98,7 +98,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
                         power -= PowerConf.ffProjectorUsagePerBlockToGenerate;
                     }
                 } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
-                    if (power >= PowerConf.ffProjectorUsagePerBlock) {
+                    if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
                         refreshFFTimer(ffPos);
                     }
                 }
