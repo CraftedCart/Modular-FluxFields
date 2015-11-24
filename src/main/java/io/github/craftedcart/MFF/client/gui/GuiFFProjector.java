@@ -99,7 +99,7 @@ public class GuiFFProjector extends GuiScreen {
             //Draw power value
             Field f = projector.getClass().getField("power");
             double power = f.getDouble(projector);
-            double usage = ((x2 - x1) * (y2 - y1) + (z2 - z1 - 2) * (y2 - y1) + (x2 - x1 - 2) * (z2 - z1 - 2)) * 2 * PowerConf.ffProjectorUsagePerBlock;
+            double usage = ((x2 - x1) * (y2 - y1) + ((z2 + 1) - (z1 - 1)) * (y2 - y1) + ((x2 + 1) - (x1 - 1)) * ((z2 + 1) - (z1 - 1))) * 2 * PowerConf.ffProjectorUsagePerBlock;
 
             this.drawRect(this.width / 2 - 113, this.height / 2 + 99, this.width / 2 + 180, this.height / 2 + 101, 0xFF212121);
             this.drawRect(this.width / 2 - 113, this.height / 2 + 99, (int) (this.width / 2 - 113 + power / PowerConf.ffProjectorMaxPower * 293), this.height / 2 + 101, 0xFF2196F3);
