@@ -21,6 +21,7 @@ public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
 
         super();
         this.setUnlocalizedName(Names.BlockFFProjector);
+        this.setHardness(6f);
 
     }
 

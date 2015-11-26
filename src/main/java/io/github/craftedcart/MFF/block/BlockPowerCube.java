@@ -20,6 +20,7 @@ public class BlockPowerCube extends ModBlock implements ITileEntityProvider {
 
         super();
         this.setUnlocalizedName("powerCube");
+        this.setHardness(4f);
 
     }
 
