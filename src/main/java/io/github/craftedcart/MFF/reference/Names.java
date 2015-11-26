@@ -10,6 +10,8 @@ public final class Names {
     public static final String BlockForcefield = "forcefield";
     public static final String BlockFFProjector = "ffProjector";
     public static final String BlockPowerCube = "powerCube";
+    //Ores
+    public static final String BlockOreAmethyst = "oreAmethyst";
 
     //Items
     public static final String ItemPrism = "prism";

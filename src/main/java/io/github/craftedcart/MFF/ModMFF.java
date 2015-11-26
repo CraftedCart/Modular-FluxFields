@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF;
 
+import io.github.craftedcart.MFF.WorldGeneration.OreGeneration;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.init.ModBlocks;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
@@ -48,6 +50,8 @@ public class ModMFF
 
         proxy.registerRenders();
         proxy.init();
+
+        GameRegistry.registerWorldGenerator(new OreGeneration(), 0);
 
         LogHelper.info("Init Complete");
 

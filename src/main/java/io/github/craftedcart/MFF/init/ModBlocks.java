@@ -1,9 +1,6 @@
 package io.github.craftedcart.MFF.init;
 
-import io.github.craftedcart.MFF.block.BlockFFProjector;
-import io.github.craftedcart.MFF.block.BlockForcefield;
-import io.github.craftedcart.MFF.block.BlockPowerCube;
-import io.github.craftedcart.MFF.block.ModBlock;
+import io.github.craftedcart.MFF.block.*;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerCube;
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.reference.Reference;
@@ -12,8 +9,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -25,6 +24,8 @@ public class ModBlocks {
     public static final ModBlock forcefield = new BlockForcefield();
     public static final ModBlock ffProjector = new BlockFFProjector();
     public static final ModBlock powerCube = new BlockPowerCube();
+    //Ores
+    public static final ModBlock oreAmethyst = new BlockOreAmethyst();
 
 
     public static void init() {
@@ -34,6 +35,9 @@ public class ModBlocks {
         GameRegistry.registerBlock(ffProjector, Names.BlockFFProjector);
         GameRegistry.registerBlock(powerCube, Names.BlockPowerCube);
         ClientRegistry.bindTileEntitySpecialRenderer(TEPowerCube.class, new TERendererPowerCube());
+        //Ores
+        GameRegistry.registerBlock(oreAmethyst, Names.BlockOreAmethyst);
+        OreDictionary.registerOre(Names.BlockOreAmethyst, new ItemStack(oreAmethyst));
 
     }
 
@@ -43,6 +47,8 @@ public class ModBlocks {
         registerRender(forcefield);
         registerRender(ffProjector);
         registerBlockRenderAsItem(powerCube, Names.BlockPowerCube);
+        //Ores
+        registerRender(oreAmethyst);
 
     }
 
