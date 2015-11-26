@@ -8,3 +8,7 @@ item.mff:prism.name=Prism
 tile.mff:forcefield.name=Forcefield
 tile.mff:ffProjector.name=Forcefield Projector
 tile.mff:powerCube.name=Power Cube
+
+#Chat
+chat.mff:bypassedFFProtection=§eMFF: Bypassed a block that was protected by a forcefield (You're in creative mode!)
+chat.mff:warnFFProtection=§cMFF: Nope! That block's protected by a forcefield

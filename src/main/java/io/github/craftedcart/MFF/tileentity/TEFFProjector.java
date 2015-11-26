@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.tileentity;
 
+import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.utility.LogHelper;
@@ -34,7 +35,9 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
     //Not so config-y stuff
     private int updateTime = 100;
-    List<BlockPos> blockList = new ArrayList<BlockPos>();
+    public List<BlockPos> blockList = new ArrayList<BlockPos>();
+    private boolean doWorldLoadSetup = false;
+    public boolean isPowered = false;
 
     public void getBlocks() {
 
@@ -67,11 +70,22 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
     @Override
     public void update() {
 
+        if (!doWorldLoadSetup) {
+            ArrayList<Object> al = new ArrayList<Object>();
+            al.add(this.getWorld());
+            al.add(this.getPos());
+            PreventFFBlockBreak.ffProjectors.add(al);
+            doWorldLoadSetup = true;
+        }
+
         updateTime--;
 
         //Use 2 power/block/t
         if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
             power -= PowerConf.ffProjectorUsagePerBlock * blockList.size();
+            isPowered = true;
+        } else {
+            isPowered = false;
         }
 
         if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
