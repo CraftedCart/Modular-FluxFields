@@ -3,6 +3,9 @@ itemGroup.MFF=Modular FluxFields
 
 #Items
 item.mff:prism.name=Prism
+#Crystals
+item.mff:refinedAmethyst.name=Refined Amethyst
+item.mff:rawAmethyst.name=Raw Amethyst
 
 #Blocks
 tile.mff:forcefield.name=Forcefield

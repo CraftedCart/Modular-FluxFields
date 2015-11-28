@@ -15,6 +15,9 @@ public final class Names {
 
     //Items
     public static final String ItemPrism = "prism";
+    //Crystals
+    public static final String ItemRefinedAmethyst = "refinedAmethyst";
+    public static final String ItemRawAmethyst = "rawAmethyst";
 
     //Tile Entities
     public static final String TEForcefield = "teForcefield";
