@@ -1,9 +1,6 @@
 package io.github.craftedcart.MFF.init;
 
-import io.github.craftedcart.MFF.item.ItemPrism;
-import io.github.craftedcart.MFF.item.ItemRawAmethyst;
-import io.github.craftedcart.MFF.item.ItemRefinedAmethyst;
-import io.github.craftedcart.MFF.item.ModItem;
+import io.github.craftedcart.MFF.item.*;
 import io.github.craftedcart.MFF.reference.Names;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -21,6 +18,9 @@ public class ModItems {
     //Crystals
     public static final ModItem refinedAmethyst = new ItemRefinedAmethyst();
     public static final ModItem rawAmethyst = new ItemRawAmethyst();
+    //Upgrades
+    public static final ModItem speedUpgrade = new ItemSpeedUpgrade();
+    public static final ModItem efficiencyUpgrade = new ItemEfficiencyUpgrade();
 
     public static void init() {
 
@@ -29,6 +29,9 @@ public class ModItems {
         //Crystals
         GameRegistry.registerItem(refinedAmethyst, Names.ItemRefinedAmethyst);
         GameRegistry.registerItem(rawAmethyst, Names.ItemRawAmethyst);
+        //Upgrades
+        GameRegistry.registerItem(speedUpgrade, Names.ItemSpeedUpgrade);
+        GameRegistry.registerItem(efficiencyUpgrade, Names.ItemEfficiencyUpgrade);
 
     }
 
@@ -39,6 +42,9 @@ public class ModItems {
         //Crystals
         registerRender(refinedAmethyst);
         registerRender(rawAmethyst);
+        //Upgrades
+        registerRender(speedUpgrade);
+        registerRender(efficiencyUpgrade);
 
     }
 

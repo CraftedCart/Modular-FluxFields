@@ -21,14 +21,17 @@ public class ContainerCrystalRefinery extends Container {
         /*
          * SLOTS:
          *
-         * Tile Entity 0-1 ........  0 -  1
-         * Player Inventory 9-35 ..  2 - 28
-         * Player Inventory 0-8 ... 29 - 37
+         * Tile Entity 0-1 ........  0 -  4
+         * Player Inventory 9-35 ..  5 - 31
+         * Player Inventory 0-8 ... 32 - 41
          */
 
-        //Tile Entity, Slot 0-1, Slot IDs 0-1
-        this.addSlotToContainer(new Slot(te, 0, 46, 35));
-        this.addSlotToContainer(new Slot(te, 1, 114, 35));
+        //Tile Entity, Slot 0-1, Slot IDs 0-2
+        this.addSlotToContainer(new Slot(te, 0, 46, 35)); //Input
+        this.addSlotToContainer(new Slot(te, 1, 114, 35)); //Output
+        this.addSlotToContainer(new Slot(te, 2, 181, 8)); //Upgrade 1
+        this.addSlotToContainer(new Slot(te, 3, 181, 26)); //Upgrade 2
+        this.addSlotToContainer(new Slot(te, 4, 181, 44)); //Upgrade 3
 
         // Player Inventory, Slot 9-35, Slot IDs 2-28
         for (int y = 0; y < 3; ++y) {
@@ -53,9 +56,9 @@ public class ContainerCrystalRefinery extends Container {
             previous = current.copy();
 
             //Custom Behaviour
-            if (fromSlot <= 1) {
+            if (fromSlot <= 4) {
                 // From TE Inventory to Player Inventory
-                if (!this.mergeItemStack(current, 2, 38, true))
+                if (!this.mergeItemStack(current, 5, 41, true))
                     return null;
             } else {
                 // From Player Inventory to TE Inventory

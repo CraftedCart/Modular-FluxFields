@@ -25,7 +25,7 @@ public class GuiCrystalRefinery extends GuiContainer {
         this.playerInv = playerInv;
         this.te = te;
 
-        this.xSize = 176;
+        this.xSize = 205;
         this.ySize = 166;
     }
 
@@ -55,10 +55,12 @@ public class GuiCrystalRefinery extends GuiContainer {
             int progress = fProgress.getInt(te);
             Field fMaxProgress = te.getClass().getField("maxProgress");
             int maxProgress = fMaxProgress.getInt(te);
+            Field fPowerMultiplier = te.getClass().getField("powerMultiplier");
+            double powerMultiplier = fPowerMultiplier.getDouble(te);
 
             float ticksLeft;
-            if (power >= PowerConf.crystalRefineryUsage) {
-                ticksLeft = (progress == 0 || maxProgress - progress - partialTicks < 0) ? 0 : maxProgress - progress - partialTicks;
+            if (power >= PowerConf.crystalRefineryUsage * powerMultiplier) {
+                ticksLeft = (progress == 0 || maxProgress - progress - partialTicks < 0) ? maxProgress : maxProgress - progress - partialTicks;
             } else {
                 ticksLeft = maxProgress - progress;
             }
@@ -66,7 +68,7 @@ public class GuiCrystalRefinery extends GuiContainer {
             this.drawRect(this.guiLeft - 24, this.guiTop - 8, this.guiLeft + xSize + 24, this.guiTop - 6, 0xFF212121);
             this.drawRect(this.guiLeft - 24, this.guiTop - 8, (int) (this.guiLeft - 24 + (xSize + 48) * (1 - ticksLeft / maxProgress)), this.guiTop - 6, 0xFF4CAF50);
 
-            this.fontRendererObj.drawString("Remaining: " + String.format("%05.2f", (ticksLeft) / 20f) + "s",
+            this.fontRendererObj.drawString("Remaining: " + String.format("%06.2f", (ticksLeft) / 20f) + "s",
                     this.guiLeft - 24, this.guiTop - 18, 0xFAFAFA, false);
 
         } catch (NoSuchFieldException e) {

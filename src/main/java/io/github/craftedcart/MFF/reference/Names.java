@@ -19,6 +19,9 @@ public final class Names {
     //Crystals
     public static final String ItemRefinedAmethyst = "refinedAmethyst";
     public static final String ItemRawAmethyst = "rawAmethyst";
+    //Upgrades
+    public static final String ItemSpeedUpgrade = "speedUpgrade";
+    public static final String ItemEfficiencyUpgrade = "efficiencyUpgrade";
 
     //Tile Entities
     public static final String TEForcefield = "teForcefield";

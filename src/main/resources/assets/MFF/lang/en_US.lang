@@ -6,6 +6,9 @@ item.mff:prism.name=Prism
 #Crystals
 item.mff:refinedAmethyst.name=Refined Amethyst
 item.mff:rawAmethyst.name=Raw Amethyst
+#Upgrades
+item.mff:speedUpgrade.name=Speed Upgrade
+item.mff:efficiencyUpgrade.name=Efficiency Upgrade
 
 #Blocks
 tile.mff:forcefield.name=Forcefield
@@ -21,3 +24,8 @@ chat.mff:warnFFProtection=§cMFF: Nope! That block's protected by a forcefield
 
 #Gui
 container.mff:crystalRefinery=Crystal Refinery
+
+#Stats
+stat.mff:+100%Speed=§a+100% Speed
+stat.mff:+125%PowerUsageTick=§c+125% Power Usage / tick
+stat.mff:-50%PowerUsageTick=§a-50% Power Usage / tick

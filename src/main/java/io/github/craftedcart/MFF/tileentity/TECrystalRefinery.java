@@ -28,7 +28,12 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
     public double power = 0;
     public int progress = 0;
-    public int maxProgress = 200;
+    public int maxProgress = PowerConf.crystalRefineryBaseTime;
+
+    public double speedMultiplier = 1;
+    public double powerMultiplier = 1;
+    public double powerTimser = 1;
+    public double powerDivider = 1;
 
     public TECrystalRefinery() {
         this.inventory = new ItemStack[this.getSizeInventory()];
@@ -37,7 +42,7 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
     @Override
     public int getSizeInventory() {
-        return 2;
+        return 5;
     }
 
     @Override
@@ -74,7 +79,6 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
             return null;
         }
     }
-
 
     @Override
     public ItemStack getStackInSlotOnClosing(int index) {
@@ -134,7 +138,7 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
     @Override
     public void setField(int id, int value) {
-
+        //NO-OP
     }
 
     @Override
@@ -264,13 +268,16 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
         ItemStack input = getStackInSlot(0);
         ItemStack output = getStackInSlot(1);
+        ItemStack upgrade1 = getStackInSlot(2);
+        ItemStack upgrade2 = getStackInSlot(3);
+        ItemStack upgrade3 = getStackInSlot(4);
 
         if (input != null) {
             if (input.getItem() == ModItems.rawAmethyst) {
 
-                if (progress <= maxProgress && power > PowerConf.crystalRefineryUsage) {
+                if (progress <= maxProgress && power > PowerConf.crystalRefineryUsage * powerMultiplier) {
                     progress++;
-                    power -= PowerConf.crystalRefineryUsage;
+                    power -= PowerConf.crystalRefineryUsage * powerMultiplier;
                 } else if (progress >= maxProgress) {
                     //Done Refining
                     if (output != null) {
@@ -293,12 +300,39 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
             progress = 0;
         }
 
+        //Check for upgrades
+        speedMultiplier = 1;
+        powerMultiplier = 1;
+        powerTimser = 1;
+        powerDivider = 1;
+        checkForUpgrade(upgrade1);
+        checkForUpgrade(upgrade2);
+        checkForUpgrade(upgrade3);
+        maxProgress = (int) (PowerConf.crystalRefineryBaseTime / speedMultiplier);
+        powerMultiplier *= powerTimser;
+        powerMultiplier /= powerDivider;
+
     }
 
-    //Draw power from a Power Sphere
+    private void checkForUpgrade (ItemStack stack) {
+
+        if (stack != null) {
+            if (stack.getItem() == ModItems.speedUpgrade) {
+                //Speed Upgrade
+                speedMultiplier += stack.stackSize;
+                powerTimser += 0.25 * stack.stackSize;
+            } else if (stack.getItem() == ModItems.efficiencyUpgrade) {
+                //Efficiency Upgrade
+                powerDivider += 0.5 * stack.stackSize;
+            }
+        }
+
+    }
+
+    //Draw power from a Power Cube
     private void drawPower(TEPowerCube powerCube) {
 
-        double powerDrawRate = PowerConf.CrystalRefineryDrawRate;
+        double powerDrawRate = PowerConf.crystalRefineryDrawRate;
         double powerMax = PowerConf.crystalRefineryMaxPower;
 
         if (power < powerMax) {
