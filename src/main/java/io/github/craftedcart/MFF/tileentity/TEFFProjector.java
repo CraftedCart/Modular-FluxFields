@@ -80,18 +80,19 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
         updateTime--;
 
+        //Draw power from above
+        if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
+            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerCube) {
+                drawPower((TEPowerCube) worldObj.getTileEntity(this.getPos().add(0, 1, 0)));
+            }
+        }
+
         //Use 2 power/block/t
         if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
             power -= PowerConf.ffProjectorUsagePerBlock * blockList.size();
             isPowered = true;
         } else {
             isPowered = false;
-        }
-
-        if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
-            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerCube) {
-                drawPower((TEPowerCube) worldObj.getTileEntity(this.getPos().add(0, 1, 0)));
-            }
         }
 
         //Executed every 4.95s (99t)
@@ -145,7 +146,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
     }
 
-    //Draw power from a Power Sphere
+    //Draw power from a Power Cube
     private void drawPower(TEPowerCube powerCube) {
 
         double powerDrawRate = PowerConf.ffProjectorDrawRate;
@@ -153,17 +154,17 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
         if (power < powerMax) {
 
-            double psPower; //Power Sphere Power
+            double pcPower; //Power Cube Power
 
             try {
 
                 Field f = powerCube.getClass().getField("power");
-                psPower = f.getDouble(powerCube);
+                pcPower = f.getDouble(powerCube);
 
-                if (psPower > 0) {
-                    if (psPower < powerDrawRate) {
-                        if (power + psPower <= powerMax) {
-                            power += psPower;
+                if (pcPower > 0) {
+                    if (pcPower < powerDrawRate) {
+                        if (power + pcPower <= powerMax) {
+                            power += pcPower;
                             f.setDouble(powerCube, 0);
                         } else {
                             f.setDouble(powerCube, powerMax - power);
@@ -172,9 +173,9 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
                     } else {
                         if (power + powerDrawRate <= powerMax) {
                             power += powerDrawRate;
-                            f.setDouble(powerCube, psPower - powerDrawRate);
+                            f.setDouble(powerCube, pcPower - powerDrawRate);
                         } else {
-                            f.setDouble(powerCube, psPower - (powerMax - power));
+                            f.setDouble(powerCube, pcPower - (powerMax - power));
                             power = powerMax;
                         }
                     }
