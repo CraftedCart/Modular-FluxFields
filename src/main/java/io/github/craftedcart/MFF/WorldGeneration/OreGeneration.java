@@ -1,7 +1,6 @@
-package io.github.craftedcart.MFF.WorldGeneration;
+package io.github.craftedcart.MFF.worldgeneration;
 
 import io.github.craftedcart.MFF.init.ModBlocks;
-import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;

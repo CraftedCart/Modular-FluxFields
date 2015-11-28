@@ -1,6 +1,6 @@
 package io.github.craftedcart.MFF;
 
-import io.github.craftedcart.MFF.WorldGeneration.OreGeneration;
+import io.github.craftedcart.MFF.worldgeneration.OreGeneration;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.init.ModBlocks;
