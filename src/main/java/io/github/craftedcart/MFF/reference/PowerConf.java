@@ -17,6 +17,6 @@ public final class PowerConf {
     public static final double ffProjectorUsagePerBlockToGenerate = 150;
     public static final double crystalRefineryUsage = 99.12;
 
-    public static final int crystalRefineryBaseTime = 2400; //10s (200t)
+    public static final int crystalRefineryBaseTime = 2400; //120s (2400t)
 
 }
