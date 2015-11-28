@@ -26,6 +26,7 @@ public class BlockCrystalRefinery extends ModBlock implements ITileEntityProvide
         super();
         this.setUnlocalizedName(Names.BlockCrystalRefinery);
         this.setHardness(6f);
+        this.setHarvestLevel("pickaxe", 2); //Requires iron pickaxe to harvest
 
     }
 
