@@ -11,9 +11,13 @@ item.mff:rawAmethyst.name=Raw Amethyst
 tile.mff:forcefield.name=Forcefield
 tile.mff:ffProjector.name=Forcefield Projector
 tile.mff:powerCube.name=Power Cube
+tile.mff:crystalRefinery.name=Crystal Refinery
 #Ores
 tile.mff:oreAmethyst.name=Amethyst Ore
 
 #Chat
 chat.mff:bypassedFFProtection=§eMFF: Bypassed a block that was protected by a forcefield (You're in creative mode!)
 chat.mff:warnFFProtection=§cMFF: Nope! That block's protected by a forcefield
+
+#Gui
+container.mff:crystalRefinery=Crystal Refinery

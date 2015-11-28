@@ -1,25 +1,34 @@
 package io.github.craftedcart.MFF.tileentity;
 
+import io.github.craftedcart.MFF.init.ModItems;
+import io.github.craftedcart.MFF.reference.PowerConf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
 
-public class TECrystalRefinery extends TileEntity implements IInventory, ISidedInventory {
+public class TECrystalRefinery extends TileEntity implements IInventory, ISidedInventory, IUpdatePlayerListBox {
 
     private ItemStack[] inventory;
     private String customName;
+
+    public double power = 0;
+    public int progress = 0;
+    public int maxProgress = 200;
 
     public TECrystalRefinery() {
         this.inventory = new ItemStack[this.getSizeInventory()];
@@ -141,7 +150,7 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
     @Override
     public String getName() {
-        return this.hasCustomName() ? this.customName : "container.tutorial_tile_entity";
+        return this.hasCustomName() ? this.customName : "container.mff:crystalRefinery";
     }
 
     @Override
@@ -166,6 +175,7 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
 
+        //Inventory stuff
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < this.getSizeInventory(); ++i) {
             if (this.getStackInSlot(i) != null) {
@@ -180,6 +190,10 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
         if (this.hasCustomName()) {
             nbt.setString("CustomName", this.getCustomName());
         }
+
+        //Not inventory stuff
+        nbt.setInteger("progress", progress);
+        nbt.setDouble("power", power);
     }
 
 
@@ -187,6 +201,7 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
 
+        //Inventory Stuff
         NBTTagList list = nbt.getTagList("Items", 10);
         for (int i = 0; i < list.tagCount(); ++i) {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
@@ -197,6 +212,10 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
         if (nbt.hasKey("CustomName", 8)) {
             this.setCustomName(nbt.getString("CustomName"));
         }
+
+        //Not inventory stuff
+        progress = nbt.getInteger("progress");
+        power = nbt.getInteger("power");
     }
 
     @Override
@@ -221,4 +240,104 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
             return false;
         }
     }
+
+    private int updateTime = 100;
+
+    @Override
+    public void update() {
+
+        //Executed every 5 seconds
+        if (updateTime <= 0) {
+            updateTime = 100; //5s (100t)
+
+            //Send info to client
+            worldObj.markBlockForUpdate(this.getPos());
+            markDirty();
+        }
+
+        //Draw power from above
+        if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
+            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerCube) {
+                drawPower((TEPowerCube) worldObj.getTileEntity(this.getPos().add(0, 1, 0)));
+            }
+        }
+
+        ItemStack input = getStackInSlot(0);
+        ItemStack output = getStackInSlot(1);
+
+        if (input != null) {
+            if (input.getItem() == ModItems.rawAmethyst) {
+
+                if (progress <= maxProgress && power > PowerConf.crystalRefineryUsage) {
+                    progress++;
+                    power -= PowerConf.crystalRefineryUsage;
+                } else if (progress >= maxProgress) {
+                    //Done Refining
+                    if (output != null) {
+                        if ((output.getItem() == ModItems.refinedAmethyst && output.stackSize < output.getMaxStackSize())) {
+                            progress = 0;
+                            decrStackSize(0, 1);
+                            setInventorySlotContents(1, new ItemStack(ModItems.refinedAmethyst, output.stackSize + 1));
+                        }
+                    } else {
+                        progress = 0;
+                        decrStackSize(0, 1);
+                        setInventorySlotContents(1, new ItemStack(ModItems.refinedAmethyst, 1));
+                    }
+                }
+
+            } else {
+                progress = 0;
+            }
+        } else {
+            progress = 0;
+        }
+
+    }
+
+    //Draw power from a Power Sphere
+    private void drawPower(TEPowerCube powerCube) {
+
+        double powerDrawRate = PowerConf.CrystalRefineryDrawRate;
+        double powerMax = PowerConf.crystalRefineryMaxPower;
+
+        if (power < powerMax) {
+
+            double pcPower; //Power Cube Power
+
+            try {
+
+                Field f = powerCube.getClass().getField("power");
+                pcPower = f.getDouble(powerCube);
+
+                if (pcPower > 0) {
+                    if (pcPower < powerDrawRate) {
+                        if (power + pcPower <= powerMax) {
+                            power += pcPower;
+                            f.setDouble(powerCube, 0);
+                        } else {
+                            f.setDouble(powerCube, powerMax - power);
+                            power = powerMax;
+                        }
+                    } else {
+                        if (power + powerDrawRate <= powerMax) {
+                            power += powerDrawRate;
+                            f.setDouble(powerCube, pcPower - powerDrawRate);
+                        } else {
+                            f.setDouble(powerCube, pcPower - (powerMax - power));
+                            power = powerMax;
+                        }
+                    }
+                }
+
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
 }
