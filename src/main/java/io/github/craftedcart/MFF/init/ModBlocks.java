@@ -24,6 +24,7 @@ public class ModBlocks {
     public static final ModBlock forcefield = new BlockForcefield();
     public static final ModBlock ffProjector = new BlockFFProjector();
     public static final ModBlock powerCube = new BlockPowerCube();
+    public static final ModBlock crystalRefinery = new BlockCrystalRefinery();
     //Ores
     public static final ModBlock oreAmethyst = new BlockOreAmethyst();
 
@@ -35,6 +36,7 @@ public class ModBlocks {
         GameRegistry.registerBlock(ffProjector, Names.BlockFFProjector);
         GameRegistry.registerBlock(powerCube, Names.BlockPowerCube);
         ClientRegistry.bindTileEntitySpecialRenderer(TEPowerCube.class, new TERendererPowerCube());
+        GameRegistry.registerBlock(crystalRefinery, Names.BlockCrystalRefinery);
         //Ores
         GameRegistry.registerBlock(oreAmethyst, Names.BlockOreAmethyst);
         OreDictionary.registerOre(Names.BlockOreAmethyst, new ItemStack(oreAmethyst));
@@ -47,6 +49,7 @@ public class ModBlocks {
         registerRender(forcefield);
         registerRender(ffProjector);
         registerBlockRenderAsItem(powerCube, Names.BlockPowerCube);
+        registerRender(crystalRefinery);
         //Ores
         registerRender(oreAmethyst);
 

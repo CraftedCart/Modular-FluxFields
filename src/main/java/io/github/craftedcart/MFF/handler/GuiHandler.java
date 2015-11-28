@@ -1,6 +1,9 @@
 package io.github.craftedcart.MFF.handler;
 
+import io.github.craftedcart.MFF.client.gui.GuiCrystalRefinery;
 import io.github.craftedcart.MFF.client.gui.GuiFFProjector;
+import io.github.craftedcart.MFF.container.ContainerCrystalRefinery;
+import io.github.craftedcart.MFF.tileentity.TECrystalRefinery;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -16,9 +19,14 @@ import java.lang.reflect.Field;
 public class GuiHandler implements IGuiHandler {
 
     public static final int FFProjector_TILE_ENTITY_GUI = 0;
+    public static final int CrystalRefinery_TILE_ENTITY_GUI = 1;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        if (ID == CrystalRefinery_TILE_ENTITY_GUI) {
+            return new ContainerCrystalRefinery(player.inventory, (TECrystalRefinery) world.getTileEntity(new BlockPos(x, y, z)));
+        }
+
         return null;
     }
 
@@ -53,7 +61,10 @@ public class GuiHandler implements IGuiHandler {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+        } else if (ID == CrystalRefinery_TILE_ENTITY_GUI) {
+            return new GuiCrystalRefinery(player.inventory, (TECrystalRefinery) world.getTileEntity(new BlockPos(x, y, z)));
         }
+
         return null;
     }
 

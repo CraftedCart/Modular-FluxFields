@@ -10,6 +10,7 @@ public final class Names {
     public static final String BlockForcefield = "forcefield";
     public static final String BlockFFProjector = "ffProjector";
     public static final String BlockPowerCube = "powerCube";
+    public static final String BlockCrystalRefinery = "crystalRefinery";
     //Ores
     public static final String BlockOreAmethyst = "oreAmethyst";
 
@@ -23,4 +24,5 @@ public final class Names {
     public static final String TEForcefield = "teForcefield";
     public static final String TEFFProjector = "teFFProjector";
     public static final String TEPowerCube = "tePowerCube";
+    public static final String TECrystalRefinery = "teCrystalRefinery";
 }
