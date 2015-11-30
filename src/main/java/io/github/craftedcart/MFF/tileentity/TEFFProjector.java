@@ -4,14 +4,18 @@ import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.utility.LogHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -21,7 +25,7 @@ import java.util.List;
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
 
-public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
+public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, IInventory {
 
     //Config-y stuff
     public int minX = -5;
@@ -31,13 +35,199 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
     public int minZ = -5;
     public int maxZ = 5;
 
-    public double power = 0;
-
     //Not so config-y stuff
     private int updateTime = 100;
     public List<BlockPos> blockList = new ArrayList<BlockPos>();
     private boolean doWorldLoadSetup = false;
     public boolean isPowered = false;
+    private ItemStack[] inventory;
+    private String customName;
+    public double power = 0;
+    public int uptime = 0;
+
+    public TEFFProjector() {
+        this.inventory = new ItemStack[this.getSizeInventory()];
+    }
+
+    @Override
+    public int getSizeInventory() {
+        return 0;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int index) {
+        if (index < 0 || index >= this.getSizeInventory())
+            return null;
+        return this.inventory[index];
+    }
+
+    @Override
+    public ItemStack decrStackSize(int index, int count) {
+        if (this.getStackInSlot(index) != null) {
+            ItemStack itemstack;
+
+            if (this.getStackInSlot(index).stackSize <= count) {
+                itemstack = this.getStackInSlot(index);
+                this.setInventorySlotContents(index, null);
+                this.markDirty();
+                return itemstack;
+            } else {
+                itemstack = this.getStackInSlot(index).splitStack(count);
+
+                if (this.getStackInSlot(index).stackSize <= 0) {
+                    this.setInventorySlotContents(index, null);
+                } else {
+                    //Just to show that changes happened
+                    this.setInventorySlotContents(index, this.getStackInSlot(index));
+                }
+
+                this.markDirty();
+                return itemstack;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int index) {
+        ItemStack stack = this.getStackInSlot(index);
+        this.setInventorySlotContents(index, null);
+        return stack;
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        if (index < 0 || index >= this.getSizeInventory())
+            return;
+
+        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+            stack.stackSize = this.getInventoryStackLimit();
+
+        if (stack != null && stack.stackSize == 0)
+            stack = null;
+
+        this.inventory[index] = stack;
+        this.markDirty();
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return 64;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return this.worldObj.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.pos.add(0.5, 0.5, 0.5)) <= 64;
+    }
+
+    @Override
+    public void openInventory(EntityPlayer player) {
+        //NO-OP
+    }
+
+    @Override
+    public void closeInventory(EntityPlayer player) {
+        //NO-OP
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        if (index == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        //NO-OP
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < this.getSizeInventory(); i++)
+            this.setInventorySlotContents(i, null);
+    }
+
+    @Override
+    public String getName() {
+        return this.hasCustomName() ? this.customName : "container.mff:ffProjector";
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return this.customName != null && !this.customName.equals("");
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName());
+    }
+
+    public String getCustomName() {
+        return this.customName;
+    }
+
+    public void setCustomName(String customName) {
+        this.customName = customName;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+
+        writeSyncableDataToNBT(nbt);
+
+        //Inventory stuff
+        NBTTagList list = new NBTTagList();
+        for (int i = 0; i < this.getSizeInventory(); ++i) {
+            if (this.getStackInSlot(i) != null) {
+                NBTTagCompound stackTag = new NBTTagCompound();
+                stackTag.setByte("Slot", (byte) i);
+                this.getStackInSlot(i).writeToNBT(stackTag);
+                list.appendTag(stackTag);
+            }
+        }
+        nbt.setTag("Items", list);
+
+        if (this.hasCustomName()) {
+            nbt.setString("CustomName", this.getCustomName());
+        }
+
+    }
+
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+
+        readSyncableDataFromNBT(nbt);
+
+        //Inventory Stuff
+        NBTTagList list = nbt.getTagList("Items", 10);
+        for (int i = 0; i < list.tagCount(); ++i) {
+            NBTTagCompound stackTag = list.getCompoundTagAt(i);
+            int slot = stackTag.getByte("Slot") & 255;
+            this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
+        }
+
+        if (nbt.hasKey("CustomName", 8)) {
+            this.setCustomName(nbt.getString("CustomName"));
+        }
+
+    }
 
     public void getBlocks() {
 
@@ -91,8 +281,10 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
             power -= PowerConf.ffProjectorUsagePerBlock * blockList.size();
             isPowered = true;
+            uptime++;
         } else {
             isPowered = false;
+            uptime = 0;
         }
 
         //Executed every 4.95s (99t)
@@ -191,26 +383,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
 
     }
 
-    @Override
-    public void writeToNBT(NBTTagCompound tagCompound)
-    {
-        super.writeToNBT(tagCompound);
-
-        writeSyncableDataToNBT(tagCompound);
-
-        // ... Continue writing non-syncable data
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tagCompound)
-    {
-        super.readFromNBT(tagCompound);
-
-        readSyncableDataFromNBT(tagCompound);
-
-        // ... Continue reading non-syncable data
-    }
-
     void writeSyncableDataToNBT(NBTTagCompound tagCompound) {
         tagCompound.setDouble("power", power);
 
@@ -220,6 +392,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         tagCompound.setInteger("x2", maxX);
         tagCompound.setInteger("y2", maxY);
         tagCompound.setInteger("z2", maxZ);
+
+        tagCompound.setInteger("uptime", uptime);
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
@@ -231,6 +405,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox {
         maxX = tagCompound.getInteger("x2");
         maxY = tagCompound.getInteger("y2");
         maxZ = tagCompound.getInteger("z2");
+
+        uptime = tagCompound.getInteger("uptime");
 
     }
 

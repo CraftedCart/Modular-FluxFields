@@ -1,11 +1,14 @@
 package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.ModMFF;
+import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -30,13 +33,21 @@ public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
         return new TEFFProjector();
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (worldIn.isRemote) {
-            playerIn.openGui(ModMFF.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
-            return true;
+        if (!world.isRemote) {
+            player.openGui(ModMFF.instance, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+
+        worldIn.getTileEntity(pos).getTileData().setString("owner", String.valueOf(placer.getPersistentID()));
+        worldIn.getTileEntity(pos).getTileData().setString("ownerName", placer.getName());
+
     }
 
 }

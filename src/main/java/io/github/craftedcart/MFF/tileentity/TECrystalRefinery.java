@@ -39,7 +39,6 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
         this.inventory = new ItemStack[this.getSizeInventory()];
     }
 
-
     @Override
     public int getSizeInventory() {
         return 5;
