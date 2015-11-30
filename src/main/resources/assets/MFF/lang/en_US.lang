@@ -24,8 +24,9 @@ chat.mff:warnFFProtection=§cMFF: Nope! That block's protected by a forcefield
 
 #Gui
 container.mff:crystalRefinery=Crystal Refinery
-container.mff:ffProjector=FF Projector
+container.mff:ffProjector=Forcefield Projector
 gui.mff:info=Info
+gui.mff:sizing=Sizing
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed

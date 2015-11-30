@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.handler;
 
+import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSave;
 import io.github.craftedcart.MFF.reference.Reference;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -17,6 +18,7 @@ public class NetworkHandler {
     public static void init() {
         network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         network.registerMessage(MessageFFProjectorGuiSave.Handler.class, MessageFFProjectorGuiSave.class, 0, Side.SERVER);
+        network.registerMessage(MessageRequestOpenGui.Handler.class, MessageRequestOpenGui.class, 0, Side.SERVER);
     }
 
 }

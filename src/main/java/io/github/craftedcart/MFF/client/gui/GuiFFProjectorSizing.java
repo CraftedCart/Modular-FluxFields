@@ -19,13 +19,13 @@ import java.io.IOException;
  * Created by CraftedCart on 29/11/2015 (DD/MM/YYYY)
  */
 
-public class GuiFFProjectorInfo extends GuiContainer {
+public class GuiFFProjectorSizing extends GuiContainer {
 
     private IInventory playerInv;
     private TEFFProjector te;
     private EntityPlayer player;
 
-    public GuiFFProjectorInfo(EntityPlayer player, IInventory playerInv, TEFFProjector te) {
+    public GuiFFProjectorSizing(EntityPlayer player, IInventory playerInv, TEFFProjector te) {
         super(new ContainerFFProjectorInfo(playerInv, te));
 
         this.playerInv = playerInv;
@@ -42,7 +42,7 @@ public class GuiFFProjectorInfo extends GuiContainer {
         this.drawDefaultBackground();
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorInfo.png"));
+        this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSizing.png"));
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         //Draw power value
         double power = this.te.power;
@@ -74,19 +74,7 @@ public class GuiFFProjectorInfo extends GuiContainer {
         String s = this.te.getDisplayName().getUnformattedText();
         this.fontRendererObj.drawString(s, 75, 4, 0x404040); //Draw block name
         this.fontRendererObj.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, 84, 0x404040); //Draw inventory name
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:info"), 15, 17, 0x404040); //Draw tab name
-
-        //Info stats
-        this.fontRendererObj.drawString(String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
-                15, 26, 0x404040, false); //Draw power level
-        this.fontRendererObj.drawString(String.format("%.2f FE / t - %.2f FE / s", upkeep, upkeep * 20),
-                15, 35, 0x404040, false); //Draw power upkeep
-        this.fontRendererObj.drawString(String.format("XYZ Size: %d, %d, %d", this.te.maxX - this.te.minX + 1, this.te.maxY - this.te.minY + 1, this.te.maxZ - this.te.minZ + 1),
-                15, 44, 0x404040, false); //Draw size
-        this.fontRendererObj.drawString(String.format("Owner: %s", te.getTileData().getString("ownerName")),
-                15, 53, 0x404040, false); //Draw owner
-        this.fontRendererObj.drawString(String.format("Uptime: %s : %s : %s", hrStr, mnStr, secStr),
-                15, 62, 0x404040, false); //Draw uptime
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:sizing"), 15, 17, 0x404040); //Draw tab name
 
     }
 
@@ -105,10 +93,10 @@ public class GuiFFProjectorInfo extends GuiContainer {
 
         if (x >= 1 && x <= 15 && y >= 1 && y <= 13) {
             //Info button clicked
-            //NO-OP, We're already on the info tab
+            NetworkHandler.network.sendToServer(new MessageRequestOpenGui(this.te.getPos(), player, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI));
         } else if (x >= 16 && x <= 29 && y >= 1 && y <= 13) {
             //Sizing button clicked
-            NetworkHandler.network.sendToServer(new MessageRequestOpenGui(this.te.getPos(), player, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI));
+            //NO-OP, We're already on the sizing tab
         } else if (x >= 30 && x <= 43 && y >= 1 && y <= 13) {
             //Security button clicked
         } else if (x >= 44 && x <= 57 && y >= 1 && y <= 13) {
