@@ -18,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
  * Created by CraftedCart on 22/11/2015 (DD/MM/YYYY)
  */
 
-public class MessageFFProjectorGuiSave implements IMessage {
+public class MessageFFProjectorGuiSaveSizing implements IMessage {
 
     BlockPos pos;
 
@@ -29,9 +29,9 @@ public class MessageFFProjectorGuiSave implements IMessage {
     int y2;
     int z2;
 
-    public MessageFFProjectorGuiSave() {}
+    public MessageFFProjectorGuiSaveSizing() {}
 
-    public MessageFFProjectorGuiSave(BlockPos pos, int x1, int y1, int z1, int x2, int y2, int z2) {
+    public MessageFFProjectorGuiSaveSizing(BlockPos pos, int x1, int y1, int z1, int x2, int y2, int z2) {
         this.pos = pos;
         this.x1 = x1;
         this.y1 = y1;
@@ -72,10 +72,10 @@ public class MessageFFProjectorGuiSave implements IMessage {
         ByteBufUtils.writeTag(buf, tag);
     }
 
-    public static class Handler implements IMessageHandler<MessageFFProjectorGuiSave, IMessage> {
+    public static class Handler implements IMessageHandler<MessageFFProjectorGuiSaveSizing, IMessage> {
 
         @Override
-        public IMessage onMessage(final MessageFFProjectorGuiSave message, final MessageContext ctx) {
+        public IMessage onMessage(final MessageFFProjectorGuiSaveSizing message, final MessageContext ctx) {
             IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
             mainThread.addScheduledTask(new Runnable() {
                 @Override

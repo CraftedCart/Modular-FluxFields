@@ -16,7 +16,7 @@ import net.minecraft.util.StatCollector;
 import java.io.IOException;
 
 /**
- * Created by CraftedCart on 29/11/2015 (DD/MM/YYYY)
+ * Created by CraftedCart on 30/11/2015 (DD/MM/YYYY)
  */
 
 public class GuiFFProjectorInfo extends GuiContainer {
@@ -74,19 +74,19 @@ public class GuiFFProjectorInfo extends GuiContainer {
         String s = this.te.getDisplayName().getUnformattedText();
         this.fontRendererObj.drawString(s, 75, 4, 0x404040); //Draw block name
         this.fontRendererObj.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, 84, 0x404040); //Draw inventory name
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:info"), 15, 17, 0x404040); //Draw tab name
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:info"), 15, 18, 0x404040); //Draw tab name
 
         //Info stats
         this.fontRendererObj.drawString(String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
-                15, 26, 0x404040, false); //Draw power level
+                15, 27, 0x404040, false); //Draw power level
         this.fontRendererObj.drawString(String.format("%.2f FE / t - %.2f FE / s", upkeep, upkeep * 20),
-                15, 35, 0x404040, false); //Draw power upkeep
+                15, 36, 0x404040, false); //Draw power upkeep
         this.fontRendererObj.drawString(String.format("XYZ Size: %d, %d, %d", this.te.maxX - this.te.minX + 1, this.te.maxY - this.te.minY + 1, this.te.maxZ - this.te.minZ + 1),
-                15, 44, 0x404040, false); //Draw size
+                15, 45, 0x404040, false); //Draw size
         this.fontRendererObj.drawString(String.format("Owner: %s", te.getTileData().getString("ownerName")),
-                15, 53, 0x404040, false); //Draw owner
+                15, 54, 0x404040, false); //Draw owner
         this.fontRendererObj.drawString(String.format("Uptime: %s : %s : %s", hrStr, mnStr, secStr),
-                15, 62, 0x404040, false); //Draw uptime
+                15, 63, 0x404040, false); //Draw uptime
 
     }
 

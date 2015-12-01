@@ -3,6 +3,7 @@ package io.github.craftedcart.MFF.network;
 import io.github.craftedcart.MFF.ModMFF;
 import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
