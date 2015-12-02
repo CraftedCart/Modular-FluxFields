@@ -13,8 +13,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-import java.lang.reflect.Field;
-
 /**
  * Created by CraftedCart on 22/11/2015 (DD/MM/YYYY)
  */

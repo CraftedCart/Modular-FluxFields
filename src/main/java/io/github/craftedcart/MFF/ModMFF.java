@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF;
 
-import io.github.craftedcart.MFF.worldgeneration.OreGeneration;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.init.ModBlocks;
@@ -9,6 +8,7 @@ import io.github.craftedcart.MFF.init.ModTileEntities;
 import io.github.craftedcart.MFF.proxy.IProxy;
 import io.github.craftedcart.MFF.reference.Reference;
 import io.github.craftedcart.MFF.utility.LogHelper;
+import io.github.craftedcart.MFF.worldgeneration.OreGeneration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;

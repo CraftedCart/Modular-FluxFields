@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.container;
 
-import io.github.craftedcart.MFF.tileentity.TECrystalRefinery;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

@@ -1,7 +1,5 @@
 package io.github.craftedcart.MFF.tileentity;
 
-import io.github.craftedcart.MFF.reference.PowerConf;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
