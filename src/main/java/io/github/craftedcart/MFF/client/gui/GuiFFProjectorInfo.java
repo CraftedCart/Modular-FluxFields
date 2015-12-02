@@ -87,6 +87,8 @@ public class GuiFFProjectorInfo extends GuiContainer {
                 15, 54, 0x404040, false); //Draw owner
         this.fontRendererObj.drawString(String.format("%s: %s : %s : %s", StatCollector.translateToLocal("gui.mff:uptime"), hrStr, mnStr, secStr),
                 15, 63, 0x404040, false); //Draw uptime
+        this.fontRendererObj.drawString(String.format("Status: %d (%d) / %d", this.te.calcSetup, this.te.serverCalcSetup, this.te.calcSetupMax),
+                15, 72, 0x404040, false); //Draw status
 
     }
 
