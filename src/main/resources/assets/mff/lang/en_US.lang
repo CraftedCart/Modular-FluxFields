@@ -27,6 +27,8 @@ container.mff:crystalRefinery=Crystal Refinery
 container.mff:ffProjector=Forcefield Projector
 gui.mff:info=Info
 gui.mff:sizing=Sizing
+gui.mff:security=Security
+gui.mff:securityNoUpgrade=No Security Upgrade Found
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed

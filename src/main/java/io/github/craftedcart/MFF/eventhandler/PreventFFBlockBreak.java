@@ -49,7 +49,7 @@ public class PreventFFBlockBreak {
 
                     if (fIsPowered.getBoolean(te)) {
                         Field fBlockList = teFFProjector.getClass().getField("blockList");
-                        ArrayList<BlockPos> blockList = (ArrayList) fBlockList.get(te);
+                        ArrayList<BlockPos> blockList = (ArrayList<BlockPos>) fBlockList.get(te);
 
                         for (BlockPos p : blockList) {
 

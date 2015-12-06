@@ -22,7 +22,6 @@ import net.minecraft.util.IChatComponent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -38,9 +37,12 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public int minZ = -5;
     public int maxZ = 5;
 
+    //Upgrades
+    public boolean hasSecurityUpgrade = true;
+
     //Not so config-y stuff
     private int updateTime = 100;
-    public List<BlockPos> blockList = new ArrayList<BlockPos>();
+    public ArrayList<BlockPos> blockList = new ArrayList<BlockPos>();
     private boolean doWorldLoadSetup = false;
     public boolean isPowered = false;
     private ItemStack[] inventory;
@@ -306,6 +308,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
                     if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) {
                         worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
                         power -= PowerConf.ffProjectorUsagePerBlockToGenerate;
+                    } else {
+                        uptime = 0;
                     }
                 } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
                     if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
