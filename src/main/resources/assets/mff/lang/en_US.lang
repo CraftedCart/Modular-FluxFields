@@ -30,5 +30,5 @@ gui.mff:sizing=Sizing
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed
-stat.mff:+125%PowerUsageTick=§c+125% Power Usage / tick
+stat.mff:+25%PowerUsageTick=§c+25% Power Usage / tick
 stat.mff:-50%PowerUsageTick=§a-50% Power Usage / tick

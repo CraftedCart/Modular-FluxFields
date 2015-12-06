@@ -23,7 +23,7 @@ public class ItemSpeedUpgrade extends ModItem {
     public void addInformation(ItemStack stack, EntityPlayer player, List lores, boolean par4) {
 
         lores.add(StatCollector.translateToLocal("stat.mff:+100%Speed"));
-        lores.add(StatCollector.translateToLocal("stat.mff:+125%PowerUsageTick"));
+        lores.add(StatCollector.translateToLocal("stat.mff:+25%PowerUsageTick"));
 
     }
 
