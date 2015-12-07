@@ -83,7 +83,7 @@ public class GuiFFProjectorInfo extends GuiContainer {
                 15, 36, 0x404040, false); //Draw power upkeep
         this.fontRendererObj.drawString(String.format("XYZ Size: %d, %d, %d", this.te.maxX - this.te.minX + 1, this.te.maxY - this.te.minY + 1, this.te.maxZ - this.te.minZ + 1),
                 15, 45, 0x404040, false); //Draw size
-        this.fontRendererObj.drawString(String.format("Owner: %s", te.getTileData().getString("ownerName")),
+        this.fontRendererObj.drawString(String.format("Owner: %s", te.ownerName),
                 15, 54, 0x404040, false); //Draw owner
         this.fontRendererObj.drawString(String.format("Uptime: %s : %s : %s", hrStr, mnStr, secStr),
                 15, 63, 0x404040, false); //Draw uptime

@@ -1,7 +1,10 @@
 package io.github.craftedcart.MFF.proxy;
 
+import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerCube;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.init.ModItems;
+import io.github.craftedcart.MFF.tileentity.TEPowerCube;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
@@ -14,6 +17,9 @@ public class ClientProxy extends CommonProxy {
 
         ModItems.registerRenders();
         ModBlocks.registerRenders();
+
+        //TileEntity Special Renderers
+        ClientRegistry.bindTileEntitySpecialRenderer(TEPowerCube.class, new TERendererPowerCube());
 
     }
 

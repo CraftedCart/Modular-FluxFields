@@ -6,6 +6,7 @@ import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.utility.PlayerUtils;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,8 +15,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by CraftedCart on 06/12/2015 (DD/MM/YYYY)
@@ -26,9 +32,12 @@ public class GuiFFProjectorSecurity extends GuiContainer {
     private IInventory playerInv;
     private TEFFProjector te;
     private EntityPlayer player;
+    public List<List<String>> permittedPlayers = new ArrayList<List<String>>();
 
     //Gui Elements
     private GuiTextField addPlayerTextField;
+    //Gui(ish) Elements
+    private String statusMessage;
 
     public GuiFFProjectorSecurity(EntityPlayer player, IInventory playerInv, TEFFProjector te) {
         super(new ContainerFFProjectorInfo(playerInv, te));
@@ -86,7 +95,15 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             this.addPlayerTextField.drawTextBox();
         }
 
+        this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
 
+        GL11.glScalef(0.5f, 0.5f, 0.5f);
+        Iterator<List<String>> iter = permittedPlayers.iterator();
+        int index = 0;
+        while (iter.hasNext()) {
+            this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, 0x404040);
+            index++;
+        }
 
     }
 
@@ -125,7 +142,25 @@ public class GuiFFProjectorSecurity extends GuiContainer {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         this.addPlayerTextField.textboxKeyTyped(typedChar, keyCode);
-        if(!(keyCode == Keyboard.KEY_E  &&  this.addPlayerTextField.isFocused())){
+        if (keyCode == Keyboard.KEY_RETURN && this.addPlayerTextField.isFocused()) {
+            //Add player to permitted players list
+
+            List<Object> player = PlayerUtils.getUUIDFromPlayerName(addPlayerTextField.getText());
+
+            if (player != null) {
+                //That player's online! Add the player to the list
+                List playerInfo = new ArrayList<String>();
+                playerInfo.add(player.get(0).toString());
+                playerInfo.add(player.get(1));
+                permittedPlayers.add(playerInfo);
+                statusMessage = "gui.mff:addedPermittedPlayer";
+            } else {
+                //That players not online. Show a warning
+                statusMessage = "gui.mff:playerNotOnline";
+            }
+            //Clear text field
+            this.addPlayerTextField.setText("");
+        } else if (!(keyCode == Keyboard.KEY_E  &&  this.addPlayerTextField.isFocused()) ){
             try {
                 super.keyTyped(typedChar, keyCode);
             } catch (IOException e) {

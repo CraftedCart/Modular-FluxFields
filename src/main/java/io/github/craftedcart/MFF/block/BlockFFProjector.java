@@ -45,8 +45,9 @@ public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
-        worldIn.getTileEntity(pos).getTileData().setString("owner", String.valueOf(placer.getPersistentID()));
-        worldIn.getTileEntity(pos).getTileData().setString("ownerName", placer.getName());
+        TEFFProjector te = (TEFFProjector) worldIn.getTileEntity(pos);
+        te.owner = String.valueOf(placer.getPersistentID());
+        te.ownerName = placer.getName();
 
     }
 

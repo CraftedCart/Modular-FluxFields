@@ -35,7 +35,6 @@ public class ModBlocks {
         GameRegistry.registerBlock(forcefield, Names.BlockForcefield);
         GameRegistry.registerBlock(ffProjector, Names.BlockFFProjector);
         GameRegistry.registerBlock(powerCube, Names.BlockPowerCube);
-        ClientRegistry.bindTileEntitySpecialRenderer(TEPowerCube.class, new TERendererPowerCube());
         GameRegistry.registerBlock(crystalRefinery, Names.BlockCrystalRefinery);
         //Ores
         GameRegistry.registerBlock(oreAmethyst, Names.BlockOreAmethyst);

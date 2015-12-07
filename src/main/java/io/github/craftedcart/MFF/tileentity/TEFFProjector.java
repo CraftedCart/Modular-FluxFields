@@ -49,6 +49,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     private String customName;
     public double power = 0;
     public int uptime = 0;
+    public String owner = "";
+    public String ownerName = "";
 
     public TEFFProjector() {
         this.inventory = new ItemStack[this.getSizeInventory()];
@@ -401,6 +403,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         tagCompound.setInteger("z2", maxZ);
 
         tagCompound.setInteger("uptime", uptime);
+        tagCompound.setString("owner", owner);
+        tagCompound.setString("ownerName", ownerName);
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
@@ -414,6 +418,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         maxZ = tagCompound.getInteger("z2");
 
         uptime = tagCompound.getInteger("uptime");
+        owner = tagCompound.getString("owner");
+        ownerName = tagCompound.getString("ownerName");
 
     }
 
