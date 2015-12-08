@@ -7,6 +7,7 @@ import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import io.github.craftedcart.MFF.utility.PlayerUtils;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by CraftedCart on 06/12/2015 (DD/MM/YYYY)
@@ -33,9 +33,18 @@ public class GuiFFProjectorSecurity extends GuiContainer {
     private TEFFProjector te;
     private EntityPlayer player;
     public List<List<String>> permittedPlayers = new ArrayList<List<String>>();
+    private Integer selectedPlayer;
+    private byte guiMode = 0;
+    /*
+     * Gui Modes
+     * 0: Add and manage players
+     * 1: Add and manage groups
+     */
 
     //Gui Elements
     private GuiTextField addPlayerTextField;
+    private GuiTextField addGroupTextField;
+    private GuiButton removeButton;
     //Gui(ish) Elements
     private String statusMessage;
 
@@ -56,6 +65,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         this.addPlayerTextField = new GuiTextField(0, this.fontRendererObj, 15, 29, 154, 9);
         addPlayerTextField.setMaxStringLength(16);
         this.addPlayerTextField.setFocused(true);
+        this.buttonList.add(this.removeButton = new GuiButton(0, this.guiLeft + 7, this.guiTop + 62, 64, 20, StatCollector.translateToLocal("gui.mff:remove")));
     }
 
     @Override
@@ -92,18 +102,34 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         if (!this.te.hasSecurityUpgrade) {
             this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityNoUpgrade"), 15, 29, 0xFAFAFA); //Draw no upgrade warning
         } else {
-            this.addPlayerTextField.drawTextBox();
+
+            this.addPlayerTextField.drawTextBox(); //Draw add player text box
+            //this.removeButton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY); //Draw remove button
+            this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
+
+            GL11.glScalef(0.5f, 0.5f, 0.5f);
+            Iterator<List<String>> iter = permittedPlayers.iterator();
+            int index = 0;
+            while (iter.hasNext()) {
+                int col;
+                if (selectedPlayer != null && selectedPlayer == index) {
+                    col = 0x2196F3;
+                } else {
+                    col = 0x404040;
+                }
+                this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, col);
+                index++;
+            }
+
+            if (selectedPlayer == null) {
+                removeButton.enabled = false;
+            } else {
+                removeButton.enabled = true;
+            }
+
         }
 
-        this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
-
-        GL11.glScalef(0.5f, 0.5f, 0.5f);
-        Iterator<List<String>> iter = permittedPlayers.iterator();
-        int index = 0;
-        while (iter.hasNext()) {
-            this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, 0x404040);
-            index++;
-        }
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
     }
 
@@ -122,6 +148,17 @@ public class GuiFFProjectorSecurity extends GuiContainer {
 
         this.addPlayerTextField.mouseClicked(x, y, btn);
 
+        int x2 = x * 2;
+        int y2 = y * 2;
+        //Select player
+        if (x2 >= 344 && x2 <= 504 && y2 >= 58) {
+            for (int i = 0; i < permittedPlayers.size(); i++) {
+                if ((y2 - 58) / 9 <= permittedPlayers.size()) {
+                    selectedPlayer = (y2 - 58) / 9;
+                }
+            }
+        }
+
         if (x >= 1 && x <= 15 && y >= 1 && y <= 13) {
             //Info button clicked
             NetworkHandler.network.sendToServer(new MessageRequestOpenGui(this.te.getPos(), player, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI));
@@ -135,6 +172,23 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             //Upgrades button clicked
         } else if (x >= 58 && x <= 71 && y >= 1 && y <= 13) {
             //Power Usage button clicked
+        }
+
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+
+        if (button == removeButton) {
+            //Player clicked on remove
+            if (selectedPlayer != null) {
+                permittedPlayers.remove((int) selectedPlayer);
+                if (selectedPlayer - 1 >= 0 && permittedPlayers.size() > 0) {
+                    selectedPlayer -= 1;
+                } else if (!(permittedPlayers.size() > 0)) {
+                    selectedPlayer = null;
+                }
+            }
         }
 
     }
@@ -167,6 +221,16 @@ public class GuiFFProjectorSecurity extends GuiContainer {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+
+        super.onGuiClosed();
+
+        //TODO
+        //NetworkHandler.network.sendToServer(new SomethingOrOther());
+
     }
 
 }

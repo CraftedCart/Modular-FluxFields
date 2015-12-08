@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by CraftedCart on 07/12/2015 (DD/MM/YYYY)
@@ -22,7 +21,6 @@ public class PlayerUtils {
 
         while (iterator.hasNext()) {
             EntityPlayer plr = (EntityPlayer) iterator.next();
-            LogHelper.info(plr.getName());
 
             if (plr.getName().toString().toLowerCase().equals(name.toLowerCase())) {
                 List<Object> toReturn = new ArrayList<Object>();

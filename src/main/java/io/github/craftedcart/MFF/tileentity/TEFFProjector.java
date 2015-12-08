@@ -22,6 +22,7 @@ import net.minecraft.util.IChatComponent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -51,6 +52,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public int uptime = 0;
     public String owner = "";
     public String ownerName = "";
+    public List<List<String>> permittedPlayers = new ArrayList<List<String>>();
 
     public TEFFProjector() {
         this.inventory = new ItemStack[this.getSizeInventory()];

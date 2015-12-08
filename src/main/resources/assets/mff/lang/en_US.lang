@@ -31,6 +31,7 @@ gui.mff:security=Security
 gui.mff:securityNoUpgrade=No Security Upgrade Found
 gui.mff:playerNotOnline=That player's not online
 gui.mff:addedPermittedPlayer=Added player to the whitelist
+gui.mff:remove=Remove
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed
