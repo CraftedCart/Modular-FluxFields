@@ -43,16 +43,16 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
     //Not so config-y stuff
     private int updateTime = 100;
-    public ArrayList<BlockPos> blockList = new ArrayList<BlockPos>();
-    private boolean doWorldLoadSetup = false;
-    public boolean isPowered = false;
-    private ItemStack[] inventory;
+    public ArrayList<BlockPos> blockList = new ArrayList<BlockPos>(); //The list of blockposes of the forcefield walls
+    private boolean doWorldLoadSetup = false; //Used to make sure a block of code only runs once on chunk load
+    public boolean isPowered = false; //Does the FF Projector has enough power to keep running
+    private ItemStack[] inventory; //The inventory of the FF Projector
     private String customName;
     public double power = 0;
     public int uptime = 0;
-    public String owner = "";
-    public String ownerName = "";
-    public List<List<String>> permittedPlayers = new ArrayList<List<String>>();
+    public String owner = ""; //The owner UUID
+    public String ownerName = ""; //The owner username
+    public List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //The list of permitted players defined by the security tab on the gui
 
     public TEFFProjector() {
         this.inventory = new ItemStack[this.getSizeInventory()];
@@ -240,24 +240,24 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
     public void getBlocks() {
 
-        BlockPos pos = this.getPos();
-        blockList.clear();
+        BlockPos pos = this.getPos(); //Get this projector's position
+        blockList.clear(); //Clear the list of blockposes of the forcefield walls
 
-        for (int x = minX; x <= maxX; x++) {
+        for (int x = minX; x <= maxX; x++) { //Calculate the +/- Z walls
             for (int y = minY; y <= maxY; y++) {
                 blockList.add(pos.add(x, y, minZ));
                 blockList.add(pos.add(x, y, maxZ));
             }
         }
 
-        for (int z = minZ + 1; z <= maxZ - 1; z++) {
+        for (int z = minZ + 1; z <= maxZ - 1; z++) { //Calculate the +/- X walls
             for (int y = minY; y <= maxY; y++) {
                 blockList.add(pos.add(minX, y, z));
                 blockList.add(pos.add(maxX, y, z));
             }
         }
 
-        for (int x = minX + 1; x <= maxX - 1; x++) {
+        for (int x = minX + 1; x <= maxX - 1; x++) { //Calculate the +/- Y walls
             for (int z = minZ + 1; z <= maxZ - 1; z++) {
                 blockList.add(pos.add(x, maxY, z));
                 blockList.add(pos.add(x, minY, z));
@@ -267,22 +267,22 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     }
 
     @Override
-    public void update() {
+    public void update() { //Runs every game tick (20 times a second)
 
-        if (!doWorldLoadSetup) {
+        if (!doWorldLoadSetup) { //This only runs when the chunk loads
             ArrayList<Object> al = new ArrayList<Object>();
-            al.add(this.getWorld());
-            al.add(this.getPos());
-            PreventFFBlockBreak.ffProjectors.add(al);
+            al.add(this.getWorld()); //Add this world to the list
+            al.add(this.getPos()); //Add this blockpos to the list
+            PreventFFBlockBreak.ffProjectors.add(al); //Register itself with the event handler which prevents FF block breaking
             doWorldLoadSetup = true;
         }
 
         updateTime--;
 
         //Draw power from above
-        if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
-            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerCube) {
-                drawPower((TEPowerCube) worldObj.getTileEntity(this.getPos().add(0, 1, 0)));
+        if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) { //If a tile entity exists above
+            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerCube) { //If the tile entity is a power cube
+                drawPower((TEPowerCube) worldObj.getTileEntity(this.getPos().add(0, 1, 0))); //Draw some power
             }
         }
 
@@ -304,20 +304,20 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             worldObj.markBlockForUpdate(this.getPos());
             markDirty();
 
-            getBlocks();
+            getBlocks(); //Calculate the blockposes of the walls
 
-            for (BlockPos ffPos : blockList) {
+            for (BlockPos ffPos : blockList) { //Loop through every blockpos
 
-                if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) {
-                    if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) {
-                        worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState());
-                        power -= PowerConf.ffProjectorUsagePerBlockToGenerate;
+                if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) { //If the block found is air
+                    if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) { //If we have enough power to place an FF block
+                        worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState()); //Place an FF block
+                        power -= PowerConf.ffProjectorUsagePerBlockToGenerate; //Minus the power used
                     } else {
-                        uptime = 0;
+                        uptime = 0; //Reset the uptime
                     }
-                } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
-                    if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
-                        refreshFFTimer(ffPos);
+                } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) { //IF the block found id an FF
+                    if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) { //If we have enough power to sustain the FF
+                        refreshFFTimer(ffPos); //Refresh the decay timer of the FF
                     }
                 }
 
@@ -330,18 +330,18 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     //Refresh the forcefield decay timer
     private void refreshFFTimer(BlockPos ffPos) {
 
-        TileEntity te = worldObj.getTileEntity(ffPos);
+        TileEntity te = worldObj.getTileEntity(ffPos); //Get the tileentity
 
-        if (te != null) {
+        if (te != null) { //Prevent it from trying to update forcefields that are not loaded (in an unloaded chunk)
             try {
-                Field f = te.getClass().getField("decayTimer");
-                f.setInt(te, 100); //5s
+                Field f = te.getClass().getField("decayTimer"); //Get its decayTimer
+                f.setInt(te, 100); //Set it to 5s
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {
-                LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString());
+                LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString()); //This shouldn't happen ever
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -355,31 +355,31 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         double powerDrawRate = PowerConf.ffProjectorDrawRate;
         double powerMax = PowerConf.ffProjectorMaxPower;
 
-        if (power < powerMax) {
+        if (power < powerMax) { //If we have space for more power
 
             double pcPower; //Power Cube Power
 
             try {
 
                 Field f = powerCube.getClass().getField("power");
-                pcPower = f.getDouble(powerCube);
+                pcPower = f.getDouble(powerCube); //Get the power cube's power level
 
-                if (pcPower > 0) {
-                    if (pcPower < powerDrawRate) {
-                        if (power + pcPower <= powerMax) {
-                            power += pcPower;
-                            f.setDouble(powerCube, 0);
+                if (pcPower > 0) { //If the power cube has more than 0 power
+                    if (pcPower < powerDrawRate) { //If the power cube has less power than what the FF Projector draws in 1 tick
+                        if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
+                            power += pcPower; //Draw all power from the power cube
+                            f.setDouble(powerCube, 0); //Set the power cube's power level to 0
                         } else {
-                            f.setDouble(powerCube, powerMax - power);
-                            power = powerMax;
+                            f.setDouble(powerCube, powerMax - power); //Set the power cube's power level to the difference between the projector's power and max power
+                            power = powerMax; //Set the projector's power level to the max
                         }
                     } else {
-                        if (power + powerDrawRate <= powerMax) {
-                            power += powerDrawRate;
-                            f.setDouble(powerCube, pcPower - powerDrawRate);
+                        if (power + powerDrawRate <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
+                            power += powerDrawRate; //Draw some power from the power cube
+                            f.setDouble(powerCube, pcPower - powerDrawRate); //Minus the power drawn from the power cube
                         } else {
-                            f.setDouble(powerCube, pcPower - (powerMax - power));
-                            power = powerMax;
+                            f.setDouble(powerCube, pcPower - (powerMax - power)); //Draw the power difference between the projector's power and max power
+                            power = powerMax; //Set the projector's power to the max
                         }
                     }
                 }
