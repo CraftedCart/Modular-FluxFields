@@ -86,7 +86,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         this.drawRect(this.guiLeft - 24, this.guiTop - 8, this.guiLeft + xSize + 24, this.guiTop - 6, 0xFF212121);
         this.drawRect(this.guiLeft - 24, this.guiTop - 8, (int) (this.guiLeft - 24 + (double) (xSize + 48) * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
 
-        this.fontRendererObj.drawString("Power: " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
                 this.guiLeft - 24, this.guiTop - 18, 0xFAFAFA, false);
 
     }
@@ -103,28 +103,35 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityNoUpgrade"), 15, 29, 0xFAFAFA); //Draw no upgrade warning
         } else {
 
-            this.addPlayerTextField.drawTextBox(); //Draw add player text box
-            //this.removeButton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY); //Draw remove button
-            this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
+            if (guiMode == 0) { //If it's on add/manage players mode
 
-            GL11.glScalef(0.5f, 0.5f, 0.5f);
-            Iterator<List<String>> iter = permittedPlayers.iterator();
-            int index = 0;
-            while (iter.hasNext()) {
-                int col;
-                if (selectedPlayer != null && selectedPlayer == index) {
-                    col = 0x2196F3;
-                } else {
-                    col = 0x404040;
+                this.addPlayerTextField.drawTextBox(); //Draw add player text box
+                this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
+
+                GL11.glScalef(0.5f, 0.5f, 0.5f);
+                Iterator<List<String>> iter = permittedPlayers.iterator();
+                int index = 0;
+                while (iter.hasNext()) {
+                    int col;
+                    if (selectedPlayer != null && selectedPlayer == index) {
+                        col = 0x2196F3;
+                    } else {
+                        col = 0x404040;
+                    }
+                    this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, col);
+                    index++;
                 }
-                this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, col);
-                index++;
-            }
 
-            if (selectedPlayer == null) {
-                removeButton.enabled = false;
-            } else {
-                removeButton.enabled = true;
+                if (selectedPlayer == null) {
+                    removeButton.enabled = false;
+                } else {
+                    removeButton.enabled = true;
+                }
+
+            } else if (guiMode == 1) {
+
+                //TODO
+
             }
 
         }
@@ -202,12 +209,16 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             List<Object> player = PlayerUtils.getUUIDFromPlayerName(addPlayerTextField.getText());
 
             if (player != null) {
-                //That player's online! Add the player to the list
-                List playerInfo = new ArrayList<String>();
-                playerInfo.add(player.get(0).toString());
-                playerInfo.add(player.get(1));
-                permittedPlayers.add(playerInfo);
-                statusMessage = "gui.mff:addedPermittedPlayer";
+                //That player's online! Add the player to the list it the player's not on there already
+                if (!doesUUIDExistInPermittedPlayers(player.get(0).toString())) {
+                    List playerInfo = new ArrayList<String>();
+                    playerInfo.add(player.get(0).toString());
+                    playerInfo.add(player.get(1));
+                    permittedPlayers.add(playerInfo);
+                    statusMessage = "gui.mff:addedPermittedPlayer";
+                } else {
+                    statusMessage = "gui.mff:permittedPlayerAlreadyExists";
+                }
             } else {
                 //That players not online. Show a warning
                 statusMessage = "gui.mff:playerNotOnline";
@@ -230,6 +241,18 @@ public class GuiFFProjectorSecurity extends GuiContainer {
 
         //TODO
         //NetworkHandler.network.sendToServer(new SomethingOrOther());
+
+    }
+
+    private boolean doesUUIDExistInPermittedPlayers(String UUID) {
+
+        Iterator<List<String>> iter = permittedPlayers.iterator();
+        while (iter.hasNext()) {
+            if (UUID.equals(iter.next().get(0))) {
+                return true;
+            }
+        }
+        return false;
 
     }
 

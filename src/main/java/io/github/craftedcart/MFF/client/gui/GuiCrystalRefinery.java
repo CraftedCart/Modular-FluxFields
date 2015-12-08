@@ -7,6 +7,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import java.lang.reflect.Field;
 
@@ -47,7 +48,7 @@ public class GuiCrystalRefinery extends GuiContainer {
             this.drawRect(this.guiLeft - 24, this.guiTop - 24, this.guiLeft + xSize + 24, this.guiTop - 22, 0xFF212121);
             this.drawRect(this.guiLeft - 24, this.guiTop - 24, (int) (this.guiLeft - 24 + (double) (xSize + 48) * power / PowerConf.crystalRefineryMaxPower), this.guiTop - 22, 0xFF2196F3);
 
-            this.fontRendererObj.drawString("Power: " + String.format("%09.2f", power) + " / " + String.format("%09.2f", PowerConf.crystalRefineryMaxPower) + " FE",
+            this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%09.2f", power) + " / " + String.format("%09.2f", PowerConf.crystalRefineryMaxPower) + " FE",
                     this.guiLeft - 24, this.guiTop - 34, 0xFAFAFA, false);
 
             //Draw progress value
@@ -68,7 +69,7 @@ public class GuiCrystalRefinery extends GuiContainer {
             this.drawRect(this.guiLeft - 24, this.guiTop - 8, this.guiLeft + xSize + 24, this.guiTop - 6, 0xFF212121);
             this.drawRect(this.guiLeft - 24, this.guiTop - 8, (int) (this.guiLeft - 24 + (xSize + 48) * (1 - ticksLeft / maxProgress)), this.guiTop - 6, 0xFF4CAF50);
 
-            this.fontRendererObj.drawString("Remaining: " + String.format("%06.2f", (ticksLeft) / 20f) + "s",
+            this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:remaining") + ": " + String.format("%06.2f", (ticksLeft) / 20f) + "s",
                     this.guiLeft - 24, this.guiTop - 18, 0xFAFAFA, false);
 
         } catch (NoSuchFieldException e) {

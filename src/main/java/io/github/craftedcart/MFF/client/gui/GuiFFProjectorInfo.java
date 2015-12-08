@@ -50,7 +50,7 @@ public class GuiFFProjectorInfo extends GuiContainer {
         this.drawRect(this.guiLeft - 24, this.guiTop - 8, this.guiLeft + xSize + 24, this.guiTop - 6, 0xFF212121);
         this.drawRect(this.guiLeft - 24, this.guiTop - 8, (int) (this.guiLeft - 24 + (double) (xSize + 48) * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
 
-        this.fontRendererObj.drawString("Power: " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
                 this.guiLeft - 24, this.guiTop - 18, 0xFAFAFA, false);
 
     }
@@ -83,9 +83,9 @@ public class GuiFFProjectorInfo extends GuiContainer {
                 15, 36, 0x404040, false); //Draw power upkeep
         this.fontRendererObj.drawString(String.format("XYZ Size: %d, %d, %d", this.te.maxX - this.te.minX + 1, this.te.maxY - this.te.minY + 1, this.te.maxZ - this.te.minZ + 1),
                 15, 45, 0x404040, false); //Draw size
-        this.fontRendererObj.drawString(String.format("Owner: %s", te.ownerName),
+        this.fontRendererObj.drawString(String.format("%s: %s", StatCollector.translateToLocal("gui.mff:owner"), te.ownerName),
                 15, 54, 0x404040, false); //Draw owner
-        this.fontRendererObj.drawString(String.format("Uptime: %s : %s : %s", hrStr, mnStr, secStr),
+        this.fontRendererObj.drawString(String.format("%s: %s : %s : %s", StatCollector.translateToLocal("gui.mff:uptime"), hrStr, mnStr, secStr),
                 15, 63, 0x404040, false); //Draw uptime
 
     }
