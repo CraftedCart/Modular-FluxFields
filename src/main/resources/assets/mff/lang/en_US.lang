@@ -27,7 +27,8 @@ container.mff:crystalRefinery=Crystal Refinery
 container.mff:ffProjector=Forcefield Projector
 gui.mff:info=Info
 gui.mff:sizing=Sizing
-gui.mff:security=Security
+gui.mff:securityPlayers=Security: Manage Players
+gui.mff:securityGroups=Security: Manage Groups
 gui.mff:securityNoUpgrade=No Security Upgrade Found
 gui.mff:playerNotOnline=That player's not online
 gui.mff:addedPermittedPlayer=Added player to the whitelist
@@ -37,6 +38,8 @@ gui.mff:owner=Owner
 gui.mff:uptime=Uptime
 gui.mff:power=Power
 gui.mff:remaining=Remaining
+gui.mff:addedNewGroup=Added new group
+gui.mff:groupAlreadyExists=Group already exists
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed

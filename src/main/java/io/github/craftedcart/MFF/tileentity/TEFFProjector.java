@@ -22,6 +22,7 @@ import net.minecraft.util.IChatComponent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,6 +54,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public String owner = ""; //The owner UUID
     public String ownerName = ""; //The owner username
     public List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //The list of permitted players defined by the security tab on the gui
+    public List<List<Object>> permissionGroups = Arrays.asList(Arrays.asList((Object) "Everyone"));
+    //List containing lists of groups containing the group ID and its permissions (in that order) defined by the security tab on the gui
 
     public TEFFProjector() {
         this.inventory = new ItemStack[this.getSizeInventory()];
@@ -267,7 +270,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     }
 
     @Override
-    public void update() { //Runs every game tick (20 times a second)
+    public void update() { //Runs every game tick (20 times a second)q
 
         if (!doWorldLoadSetup) { //This only runs when the chunk loads
             ArrayList<Object> al = new ArrayList<Object>();
@@ -315,7 +318,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
                     } else {
                         uptime = 0; //Reset the uptime
                     }
-                } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) { //IF the block found id an FF
+                } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) { //If the block found is an FF
                     if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) { //If we have enough power to sustain the FF
                         refreshFFTimer(ffPos); //Refresh the decay timer of the FF
                     }
