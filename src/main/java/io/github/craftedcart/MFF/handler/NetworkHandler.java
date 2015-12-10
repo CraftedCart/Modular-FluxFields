@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.handler;
 
+import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSecurity;
 import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSizing;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.reference.Reference;
@@ -19,6 +20,7 @@ public class NetworkHandler {
         network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         network.registerMessage(MessageFFProjectorGuiSaveSizing.Handler.class, MessageFFProjectorGuiSaveSizing.class, 0, Side.SERVER);
         network.registerMessage(MessageRequestOpenGui.Handler.class, MessageRequestOpenGui.class, 1, Side.SERVER);
+        network.registerMessage(MessageFFProjectorGuiSaveSecurity.Handler.class, MessageFFProjectorGuiSaveSecurity.class, 2, Side.SERVER);
     }
 
 }

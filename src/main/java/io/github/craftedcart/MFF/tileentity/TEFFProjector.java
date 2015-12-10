@@ -54,7 +54,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public String owner = ""; //The owner UUID
     public String ownerName = ""; //The owner username
     public List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //The list of permitted players defined by the security tab on the gui
-    public List<List<Object>> permissionGroups = Arrays.asList(Arrays.asList((Object) "Everyone"));
+    public List<List<Object>> permissionGroups = new ArrayList<List<Object>>(Arrays.asList(Arrays.asList((Object) "gui.mff:everyone")));
     //List containing lists of groups containing the group ID and its permissions (in that order) defined by the security tab on the gui
 
     public TEFFProjector() {
@@ -410,6 +410,36 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         tagCompound.setInteger("uptime", uptime);
         tagCompound.setString("owner", owner);
         tagCompound.setString("ownerName", ownerName);
+
+        //Set players list
+        NBTTagCompound players = new NBTTagCompound();
+        int index = 0;
+        for (Object plr : permittedPlayers) {
+            List plrList = (List) plr;
+
+            NBTTagCompound playerData = new NBTTagCompound();
+            playerData.setString("uuid", (String) plrList.get(0)); //Set player UUID
+            playerData.setString("name", (String) plrList.get(1)); //Set player name
+            playerData.setString("groupID", (String) plrList.get(2)); //Set player group ID
+
+            players.setTag(String.valueOf(index), playerData);
+            index++;
+        }
+        tagCompound.setTag("permittedPlayers", players);
+
+        //Set groups list
+        NBTTagCompound groups = new NBTTagCompound();
+        index = 0;
+        for (Object group : permissionGroups) {
+            List groupList = (List) group;
+
+            NBTTagCompound groupData = new NBTTagCompound();
+            groupData.setString("id", (String) groupList.get(0)); //Set group ID
+
+            groups.setTag(String.valueOf(index), groupData);
+            index++;
+        }
+        tagCompound.setTag("permissionGroups", groups);
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
@@ -425,6 +455,46 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         uptime = tagCompound.getInteger("uptime");
         owner = tagCompound.getString("owner");
         ownerName = tagCompound.getString("ownerName");
+
+        //Read players
+        if (tagCompound.hasKey("permittedPlayers")) {
+            NBTTagCompound players = (NBTTagCompound) tagCompound.getTag("permittedPlayers");
+            List<List<String>> playersList = new ArrayList<List<String>>();
+
+            int index = 0;
+            while (players.hasKey(String.valueOf(index))) {
+
+                List<String> playerData = new ArrayList<String>();
+
+                playerData.add(((NBTTagCompound) (players.getTag(String.valueOf(index)))).getString("uuid"));
+                playerData.add(((NBTTagCompound) (players.getTag(String.valueOf(index)))).getString("name"));
+                playerData.add(((NBTTagCompound) (players.getTag(String.valueOf(index)))).getString("groupID"));
+
+                playersList.add(playerData);
+
+                index++;
+            }
+            this.permittedPlayers = playersList;
+        }
+
+        //Read groups
+        if (tagCompound.hasKey("permissionGroups")) {
+            NBTTagCompound groups = (NBTTagCompound) tagCompound.getTag("permissionGroups");
+            List<List<Object>> groupsList = new ArrayList<List<Object>>();
+
+            int index = 0;
+            while (groups.hasKey(String.valueOf(index))) {
+
+                List<Object> groupData = new ArrayList<Object>();
+
+                groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getString("id"));
+
+                groupsList.add(groupData);
+
+                index++;
+            }
+            this.permissionGroups = groupsList;
+        }
 
     }
 
