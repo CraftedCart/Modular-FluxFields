@@ -135,13 +135,7 @@ public class GuiFFProjectorSizing extends GuiContainer {
     public void onGuiClosed() {
 
         super.onGuiClosed();
-        this.te.shouldResetCalcSetup = true;
-        this.te.minX = x1;
-        this.te.maxX = x2;
-        this.te.minY = y1;
-        this.te.maxY = y2;
-        this.te.minZ = z1;
-        this.te.maxZ = z2;
+
         NetworkHandler.network.sendToServer(new MessageFFProjectorGuiSaveSizing(this.te.getPos(), x1, y1, z1, x2, y2, z2));
 
     }
