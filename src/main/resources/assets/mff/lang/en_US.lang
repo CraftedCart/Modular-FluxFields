@@ -3,6 +3,8 @@ itemGroup.MFF=Modular FluxFields
 
 #Items
 item.mff:prism.name=Prism
+item.mff:aluriteIngot.name=Alurite Ingot
+item.mff:aluriteBase.name=Alurite Base
 #Crystals
 item.mff:refinedAmethyst.name=Refined Amethyst
 item.mff:rawAmethyst.name=Raw Amethyst
@@ -15,6 +17,7 @@ tile.mff:forcefield.name=Forcefield
 tile.mff:ffProjector.name=Forcefield Projector
 tile.mff:powerCube.name=Power Cube
 tile.mff:crystalRefinery.name=Crystal Refinery
+tile.mff:crystalConstructor.name=Crystal Constructor
 #Ores
 tile.mff:oreAmethyst.name=Amethyst Ore
 
@@ -24,6 +27,7 @@ chat.mff:warnFFProtection=§cMFF: Nope! That block's protected by a forcefield
 
 #Gui
 container.mff:crystalRefinery=Crystal Refinery
+container.mff:crystalConstructor=Crystal Constructor
 container.mff:ffProjector=Forcefield Projector
 gui.mff:info=Info
 gui.mff:sizing=Sizing

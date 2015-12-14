@@ -15,6 +15,8 @@ public class ModItems {
 
     //Reference Items
     public static final ModItem prism = new ItemPrism();
+    public static final ModItem aluriteIngot = new ItemAluriteIngot();
+    public static final ModItem aluriteBase = new ItemAluriteBase();
     //Crystals
     public static final ModItem refinedAmethyst = new ItemRefinedAmethyst();
     public static final ModItem rawAmethyst = new ItemRawAmethyst();
@@ -26,6 +28,8 @@ public class ModItems {
 
         //Register Items
         GameRegistry.registerItem(prism, Names.ItemPrism);
+        GameRegistry.registerItem(aluriteIngot, Names.ItemAluriteIngot);
+        GameRegistry.registerItem(aluriteBase, Names.ItemAluriteBase);
         //Crystals
         GameRegistry.registerItem(refinedAmethyst, Names.ItemRefinedAmethyst);
         GameRegistry.registerItem(rawAmethyst, Names.ItemRawAmethyst);
@@ -39,6 +43,8 @@ public class ModItems {
 
         //Register Item Renders
         registerRender(prism);
+        registerRender(aluriteIngot);
+        registerRender(aluriteBase);
         //Crystals
         registerRender(refinedAmethyst);
         registerRender(rawAmethyst);

@@ -25,6 +25,7 @@ public class ModBlocks {
     public static final ModBlock ffProjector = new BlockFFProjector();
     public static final ModBlock powerCube = new BlockPowerCube();
     public static final ModBlock crystalRefinery = new BlockCrystalRefinery();
+    public static final ModBlock crystalConstructor = new BlockCrystalConstructor();
     //Ores
     public static final ModBlock oreAmethyst = new BlockOreAmethyst();
 
@@ -36,6 +37,7 @@ public class ModBlocks {
         GameRegistry.registerBlock(ffProjector, Names.BlockFFProjector);
         GameRegistry.registerBlock(powerCube, Names.BlockPowerCube);
         GameRegistry.registerBlock(crystalRefinery, Names.BlockCrystalRefinery);
+        GameRegistry.registerBlock(crystalConstructor, Names.BlockCrystalConstructor);
         //Ores
         GameRegistry.registerBlock(oreAmethyst, Names.BlockOreAmethyst);
         OreDictionary.registerOre(Names.BlockOreAmethyst, new ItemStack(oreAmethyst));
@@ -49,6 +51,7 @@ public class ModBlocks {
         registerRender(ffProjector);
         registerBlockRenderAsItem(powerCube, Names.BlockPowerCube);
         registerRender(crystalRefinery);
+        registerRender(crystalConstructor);
         //Ores
         registerRender(oreAmethyst);
 
