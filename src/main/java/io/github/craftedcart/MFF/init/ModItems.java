@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -20,6 +21,8 @@ public class ModItems {
     //Crystals
     public static final ModItem refinedAmethyst = new ItemRefinedAmethyst();
     public static final ModItem rawAmethyst = new ItemRawAmethyst();
+    public static final ModItem refinedRuby = new ItemRefinedRuby();
+    public static final ModItem rawRuby = new ItemRawRuby();
     //Upgrades
     public static final ModItem speedUpgrade = new ItemSpeedUpgrade();
     public static final ModItem efficiencyUpgrade = new ItemEfficiencyUpgrade();
@@ -29,10 +32,15 @@ public class ModItems {
         //Register Items
         GameRegistry.registerItem(prism, Names.ItemPrism);
         GameRegistry.registerItem(aluriteIngot, Names.ItemAluriteIngot);
+        OreDictionary.registerOre("ingotAlurite", aluriteIngot);
         GameRegistry.registerItem(aluriteBase, Names.ItemAluriteBase);
         //Crystals
         GameRegistry.registerItem(refinedAmethyst, Names.ItemRefinedAmethyst);
         GameRegistry.registerItem(rawAmethyst, Names.ItemRawAmethyst);
+        OreDictionary.registerOre("gemAmethyst", rawAmethyst);
+        GameRegistry.registerItem(refinedRuby, Names.ItemRefinedRuby);
+        GameRegistry.registerItem(rawRuby, Names.ItemRawRuby);
+        OreDictionary.registerOre("gemRuby", rawRuby);
         //Upgrades
         GameRegistry.registerItem(speedUpgrade, Names.ItemSpeedUpgrade);
         GameRegistry.registerItem(efficiencyUpgrade, Names.ItemEfficiencyUpgrade);
@@ -48,6 +56,8 @@ public class ModItems {
         //Crystals
         registerRender(refinedAmethyst);
         registerRender(rawAmethyst);
+        registerRender(refinedRuby);
+        registerRender(rawRuby);
         //Upgrades
         registerRender(speedUpgrade);
         registerRender(efficiencyUpgrade);

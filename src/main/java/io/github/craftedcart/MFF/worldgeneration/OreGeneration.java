@@ -17,9 +17,11 @@ import java.util.Random;
 public class OreGeneration implements IWorldGenerator {
 
     private WorldGenerator genOreAmethyst;
+    private WorldGenerator genOreRuby;
 
     public OreGeneration() {
         this.genOreAmethyst = new WorldGenMinable(ModBlocks.oreAmethyst.getDefaultState(), 8); //Up to 8 in a vein
+        this.genOreRuby = new WorldGenMinable(ModBlocks.oreRuby.getDefaultState(), 4); //Up to 4 in a vein
     }
 
     @Override
@@ -27,6 +29,7 @@ public class OreGeneration implements IWorldGenerator {
         switch (world.provider.getDimensionId()) {
             case 0: //Overworld
                 this.runGenerator(genOreAmethyst, world, random, chunkX, chunkZ, 10, 0, 32);
+                this.runGenerator(genOreRuby, world, random, chunkX, chunkZ, 2, 0, 20);
                 break;
             case -1: //Nether
                 break;

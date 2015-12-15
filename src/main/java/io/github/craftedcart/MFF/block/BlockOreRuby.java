@@ -8,18 +8,18 @@ import net.minecraft.item.Item;
 import java.util.Random;
 
 /**
- * Created by CraftedCart on 26/11/2015 (DD/MM/YYYY)
+ * Created by CraftedCart on 15/12/2015 (DD/MM/YYYY)
  */
 
-public class BlockOreAmethyst extends ModBlock {
+public class BlockOreRuby extends ModBlock {
 
     private int least_quantity = 1;
     private int most_quantity = 4;
 
-    public BlockOreAmethyst() {
+    public BlockOreRuby() {
 
         super();
-        this.setUnlocalizedName(Names.BlockOreAmethyst);
+        this.setUnlocalizedName(Names.BlockOreRuby);
         this.setHardness(5f);
         this.setHarvestLevel("pickaxe", 2); //Requires iron pickaxe to harvest
 
@@ -27,7 +27,7 @@ public class BlockOreAmethyst extends ModBlock {
 
     @Override
     public Item getItemDropped(IBlockState blockstate, Random random, int fortune) {
-        return ModItems.rawAmethyst;
+        return ModItems.rawRuby;
     }
 
     @Override

@@ -8,6 +8,8 @@ item.mff:aluriteBase.name=Alurite Base
 #Crystals
 item.mff:refinedAmethyst.name=Refined Amethyst
 item.mff:rawAmethyst.name=Raw Amethyst
+item.mff:refinedRuby.name=Refined Ruby
+item.mff:rawRuby.name=Raw Ruby
 #Upgrades
 item.mff:speedUpgrade.name=Speed Upgrade
 item.mff:efficiencyUpgrade.name=Efficiency Upgrade
@@ -20,6 +22,7 @@ tile.mff:crystalRefinery.name=Crystal Refinery
 tile.mff:crystalConstructor.name=Crystal Constructor
 #Ores
 tile.mff:oreAmethyst.name=Amethyst Ore
+tile.mff:oreRuby.name=Ruby Ore
 
 #Chat
 chat.mff:bypassedFFProtection=§eMFF: Bypassed a block that was protected by a forcefield (You're in creative mode!)

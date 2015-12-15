@@ -28,6 +28,7 @@ public class ModBlocks {
     public static final ModBlock crystalConstructor = new BlockCrystalConstructor();
     //Ores
     public static final ModBlock oreAmethyst = new BlockOreAmethyst();
+    public static final ModBlock oreRuby = new BlockOreRuby();
 
 
     public static void init() {
@@ -41,6 +42,8 @@ public class ModBlocks {
         //Ores
         GameRegistry.registerBlock(oreAmethyst, Names.BlockOreAmethyst);
         OreDictionary.registerOre(Names.BlockOreAmethyst, new ItemStack(oreAmethyst));
+        GameRegistry.registerBlock(oreRuby, Names.BlockOreRuby);
+        OreDictionary.registerOre(Names.BlockOreRuby, new ItemStack(oreRuby));
 
     }
 
@@ -54,6 +57,7 @@ public class ModBlocks {
         registerRender(crystalConstructor);
         //Ores
         registerRender(oreAmethyst);
+        registerRender(oreRuby);
 
     }
 

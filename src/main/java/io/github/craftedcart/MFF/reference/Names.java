@@ -14,6 +14,7 @@ public final class Names {
     public static final String BlockCrystalConstructor = "crystalConstructor";
     //Ores
     public static final String BlockOreAmethyst = "oreAmethyst";
+    public static final String BlockOreRuby = "oreRuby";
 
     //Items
     public static final String ItemPrism = "prism";
@@ -22,6 +23,8 @@ public final class Names {
     //Crystals
     public static final String ItemRefinedAmethyst = "refinedAmethyst";
     public static final String ItemRawAmethyst = "rawAmethyst";
+    public static final String ItemRefinedRuby = "refinedRuby";
+    public static final String ItemRawRuby = "rawRuby";
     //Upgrades
     public static final String ItemSpeedUpgrade = "speedUpgrade";
     public static final String ItemEfficiencyUpgrade = "efficiencyUpgrade";

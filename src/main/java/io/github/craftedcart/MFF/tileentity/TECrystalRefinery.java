@@ -1,6 +1,7 @@
 package io.github.craftedcart.MFF.tileentity;
 
 import io.github.craftedcart.MFF.init.ModItems;
+import io.github.craftedcart.MFF.item.ModItem;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -292,25 +293,9 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
         if (input != null) {
             if (input.getItem() == ModItems.rawAmethyst) {
-
-                if (progress <= maxProgress && power > PowerConf.crystalRefineryUsage * powerMultiplier) {
-                    progress++;
-                    power -= PowerConf.crystalRefineryUsage * powerMultiplier;
-                } else if (progress >= maxProgress) {
-                    //Done Refining
-                    if (output != null) {
-                        if ((output.getItem() == ModItems.refinedAmethyst && output.stackSize < output.getMaxStackSize())) {
-                            progress = 0;
-                            decrStackSize(0, 1);
-                            setInventorySlotContents(1, new ItemStack(ModItems.refinedAmethyst, output.stackSize + 1));
-                        }
-                    } else {
-                        progress = 0;
-                        decrStackSize(0, 1);
-                        setInventorySlotContents(1, new ItemStack(ModItems.refinedAmethyst, 1));
-                    }
-                }
-
+                craftTick(output, ModItems.refinedAmethyst);
+            } else if (input.getItem() == ModItems.rawRuby) {
+                craftTick(output, ModItems.refinedRuby);
             } else {
                 progress = 0;
             }
@@ -330,6 +315,26 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
         powerMultiplier *= powerTimser;
         powerMultiplier /= powerDivider;
 
+    }
+
+    private void craftTick(ItemStack outputSlot, ModItem outputItem) {
+        if (progress <= maxProgress && power > PowerConf.crystalRefineryUsage * powerMultiplier) {
+            progress++;
+            power -= PowerConf.crystalRefineryUsage * powerMultiplier;
+        } else if (progress >= maxProgress) {
+            //Done Refining
+            if (outputSlot != null) {
+                if ((outputSlot.getItem() == outputItem && outputSlot.stackSize < outputSlot.getMaxStackSize())) {
+                    progress = 0;
+                    decrStackSize(0, 1);
+                    setInventorySlotContents(1, new ItemStack(outputItem, outputSlot.stackSize + 1));
+                }
+            } else {
+                progress = 0;
+                decrStackSize(0, 1);
+                setInventorySlotContents(1, new ItemStack(outputItem, 1));
+            }
+        }
     }
 
     private void checkForUpgrade (ItemStack stack) {
