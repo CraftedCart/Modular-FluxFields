@@ -18,6 +18,7 @@ public final class Names {
 
     //Items
     public static final String ItemPrism = "prism";
+    public static final String ItemCrystalSheet = "crystalSheet";
     public static final String ItemAluriteIngot = "aluriteIngot";
     public static final String ItemAluriteBase = "aluriteBase";
     //Crystals

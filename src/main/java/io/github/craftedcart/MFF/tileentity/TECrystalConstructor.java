@@ -241,7 +241,7 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
     //<editor-fold desc="ISidedInventory Stuff">
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        return new int[] {0, 1};
+        return new int[] {9};
     }
 
     @Override
@@ -311,7 +311,24 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
         )) { //Craft Alurite Base
 
             currentCraftingTime = CrystalConstructorTimings.aluriteBase;
-            craftTick(output, ModItems.aluriteBase);
+            craftTick(output, ModItems.aluriteBase, 1);
+
+        } else if (checkRecipe(
+                input1, input2, input3, input4, input5, input6, input7, input8, input9,
+                Items.emerald, ModItems.refinedRuby, null, ModItems.refinedAmethyst, Items.diamond, null, null, null, null
+        ) || checkRecipe(
+                input1, input2, input3, input4, input5, input6, input7, input8, input9,
+                null, Items.emerald, ModItems.refinedRuby, null, ModItems.refinedAmethyst, Items.diamond, null, null, null
+        ) || checkRecipe(
+                input1, input2, input3, input4, input5, input6, input7, input8, input9,
+                null, null, null, Items.emerald, ModItems.refinedRuby, null, ModItems.refinedAmethyst, Items.diamond, null
+        ) || checkRecipe(
+                input1, input2, input3, input4, input5, input6, input7, input8, input9,
+                null, null, null, null, Items.emerald, ModItems.refinedRuby, null, ModItems.refinedAmethyst, Items.diamond
+        )) { //Craft Crystal Sheet
+
+            currentCraftingTime = CrystalConstructorTimings.crystalSheet;
+            craftTick(output, ModItems.crystalSheet, 4);
 
         } else {
             progress = 0;
@@ -416,14 +433,14 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
     }
     
 
-    private void craftTick(ItemStack outputSlot, ModItem outputItem) {
+    private void craftTick(ItemStack outputSlot, ModItem outputItem, int amountProduced) {
         if (progress <= maxProgress && power > PowerConf.crystalConstructorUsage * powerMultiplier) {
             progress++;
             power -= PowerConf.crystalConstructorUsage * powerMultiplier;
         } else if (progress >= maxProgress) {
             //Done Refining
             if (outputSlot != null) {
-                if ((outputSlot.getItem() == outputItem && outputSlot.stackSize < outputSlot.getMaxStackSize())) {
+                if ((outputSlot.getItem() == outputItem && outputSlot.stackSize + amountProduced <= outputSlot.getMaxStackSize())) {
                     progress = 0;
                     decrStackSize(0, 1);
                     decrStackSize(1, 1);
@@ -434,7 +451,7 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
                     decrStackSize(6, 1);
                     decrStackSize(7, 1);
                     decrStackSize(8, 1);
-                    setInventorySlotContents(9, new ItemStack(outputItem, outputSlot.stackSize + 1));
+                    setInventorySlotContents(9, new ItemStack(outputItem, outputSlot.stackSize + amountProduced));
                 }
             } else {
                 progress = 0;
@@ -447,7 +464,7 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
                 decrStackSize(6, 1);
                 decrStackSize(7, 1);
                 decrStackSize(8, 1);
-                setInventorySlotContents(9, new ItemStack(outputItem, 1));
+                setInventorySlotContents(9, new ItemStack(outputItem, amountProduced));
             }
         }
     }

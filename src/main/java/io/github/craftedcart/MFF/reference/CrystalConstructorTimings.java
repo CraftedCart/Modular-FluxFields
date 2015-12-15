@@ -5,6 +5,7 @@ package io.github.craftedcart.MFF.reference;
  */
 public final class CrystalConstructorTimings {
 
-    public static final int aluriteBase = 2400; //120s / 2m (4200t)
+    public static final int aluriteBase = 2400; //120s / 2m (2400t)
+    public static final int crystalSheet = 3600; //180s / 3m (3600t)
 
 }

@@ -3,6 +3,7 @@ package io.github.craftedcart.MFF;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.init.ModBlocks;
+import io.github.craftedcart.MFF.init.ModCraftingRecipes;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.init.ModTileEntities;
 import io.github.craftedcart.MFF.proxy.IProxy;
@@ -38,6 +39,7 @@ public class ModMFF
 
         ModItems.init();
         ModBlocks.init();
+        ModCraftingRecipes.init();
         ModTileEntities.init();
         NetworkHandler.init();
 

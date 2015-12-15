@@ -16,6 +16,7 @@ public class ModItems {
 
     //Reference Items
     public static final ModItem prism = new ItemPrism();
+    public static final ModItem crystalSheet = new ItemCrystalSheet();
     public static final ModItem aluriteIngot = new ItemAluriteIngot();
     public static final ModItem aluriteBase = new ItemAluriteBase();
     //Crystals
@@ -31,6 +32,7 @@ public class ModItems {
 
         //Register Items
         GameRegistry.registerItem(prism, Names.ItemPrism);
+        GameRegistry.registerItem(crystalSheet, Names.ItemCrystalSheet);
         GameRegistry.registerItem(aluriteIngot, Names.ItemAluriteIngot);
         OreDictionary.registerOre("ingotAlurite", aluriteIngot);
         GameRegistry.registerItem(aluriteBase, Names.ItemAluriteBase);
@@ -51,6 +53,7 @@ public class ModItems {
 
         //Register Item Renders
         registerRender(prism);
+        registerRender(crystalSheet);
         registerRender(aluriteIngot);
         registerRender(aluriteBase);
         //Crystals

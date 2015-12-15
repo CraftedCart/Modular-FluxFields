@@ -3,6 +3,7 @@ itemGroup.MFF=Modular FluxFields
 
 #Items
 item.mff:prism.name=Prism
+item.mff:crystalSheet.name=Crystal Sheet
 item.mff:aluriteIngot.name=Alurite Ingot
 item.mff:aluriteBase.name=Alurite Base
 #Crystals
