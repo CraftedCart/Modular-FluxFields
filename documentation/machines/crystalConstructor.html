@@ -37,15 +37,15 @@
 					</tr>
 					<tr>
 						<td>Block</td>
-						<td><img src="/Modular-FluxFields/img/machines/crystalRefinery.png" class="docs-block-preview"></td>
+						<td><img src="/Modular-FluxFields/img/machines/crystalConstructor.png" class="docs-block-preview"></td>
 					</tr>
 					<tr>
 						<td>Unlocalised Name</td>
-						<td>mff:crystalRefinery</td>
+						<td>mff:crystalConstructor</td>
 					</tr>
 					<tr>
 						<td>Localised Name (en_US)</td>
-						<td>Crystal Refinery</td>
+						<td>Crystal Constructor</td>
 					</tr>
 					<tr>
 						<td>Hardness</td>
@@ -69,11 +69,11 @@
 					</tr>
 					<tr>
 						<td>Base Power Usage</td>
-						<td>99.12 FE / t</td>
+						<td>16.32 FE / t</td>
 					</tr>
 					<tr>
 						<td>Base Processing Time</td>
-						<td>2m (120s or 2400t)</td>
+						<td>Varies per item</td>
 					</tr>
 					<tr>
 						<td>Accepted Upgrades</td>
@@ -90,19 +90,19 @@
 				<ol class="breadcrumb">
   				<li><a href="/Modular-FluxFields/documentation/index.html">Documentation</a></li>
 					<li><a href="/Modular-FluxFields/documentation/machines/index.html">Machines</a></li>
-					<li class="active">Crystal Refinery</li>
+					<li class="active">Crystal Constructor</li>
 				</ol>
 
-				<h1>Crystal Refinery</h1>
+				<h1>Crystal Constructor</h1>
 
 		  	<p class="lead">
-					The Crystal Refinery is needed to convert those crystals you find underground into something more useful
+					The Crystal Constructor is the main crafting mechanic within Modular FluxFields
 		  	</p>
 
 				<p>
-					The crystal refinery is a machine required to produce refined crystals, which are needed to craft several components within Modular FluxFields.
-					Raw crystals are fed into the machine, and after 120 seconds (2400t) (You can, and will probably want to speed this up with speed upgrades), a refined crystal is outputted.
-					You can automate this by pumping items in and extracting items out from any side.<br>
+					The crystal constructor is the main machine used to craft items within Modular FluxFields.
+          Like a regular crafting table, you put items into a 3 x 3 grid and an item pops out of the output slot.
+          Unlike a regular crafting table however, the crystal constructor requires power to run, and items take a while to craft.
 					<br>
 					The crystal refinery requires power to run. Place a
           <a href="/Modular-FluxFields/documentation/power/powerCube.html"><img src="/Modular-FluxFields/img/power/powerCubeItem.png" class="docs-text-icon"> Power Cube</a>
@@ -111,23 +111,43 @@
 
 				<h2>Processing</h2>
 				<p>The crystal refinery can process the following items.</p>
-				<table class="table">
-					<tr>
-						<th>Input</th>
-						<th>Output</th>
-					</tr>
-					<tr>
-						<td><img src="/Modular-FluxFields/img/crystals/rawAmethyst.png" title="Raw Amethyst" class="docs-item-icon"> Raw Amethyst</td>
-						<td><img src="/Modular-FluxFields/img/crystals/refinedAmethyst.png" title="Refined Amethyst" class="docs-item-icon"> Refined Amethyst</td>
-					</tr>
-					<tr>
-						<td><img src="/Modular-FluxFields/img/crystals/rawRuby.png" title="Raw Ruby" class="docs-item-icon"> Raw Ruby</td>
-						<td><img src="/Modular-FluxFields/img/crystals/refinedRuby.png" title="Refined Ruby" class="docs-item-icon"> Refined Ruby</td>
-					<tr>
-				<table>
+
+        <div class="container-fluid"> <!-- Alurite Base Recipe -->
+				  <table class="table table-bordered table-nonfluid col-xs-6">
+					 <tr>
+						  <td><img src="/Modular-FluxFields/img/components/aluriteIngot.png" title="Alurite Ingot" class="docs-item-icon"></td>
+						  <td class="docs-item-icon"</td>
+					 </tr>
+            <tr>
+						  <td class="docs-item-icon"</td>
+              <td><a href="http://minecraft.gamepedia.com/Redstone"><img src="/Modular-FluxFields/img/vanilla/redstone.png" title="Redstone" class="docs-item-icon"></a></td>
+					 </tr>
+				  </table>
+          <div class="col-xs-6">
+            <img src="/Modular-FluxFields/img/components/aluriteBase.png" title="Alurite Base" class="docs-item-icon"> Alurite Base
+            <p><span class="glyphicon glyphicon-time" aria-hidden="true"></span> 2m (120s / 2400t)</p>
+          </div>
+        </div>
+
+        <div class="container-fluid"> <!-- Crystal Sheet x4 Recipe -->
+				  <table class="table table-bordered table-nonfluid col-xs-6">
+					 <tr>
+						  <td><a href="http://minecraft.gamepedia.com/Emerald"><img src="/Modular-FluxFields/img/vanilla/emerald.png" title="Emerald" class="docs-item-icon"></a></td>
+						  <td><img src="/Modular-FluxFields/img/crystals/refinedRuby.png" title="Refined Ruby" class="docs-item-icon"></td>
+					 </tr>
+            <tr>
+						  <td><img src="/Modular-FluxFields/img/crystals/refinedAmethyst.png" title="Refined Amethyst" class="docs-item-icon"></td>
+						  <td><a href="http://minecraft.gamepedia.com/Diamond"><img src="/Modular-FluxFields/img/vanilla/diamond.png" title="Diamond" class="docs-item-icon"></a></td>
+					 </tr>
+				  </table>
+          <div class="col-xs-6">
+            <img src="/Modular-FluxFields/img/components/crystalSheet.png" title="Crystal Sheet" class="docs-item-icon"> Crystal Sheet x4
+            <p><span class="glyphicon glyphicon-time" aria-hidden="true"></span> 3m (180s / 3600t)</p>
+          </div>
+        </div>
 
 				<h2>Gui</h2>
-				<a data-toggle="modal" data-target="#crystalRefineryGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/crystalRefineryAmethyst.png" class="docs-image-thumb"></a>
+				<a data-toggle="modal" data-target="#crystalRefineryGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/crystalConstructorCrystalSheet.png" class="docs-image-thumb"></a>
 				<br>
 
 				<div class="modal fade" id="crystalRefineryGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
@@ -135,10 +155,10 @@
 			    	<div class="modal-content">
 			      	<div class="modal-header">
 			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        	<h4 class="modal-title">Crystal Refinery Gui</h4>
+			        	<h4 class="modal-title">Crystal Constructor Gui</h4>
 			      	</div>
 			      	<div class="modal-body">
-			        	<img src="/Modular-FluxFields/img/gui/crystalRefineryAmethyst.png" class="docs-image-full">
+			        	<img src="/Modular-FluxFields/img/gui/crystalConstructorCrystalSheet.png" class="docs-image-full">
 			      	</div>
 			    	</div>
 			  	</div>
@@ -146,8 +166,16 @@
 
 				<br>
 				The current power status and time remaining until the raw crystal is refined are displayed at the top.<br>
-				Insert raw crystals into the left slot, and refined crystals come out of the right slot.<br>
+				Insert the recipe into the left slots, and the output comes out of the right slot.<br>
 				Up to 3 stacks of upgrades may be inserted into the right 3 slots on the GUI.<br>
+
+        <h2>Trivia</h2>
+        <ul>
+          <li>
+            The original intended time to craft one item was one hour (That means that a speed upgrade would have taken several hours to craft).
+            CraftedCart was feeling evil at that time.
+          </li>
+        </ul>
 
     	</div><!-- /.container -->
 		</div>

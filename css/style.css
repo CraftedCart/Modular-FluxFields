@@ -26,3 +26,11 @@
 .docs-item-icon {
 	height: 32px;
 }
+
+.docs-text-icon {
+	height: 1em;
+}
+
+.table-nonfluid {
+   width: auto !important;
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="A mod that adds forcefields to protect your Minecraft base">
+    <meta name="author" content="CraftedCart">
+    <link rel="icon" href="/Modular-FluxFields/img/favicon.ico">
+
+    <title>Modular FluxFields</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/Modular-FluxFields/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="/Modular-FluxFields/css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div id="navbarWrapper"></div>
+
+    <div class="jumbotron main-banner">
+      <div class="container">
+        <h1>Modular FluxFields</h1>
+        <h2>Official Documentation</h2>
+      </div>
+    </div>
+
+		<div class="container-fluid">
+			<div class="col-md-3">
+				<table class="table">
+					<tr>
+						<th>Stat</th>
+						<th>Info</th>
+					</tr>
+					<tr>
+						<td>Block</td>
+						<td><img src="/Modular-FluxFields/img/power/powerCube.png" class="docs-block-preview"></td>
+					</tr>
+          <tr>
+						<td>Item</td>
+						<td><img src="/Modular-FluxFields/img/power/powerCubeItem.png" class="docs-block-preview"></td>
+					</tr>
+					<tr>
+						<td>Unlocalised Name</td>
+						<td>mff:powerCube</td>
+					</tr>
+					<tr>
+						<td>Localised Name (en_US)</td>
+						<td>Power Cube</td>
+					</tr>
+					<tr>
+						<td>Hardness</td>
+						<td>4</td>
+					</tr>
+					<tr>
+						<td>Harvest Level</td>
+						<td>
+							<a href="http://minecraft.gamepedia.com/Pickaxe">
+								<img src="/Modular-FluxFields/img/vanilla/ironPickaxe.png" title="Iron Pickaxe"> Iron Pickaxe
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td>Max Power Storage</td>
+						<td>100,000,000 FE</td>
+					</tr>
+					<tr>
+						<td>Linking Range</td>
+						<td>Radius: 16m</td>
+					</tr>
+				</table>
+			</div>
+
+    	<div class="container col-md-9">
+
+				<ol class="breadcrumb">
+  				<li><a href="/Modular-FluxFields/documentation/index.html">Documentation</a></li>
+					<li><a href="/Modular-FluxFields/documentation/power/index.html">Power</a></li>
+					<li class="active">Power Cube</li>
+				</ol>
+
+				<h1>Power Cube</h1>
+
+		  	<p class="lead">
+					The Power Cube is the main form of power storage and transfer within Modular FluxFields
+		  	</p>
+
+				<p>
+					The power cube is the main power storage unit within Modular FluxFields.
+					The power cube is also used to transfer power between other power cubes, as well as machines.
+					Power cubes will evenly distribute their power to other power cubes within a radius of 16 blocks.
+					No tools or cables are required, power cubes automatically link up to each other (You may have to give it up to 5s for existing power cubes to recognize new power cubes).
+					Placing a power cube on top of a machine will allow that machine to draw power in from that power cube.
+					The size of the cube within the spinning power cube frame is an indicator as to how much power is stored within that cube.
+					The bigger it is, the more power that the power cube holds. Also, the cube changes from red to blue as the power level decreases.
+				</p>
+
+				<h2>Trivia</h2>
+        <ul>
+          <li>
+            The power cube used to be a power sphere, although this was scrapped due to (huge) lag issues.
+          </li>
+        </ul>
+
+    	</div><!-- /.container -->
+		</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/Modular-FluxFields/js/jquery-1.11.3.min.js"></script>
+    <script src="/Modular-FluxFields/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script type="text/javascript">
+      $("#navbarWrapper").load("/Modular-FluxFields/navbar.html"); // Load the navbar
+    </script>
+
+  </body>
+</html>

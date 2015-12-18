@@ -1,0 +1,88 @@
+{
+	"pages": [
+		{
+			"title": "Crystal Refinery",
+			"path": "/Modular-FluxFields/documentation/machines/crystalRefinery.html",
+			"tags": [
+				"crystal",
+				"refinery",
+				"refine",
+				"machine"
+			]
+		},
+		{
+			"title": "Crystal Constructor",
+			"path": "/Modular-FluxFields/documentation/machines/crystalConstructor.html",
+			"tags": [
+				"crystal",
+				"constructor",
+				"construct",
+				"build",
+				"builder",
+				"craft",
+				"crafter",
+				"crafting",
+				"machine"
+			]
+		},
+		{
+			"title": "Power Cube",
+			"path": "/Modular-FluxFields/documentation/power/powerCube.html",
+			"tags": [
+				"power",
+				"pwr",
+				"cube",
+				"energy",
+				"electricity",
+				"battery",
+				"cell",
+				"store",
+				"storage"
+			]
+		},
+		{
+			"title": "Power Documentation Home",
+			"path": "/Modular-FluxFields/documentation/power/index.html",
+			"tags": [
+				"power",
+				"pwr",
+				"energy",
+				"electricity",
+				"battery",
+				"cell",
+				"store",
+				"storage",
+				"documentation",
+				"docs",
+				"doc",
+				"wiki",
+				"home"
+			]
+		},
+		{
+			"title": "Machines Documentation Home",
+			"path": "/Modular-FluxFields/documentation/power/index.html",
+			"tags": [
+				"machine",
+				"machines",
+				"contraption",
+				"documentation",
+				"docs",
+				"doc",
+				"wiki",
+				"home"
+			]
+		},
+		{
+			"title": "Documentation Home",
+			"path": "/Modular-FluxFields/documentation/index.html",
+			"tags": [
+				"documentation",
+				"docs",
+				"doc",
+				"wiki",
+				"home"
+			]
+		}
+	]
+}
