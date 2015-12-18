@@ -83,6 +83,22 @@
 				"wiki",
 				"home"
 			]
+		},
+		{
+			"title": "Download",
+			"path": "/Modular-FluxFields/download.html",
+			"tags": [
+				"download",
+				"downloads",
+				"get"
+			]
+		}
+		{
+			"title": "Home",
+			"path": "/Modular-FluxFields/index.html",
+			"tags": [
+				"home"
+			]
 		}
 	]
 }
