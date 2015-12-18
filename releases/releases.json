@@ -1,0 +1,16 @@
+{
+	"releases": [
+		{
+			"VERSION-NAME": "v1.0 - Alpha 1",
+			"STABILITY": "Alpha",
+			"PANEL-CLASS": "panel-warning release-mc-1-8 release-alpha",
+			"RELEASE-DATE": "24 Nov 2015",
+			"MC-VERSION": "1.8",
+			"DOWNLOAD-JAR": "https://github.com/CraftedCart/Modular-FluxFields/releases/download/v1.0-Alpha1/MFF-1.8-1.0.jar",
+			"JAR-RELEASE-PROVIDER": "GitHub",
+			"JAR-SIZE": "51.4 KiB",
+			"GITHUB-RELEASE-LINK": "https://github.com/CraftedCart/Modular-FluxFields/releases/tag/v1.0-Alpha1",
+			"RELEASE-DESCRIPTION": "v1.0-Alpha1.html"
+		}
+	]
+}

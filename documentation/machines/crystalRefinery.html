@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="A mod that adds forcefields to protect your Minecraft base">
+    <meta name="author" content="CraftedCart">
+    <link rel="icon" href="/Modular-FluxFields/img/favicon.ico">
+
+    <title>Modular FluxFields</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/Modular-FluxFields/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="/Modular-FluxFields/css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div id="navbarWrapper"></div>
+
+    <div class="jumbotron main-banner">
+      <div class="container">
+        <h1>Modular FluxFields</h1>
+        <h2>Official Documentation</h2>
+      </div>
+    </div>
+
+		<div class="container-fluid">
+			<div class="col-md-3">
+				<table class="table">
+					<tr>
+						<th>Stat</th>
+						<th>Info</th>
+					</tr>
+					<tr>
+						<td>Block</td>
+						<td><img src="/Modular-FluxFields/img/machines/crystalRefinery.png" title="Crystal Refinery" class="docs-block-preview"></td>
+					</tr>
+					<tr>
+						<td>Unlocalised Name</td>
+						<td>mff:crystalRefinery</td>
+					</tr>
+					<tr>
+						<td>Localised Name (en_US)</td>
+						<td>Crystal Refinery</td>
+					</tr>
+					<tr>
+						<td>Hardness</td>
+						<td>6</td>
+					</tr>
+					<tr>
+						<td>Harvest Level</td>
+						<td>
+							<a href="http://minecraft.gamepedia.com/Pickaxe">
+								<img src="/Modular-FluxFields/img/vanilla/ironPickaxe.png" title="Iron Pickaxe"> Iron Pickaxe
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td>Max Power Storage</td>
+						<td>100,000 FE</td>
+					</tr>
+					<tr>
+						<td>Power Draw Rate</td>
+						<td>10,000 FE / t</td>
+					</tr>
+					<tr>
+						<td>Base Power Usage</td>
+						<td>99.12 FE / t</td>
+					</tr>
+					<tr>
+						<td>Base Processing Time</td>
+						<td>2m (120s or 2400t)</td>
+					</tr>
+					<tr>
+						<td>Accepted Upgrades</td>
+						<td>
+							<img src="/Modular-FluxFields/img/upgrades/speedUpgrade.png" width="32"> Speed Upgrade<br>
+							<img src="/Modular-FluxFields/img/upgrades/efficiencyUpgrade.png" width="32"> Efficiency Upgrade
+						</td>
+					</tr>
+				</table>
+			</div>
+
+    	<div class="container col-md-9">
+
+				<ol class="breadcrumb">
+  				<li><a href="/Modular-FluxFields/documentation/index.html">Documentation</a></li>
+					<li><a href="/Modular-FluxFields/documentation/machines/index.html">Machines</a></li>
+					<li class="active">Crystal Refinery</li>
+				</ol>
+
+				<h1>Crystal Refinery</h1>
+
+		  	<p class="lead">
+					The Crystal Refinery is needed to convert those crystals you find underground into something more useful
+		  	</p>
+
+				<p>
+					The crystal refinery is a machine required to produce refined crystals, which are needed to craft several components within Modular FluxFields.
+					Raw crystals are fed into the machine, and after 120 seconds (2400t) (You can, and will probably want to speed this up with speed upgrades), a refined crystal is outputted.
+					You can automate this by pumping items in and extracting items out from any side.<br>
+					<br>
+					The crystal refinery requires power to run. Place a Power Cube above it and it will draw power from that.
+				</p>
+
+				<h2>Processing</h2>
+				<p>The crystal refinery can process the following items.</p>
+				<table class="table">
+					<tr>
+						<th>Input</th>
+						<th>Output</th>
+					</tr>
+					<tr>
+						<td><img src="/Modular-FluxFields/img/crystals/rawAmethyst.png" class="docs-item-icon"> Raw Amethyst</td>
+						<td><img src="/Modular-FluxFields/img/crystals/refinedAmethyst.png" class="docs-item-icon"> Refined Amethyst</td>
+					</tr>
+					<tr>
+						<td><img src="/Modular-FluxFields/img/crystals/rawRuby.png" class="docs-item-icon"> Raw Ruby</td>
+						<td><img src="/Modular-FluxFields/img/crystals/refinedRuby.png" class="docs-item-icon"> Refined Ruby</td>
+						<tr>
+						</table>
+
+						<h2>Gui</h2>
+						<a data-toggle="modal" data-target="#crystalRefineryGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/crystalRefineryAmethyst.png" class="docs-image-thumb"></a>
+						<br>
+
+						<div class="modal fade" id="crystalRefineryGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
+			  		<div class="modal-dialog modal-lg" role="document">
+			    	<div class="modal-content">
+			      	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        	<h4 class="modal-title">Crystal Refinery Gui</h4>
+			      	</div>
+			      	<div class="modal-body">
+			        	<img src="/Modular-FluxFields/img/gui/crystalRefineryAmethyst.png" class="docs-image-full">
+			      	</div>
+			    	</div>
+			  	</div>
+				</div> <!-- / modal -->
+
+				<br>
+				The current power status and time remaining until the raw crystal is refined are displayed at the top.<br>
+				Insert raw crystals into the left slot, and refined crystals come out of the right slot.<br>
+				Up to 3 stacks of upgrades may be inserted into the right 3 slots on the GUI.<br>
+
+    	</div><!-- /.container -->
+		</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/Modular-FluxFields/js/jquery-1.11.3.min.js"></script>
+    <script src="/Modular-FluxFields/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script type="text/javascript">
+      $("#navbarWrapper").load("/Modular-FluxFields/navbar.html"); // Load the navbar
+    </script>
+
+  </body>
+</html>

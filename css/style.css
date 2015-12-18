@@ -1,0 +1,28 @@
+.main-banner {
+	background-image: url("../img/banner.png");
+	background-size: cover;
+	background-position: center;
+}
+
+.main-banner .container {
+	background-color: rgba(33, 33, 33, 0.5);
+	color: #FAFAFA;
+	border-radius: 8px;
+	padding-bottom: 16px;
+}
+
+.docs-block-preview {
+	width: 150px;
+}
+
+.docs-image-thumb {
+	height: 256px;
+}
+
+.docs-image-full {
+	width: 100%;
+}
+
+.docs-item-icon {
+	height: 32px;
+}

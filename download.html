@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="A mod that adds forcefields to protect your Minecraft base">
+    <meta name="author" content="CraftedCart">
+    <link rel="icon" href="/Modular-FluxFields/img/favicon.ico">
+
+    <title>Modular FluxFields</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/Modular-FluxFields/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="/Modular-FluxFields/css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div id="navbarWrapper"></div>
+
+    <div class="jumbotron main-banner">
+      <div class="container">
+        <h1>Downloads</h1>
+      </div>
+    </div>
+
+    <div class="container">
+
+		  <p class="lead">
+		    No stable version has been released yet, however development versions can be found on the <a href="https://github.com/CraftedCart/Modular-FluxFields/releases">GitHub Releases Page</a><br>
+				For the bleeding edge version of Modular FluxFields, you will need to clone the <a href="https://github.com/CraftedCart/Modular-FluxFields">GitHub repo</a> and compile it yourself
+		  </p>
+
+      <button type="button" data-toggle="collapse" data-target="#filterPanel" class="btn btn-default btn-block">Filter Releases</button>
+
+      <br>
+
+      <div id="filterPanel" class="panel panel-default collapse"> <!-- Filter panel -->
+
+        <div class="panel-heading">
+      		<h3 class="panel-title">Filter</h3>
+      	</div>
+
+        <div class="panel-body">
+
+          <div class="dropdown"> <!-- Search by Minecraft version -->
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              Minecraft Version
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="Search by Minecraft version">
+              <li><a href="javascript:void(0)" class="btn-mcVer-All">Show All</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="javascript:void(0)" class="btn-mcVer-1-8">1.8</a></li>
+            </ul>
+          </div> <!-- / Search by Minecraft Version -->
+
+          <br>
+
+          <table class="table">
+            <tr>
+              <th colspan="3">Stability</th>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="checkbox-stable" checked> Stable</td>
+              <td><input type="checkbox" class="checkbox-beta" checked> Beta</td>
+              <td><input type="checkbox" class="checkbox-alpha" checked> Alpha</td>
+            </tr>
+          </table>
+
+          <h4>Filtered by:</h4>
+          <div class="searchCriteria"></div> <!-- Search tags - Filled by JavaScript -->
+
+        </div>
+
+      </div>
+
+			<div class="releases"></div> <!-- Panels of releases - Filled by JavaScript -->
+
+		</div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/Modular-FluxFields/js/jquery-1.11.3.min.js"></script>
+    <script src="/Modular-FluxFields/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script type="text/javascript">
+      $("#navbarWrapper").load("/Modular-FluxFields/navbar.html"); // Load the navbar
+    </script>
+    <script src="/Modular-FluxFields/js/releases.js"></script> <!-- Fill the releases -->
+    <script src="/Modular-FluxFields/js/releases-search.js"></script>
+
+  </body>
+</html>
