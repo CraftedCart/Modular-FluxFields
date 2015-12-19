@@ -37,21 +37,76 @@
 				"battery",
 				"cell",
 				"store",
-				"storage"
+				"storage",
+				"transmit",
+				"transfer",
+				"wireless",
+				"wirelessly"
 			]
 		},
 		{
-			"title": "Power Documentation Home",
-			"path": "/Modular-FluxFields/documentation/power/index.html",
+			"title": "Prism",
+			"path": "/Modular-FluxFields/documentation/components/prism.html",
 			"tags": [
-				"power",
-				"pwr",
-				"energy",
-				"electricity",
-				"battery",
-				"cell",
-				"store",
-				"storage",
+				"prism",
+				"component",
+				"components",
+				"element",
+				"elements",
+				"crafting",
+				"ingredient",
+				"ingredients",
+				"recipe",
+				"recipes"
+			]
+		},
+		{
+			"title": "Amethyst",
+			"path": "/Modular-FluxFields/documentation/components/prism.html",
+			"tags": [
+				"amethyst",
+				"ore",
+				"raw",
+				"refined",
+				"crystal",
+				"crystals",
+				"gem",
+				"gems",
+				"component",
+				"components",
+				"element",
+				"elements",
+				"crafting",
+				"ingredient",
+				"ingredients",
+				"recipe",
+				"recipes"
+			]
+		},
+		{
+			"title": "Home",
+			"path": "/Modular-FluxFields/index.html",
+			"tags": [
+				"home"
+			]
+		},
+		{
+			"title": "Downloads",
+			"path": "/Modular-FluxFields/download.html",
+			"tags": [
+				"download",
+				"downloads",
+				"get",
+				"dl",
+				"install",
+				"release",
+				"releases"
+			]
+		},
+		{
+			"title": "Documentation Home",
+			"path": "/Modular-FluxFields/documentation/index.html",
+			"tags": [
 				"documentation",
 				"docs",
 				"doc",
@@ -74,9 +129,13 @@
 			]
 		},
 		{
-			"title": "Documentation Home",
-			"path": "/Modular-FluxFields/documentation/index.html",
+			"title": "Power Documentation Home",
+			"path": "/Modular-FluxFields/documentation/power/index.html",
 			"tags": [
+				"power",
+				"pwr",
+				"energy",
+				"electricity",
 				"documentation",
 				"docs",
 				"doc",
@@ -85,18 +144,55 @@
 			]
 		},
 		{
-			"title": "Download",
-			"path": "/Modular-FluxFields/download.html",
+			"title": "Components Documentation Home",
+			"path": "/Modular-FluxFields/documentation/components/index.html",
 			"tags": [
-				"download",
-				"downloads",
-				"get"
+				"component",
+				"components",
+				"element",
+				"elements",
+				"crafting",
+				"ingredient",
+				"ingredients",
+				"recipe",
+				"recipes",
+				"documentation",
+				"docs",
+				"doc",
+				"wiki",
+				"home"
 			]
 		},
 		{
-			"title": "Home",
-			"path": "/Modular-FluxFields/index.html",
+			"title": "Crystals Documentation Home",
+			"path": "/Modular-FluxFields/documentation/crystals/index.html",
 			"tags": [
+				"component",
+				"components",
+				"element",
+				"elements",
+				"crafting",
+				"ingredient",
+				"ingredients",
+				"recipe",
+				"recipes",
+				"crystal",
+				"crystals",
+				"gem",
+				"gems",
+				"raw",
+				"refined",
+				"mine",
+				"mining",
+				"underground",
+				"ore",
+				"world",
+				"gen",
+				"generation",
+				"documentation",
+				"docs",
+				"doc",
+				"wiki",
 				"home"
 			]
 		}

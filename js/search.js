@@ -7,31 +7,38 @@ var getQueryString = function ( field, url ) {
 
 searchString = decodeURIComponent(getQueryString("q"));
 $(".searchQuery").html('<span class="glyphicon glyphicon-search" aria-hidden="true"></span> ' + searchString);
-searchArray = searchString.toLowerCase().split(" "); //Split search string into words
+searchArray = searchString.toLowerCase().replace(/[^\w\s]|_/g, "").split(" "); //Split search string into words
 searchResults = [];
 
 $.get("/Modular-FluxFields/search/pages.json", function(data) {
-	$.each(data.pages, function(i, obj) {
-		$.each(obj.tags, function(j, tag) {
-			if ($.inArray(tag, searchArray) != -1) {
-				//Found a match
-				var foundMatch = false;
-				for (var k = 0; k < searchResults.length; k++) {
-    			if (searchResults[k][0] == i) {
-						searchResults[k][1] = searchResults[k][1] + 1;
-						foundMatch = true;
-					}
-				}
-				if (!foundMatch) {
-					searchResults.push([i, 1]);
-				}
+  if (searchArray[0] !== "") {
+	 $.each(data.pages, function(i, obj) {
+		  $.each(obj.tags, function(j, tag) {
+			 if ($.inArray(tag, searchArray) != -1) {
+				  //Found a match
+				  var foundMatch = false;
+				  for (var k = 0; k < searchResults.length; k++) {
+    			 if (searchResults[k][0] == i) {
+						  searchResults[k][1] = searchResults[k][1] + 1;
+						  foundMatch = true;
+					 }
+				  }
+				  if (!foundMatch) {
+					 searchResults.push([i, 1]);
+				  }
 
-			}
-		});
-	});
+			 }
+		  });
+	 });
+ } else {
+   $.each(data.pages, function(i, obj) {
+     searchResults.push([i, 1]);
+   });
+  }
 
-	searchResults.sort(compareSecondColumn);
-	console.log(searchResults);
+  if (searchArray[0] !== "") {
+	 searchResults.sort(compareSecondColumn);
+ }
 
 	$.get("/Modular-FluxFields/search/searchResult.html", function(resultData) {
 		$(".searchResults").html("<br>");

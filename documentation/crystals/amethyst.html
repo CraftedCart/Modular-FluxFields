@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="A mod that adds forcefields to protect your Minecraft base">
+    <meta name="author" content="CraftedCart">
+    <link rel="icon" href="/Modular-FluxFields/img/favicon.ico">
+
+    <title>Modular FluxFields</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/Modular-FluxFields/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="/Modular-FluxFields/css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div id="navbarWrapper"></div>
+
+    <div class="jumbotron main-banner">
+      <div class="container">
+        <h1>Modular FluxFields</h1>
+        <h2>Official Documentation</h2>
+      </div>
+    </div>
+
+		<div class="container-fluid">
+			<div class="col-md-3">
+				<h2>Amethyst Ore</h2>
+				<table class="table">
+					<tr>
+						<th>Stat</th>
+						<th>Info</th>
+					</tr>
+					<tr>
+						<td>Block</td>
+						<td><img src="/Modular-FluxFields/img/crystals/oreAmethyst.png" class="docs-block-preview"></td>
+					</tr>
+					<tr>
+						<td>Unlocalised Name</td>
+						<td>mff:oreAmethyst</td>
+					</tr>
+					<tr>
+						<td>Localised Name (en_US)</td>
+						<td>Amethyst Ore</td>
+					</tr>
+					<tr>
+						<td>Hardness</td>
+						<td>5</td>
+					</tr>
+					<tr>
+						<td>Harvest Level</td>
+						<td>
+							<a href="http://minecraft.gamepedia.com/Pickaxe">
+								<img src="/Modular-FluxFields/img/vanilla/ironPickaxe.png" title="Iron Pickaxe"> Iron Pickaxe
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td>Drops</td>
+						<td><img src="/Modular-FluxFields/img/crystals/rawAmethyst.png" class="docs-item-icon"> 1 - 4 Raw Amethyst</td>
+					</tr>
+					<tr>
+						<td>Found in</td>
+						<td>
+							Overworld<br>
+							Y: Between 0 - 32
+						</td>
+					</tr>
+					<tr>
+						<td>Commonness</td>
+						<td>10</td>
+					</tr>
+					<tr>
+						<td>Max Vein Size</td>
+						<td>8</td>
+				</table>
+
+				<h2>Raw Amethyst</h2>
+				<table class="table">
+					<tr>
+						<th>Stat</th>
+						<th>Info</th>
+					</tr>
+					<tr>
+						<td>Item</td>
+						<td><img src="/Modular-FluxFields/img/crystals/rawAmethyst.png" class="docs-block-preview"></td>
+					</tr>
+					<tr>
+						<td>Unlocalised Name</td>
+						<td>mff:rawAmethyst</td>
+					</tr>
+					<tr>
+						<td>Localised Name (en_US)</td>
+						<td>Raw Amethyst</td>
+					</tr>
+				</table>
+
+				<h2>Refined Amethyst</h2>
+				<table class="table">
+					<tr>
+						<th>Stat</th>
+						<th>Info</th>
+					</tr>
+					<tr>
+						<td>Item</td>
+						<td><img src="/Modular-FluxFields/img/crystals/refinedAmethyst.png" class="docs-block-preview"></td>
+					</tr>
+					<tr>
+						<td>Unlocalised Name</td>
+						<td>mff:refinedAmethyst</td>
+					</tr>
+					<tr>
+						<td>Localised Name (en_US)</td>
+						<td>Refined Amethyst</td>
+					</tr>
+				</table>
+			</div>
+
+    	<div class="container col-md-9">
+
+				<ol class="breadcrumb">
+  				<li><a href="/Modular-FluxFields/documentation/index.html">Documentation</a></li>
+					<li><a href="/Modular-FluxFields/documentation/crystals/index.html">Crystals</a></li>
+					<li class="active">Amethyst</li>
+				</ol>
+
+				<h1>Amethyst</h1>
+
+		  	<p class="lead">
+					Amethyst is a crystal which is needed to craft several items within Modular FluxFields.
+		  	</p>
+
+				<p>
+					Amethyst Ore can be found underground in the Overworld at Y: 32 or below.
+					Mining that will yield between 1 - 4 pieces of Raw Amethyst (without a fortune enchanted pickaxe).
+					Raw Amethyst cannot be used by itself in crafting recipes however; it must be first refined before it becomes useful.
+					Put Raw Amethyst into a
+					<a href="/Modular-FluxFields/documentation/machines/crystalRefinery.html"><img src="/Modular-FluxFields/img/machines/crystalRefinery.png" class="docs-text-icon"> Crystal Refinery</a>
+					to yield Refined Amethyst.
+				</p>
+
+				<a data-toggle="modal" data-target="#crystalRefineryGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/crystalRefineryAmethyst.png" class="docs-image-thumb"></a>
+				<br>
+
+				<div class="modal fade" id="crystalRefineryGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
+			  	<div class="modal-dialog modal-lg" role="document">
+			    	<div class="modal-content">
+			      	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        	<h4 class="modal-title"></h4>
+			      	</div>
+			      	<div class="modal-body">
+			        	<img src="/Modular-FluxFields/img/gui/crystalRefineryAmethyst.png" class="docs-image-full">
+			      	</div>
+			    	</div>
+			  	</div>
+				</div> <!-- / modal -->
+
+				<h2>History</h2>
+				<table class="table">
+					<tr>
+						<th>Version</tv>
+						<th>Changes</th>
+					</tr>
+					<tr>
+						<td>v1.0 - Alpha 2<br>
+						<a href="https://github.com/CraftedCart/Modular-FluxFields/commit/9910e90b37b528c89dedc49868e70e72a0dbc76c">Commit 30 <code>9910e90</code></a></td>
+						<td>Amethyst Ore introduced, as well as ore generation</td>
+					</tr>
+					<tr>
+						<td>v1.0 - Alpha 2<br>
+						<a href="https://github.com/CraftedCart/Modular-FluxFields/commit/de0b8777f646c20629113d9b90c9d00404ee4528">Commit 32 <code>de0b877</code></a></td>
+						<td>Raw Amethyst and Refined Amethyst introduced. Mining Amethyst Ore now drops Raw Amethyst</td>
+					</tr>
+					<tr>
+						<td>v1.0 - Alpha 2<br>
+						<a href="https://github.com/CraftedCart/Modular-FluxFields/commit/f201f3a7013deac5d5c475b2573f1e54c9de8a2e">Commit 36 <code>f201f3a</code></a></td>
+						<td>
+							The
+							<a href="/Modular-FluxFields/documentation/machines/crystalRefinery.html"><img src="/Modular-FluxFields/img/machines/crystalRefinery.png" class="docs-text-icon"> Crystal Refinery</a>
+							now takes Raw Amethyst and converts it to Refined Amethyst
+						</td>
+					</tr>
+					<tr>
+						<td>v1.0 - Alpha 2<br>
+						<a href="https://github.com/CraftedCart/Modular-FluxFields/commit/e16559693af39e5441facc5c8ae624b497bec8a9">Commit 37 <code>e165596</code></a></td>
+						<td>
+							It now takes 120s (2400t) for the
+							<a href="/Modular-FluxFields/documentation/machines/crystalRefinery.html"><img src="/Modular-FluxFields/img/machines/crystalRefinery.png" class="docs-text-icon"> Crystal Refinery</a>
+							to convert Raw Amethyst into Refined Amethyst (from 10s (200t))
+						</td>
+					</tr>
+				</table>
+
+    	</div><!-- /.container -->
+		</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/Modular-FluxFields/js/jquery-1.11.3.min.js"></script>
+    <script src="/Modular-FluxFields/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script type="text/javascript">
+      $("#navbarWrapper").load("/Modular-FluxFields/navbar.html"); // Load the navbar
+    </script>
+
+  </body>
+</html>

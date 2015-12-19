@@ -23,13 +23,15 @@
             <li role="separator" class="divider"></li>
             <li><a href="/Modular-FluxFields/documentation/machines/index.html">Machines</a></li>
             <li><a href="/Modular-FluxFields/documentation/power/index.html">Power</a></li>
+            <li><a href="/Modular-FluxFields/documentation/components/index.html">Components</a></li>
+            <li><a href="/Modular-FluxFields/documentation/crystals/index.html">Crystals</a></li>
           </ul>
         </li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" onkeydown="if (event.keyCode == 13) {
-            window.location.href = '/Modular-FluxFields/search.html?q=' + $('#navbarSearch').val();
+            window.location.href = '/Modular-FluxFields/search.html?q=' + encodeURIComponent($('#navbarSearch').val());
             return false;
           }" id="navbarSearch">
           <button type="button" class="btn btn-default" onclick="window.location.href = '/Modular-FluxFields/search.html?q=' + $('#navbarSearch').val();">
