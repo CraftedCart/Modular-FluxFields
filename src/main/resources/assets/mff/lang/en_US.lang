@@ -47,6 +47,7 @@ gui.mff:owner=Owner
 gui.mff:uptime=Uptime
 gui.mff:power=Power
 gui.mff:remaining=Remaining
+gui.mff:time=Time
 gui.mff:addedNewGroup=Added new group
 gui.mff:groupAlreadyExists=Group already exists
 gui.mff:chooseAName=Choose a name

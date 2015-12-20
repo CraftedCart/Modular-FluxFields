@@ -6,25 +6,30 @@ import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.init.ModCraftingRecipes;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.init.ModTileEntities;
+import io.github.craftedcart.MFF.client.neiplugin.MFFNEIPlugin;
 import io.github.craftedcart.MFF.proxy.IProxy;
 import io.github.craftedcart.MFF.reference.Reference;
 import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.worldgeneration.OreGeneration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
  */
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "after:NotEnoughItems")
 public class ModMFF
 {
+
+    private boolean shouldLoadNEIPlugin = false;
 
     @Mod.Instance
     public static ModMFF instance;
@@ -43,6 +48,14 @@ public class ModMFF
         ModTileEntities.init();
         NetworkHandler.init();
 
+        //NEI
+        if (event.getSide() == Side.CLIENT && Loader.isModLoaded("NotEnoughItems")) {
+            LogHelper.info("NEI found! Attempting to load NEI plugin");
+            shouldLoadNEIPlugin = true;
+        } else {
+            LogHelper.info("NEI not found, or this is running on a server. MFF won't load the NEI plugin");
+        }
+
         LogHelper.info("Pre-Init Complete");
 
     }
@@ -54,6 +67,12 @@ public class ModMFF
         proxy.init();
 
         GameRegistry.registerWorldGenerator(new OreGeneration(), 0);
+
+        //NEI
+        if (shouldLoadNEIPlugin) {
+            MFFNEIPlugin.addSubsets();
+            MFFNEIPlugin.addRecipeHandlers();
+        }
 
         LogHelper.info("Init Complete");
 

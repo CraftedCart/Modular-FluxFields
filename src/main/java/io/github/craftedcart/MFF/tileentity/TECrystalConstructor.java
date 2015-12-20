@@ -438,7 +438,7 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
             progress++;
             power -= PowerConf.crystalConstructorUsage * powerMultiplier;
         } else if (progress >= maxProgress) {
-            //Done Refining
+            //Done Crafting
             if (outputSlot != null) {
                 if ((outputSlot.getItem() == outputItem && outputSlot.stackSize + amountProduced <= outputSlot.getMaxStackSize())) {
                     progress = 0;
