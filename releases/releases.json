@@ -1,6 +1,7 @@
 {
 	"releases": [
 		{
+			"VERSION-ID": "v1-0-Alpha1",
 			"VERSION-NAME": "v1.0 - Alpha 1",
 			"STABILITY": "Alpha",
 			"PANEL-CLASS": "panel-warning release-mc-1-8 release-alpha",
@@ -8,9 +9,28 @@
 			"MC-VERSION": "1.8",
 			"DOWNLOAD-JAR": "https://github.com/CraftedCart/Modular-FluxFields/releases/download/v1.0-Alpha1/MFF-1.8-1.0.jar",
 			"JAR-RELEASE-PROVIDER": "GitHub",
-			"JAR-SIZE": "51.4 KiB",
+			"JAR-SIZE": "51.4 KB",
+			"DOWNLOAD-SOURCES-JAR": "https://github.com/CraftedCart/Modular-FluxFields/releases/download/v1.0-Alpha1/MFF-1.8-1.0-sources.jar",
+			"SOURCES-JAR-RELEASE-PROVIDER": "GitHub",
+			"SOURCES-JAR-SIZE": "31.1 KB",
 			"GITHUB-RELEASE-LINK": "https://github.com/CraftedCart/Modular-FluxFields/releases/tag/v1.0-Alpha1",
 			"RELEASE-DESCRIPTION": "v1.0-Alpha1.html"
+		},
+		{
+			"VERSION-ID": "v1_0-Alpha2",
+			"VERSION-NAME": "v1.0 - Alpha 2",
+			"STABILITY": "Alpha",
+			"PANEL-CLASS": "panel-warning release-mc-1-8 release-alpha",
+			"RELEASE-DATE": "21 Dec 2015",
+			"MC-VERSION": "1.8",
+			"DOWNLOAD-JAR": "https://github.com/CraftedCart/Modular-FluxFields/releases/download/v1.0-Alpha2/MFF-1.8-1.0.jar",
+			"JAR-RELEASE-PROVIDER": "GitHub",
+			"JAR-SIZE": "1.48 MB",
+			"DOWNLOAD-SOURCES-JAR": "https://github.com/CraftedCart/Modular-FluxFields/releases/download/v1.0-Alpha2/MFF-1.8-1.0-sources.jar",
+			"SOURCES-JAR-RELEASE-PROVIDER": "GitHub",
+			"SOURCES-JAR-SIZE": "1.43 MB",
+			"GITHUB-RELEASE-LINK": "https://github.com/CraftedCart/Modular-FluxFields/releases/tag/v1.0-Alpha2",
+			"RELEASE-DESCRIPTION": "v1.0-Alpha2.html"
 		}
 	]
 }
