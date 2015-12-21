@@ -1,19 +1,27 @@
-/*
 // For those who want the bleeding edge
 buildscript {
     repositories {
+
         jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+
+        maven {
+            name 'ChickenBones Repo'
+            url "http://chickenbones.net/maven/"
+        }
+
     }
+    /*
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
     }
+    */
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
-*/
+//apply plugin: 'net.minecraftforge.gradle.forge'
+
 
 // for people who want stable
 plugins {
@@ -27,7 +35,7 @@ archivesBaseName = "MFF"
 minecraft {
     version = "1.8-11.14.4.1563"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -42,7 +50,7 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-      
+
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
@@ -59,6 +67,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+    compile "codechicken:CodeChickenLib:1.8-1.1.1.95:dev"
+    compile "codechicken:CodeChickenCore:1.8-1.1.2.139:dev"
+    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
+
 }
 
 processResources
@@ -70,11 +82,11 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
