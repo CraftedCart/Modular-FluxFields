@@ -30,9 +30,12 @@ public class MFFNEIPlugin {
 
     public static void addRecipeHandlers() {
 
-        //Add Crystal Constructor recipe handler
+        //Add Crystal Constructor crafting handler
         API.registerRecipeHandler(new NEICrystalConstructorCraftingHandler());
         API.registerUsageHandler(new NEICrystalConstructorCraftingHandler());
+        //Add Crystal Refinery crafting handler
+        API.registerRecipeHandler(new NEICrystalRefineryCraftingHandler());
+        API.registerUsageHandler(new NEICrystalRefineryCraftingHandler());
 
     }
 
