@@ -47,11 +47,11 @@ public class GuiFFProjectorInfo extends GuiContainer {
         //Draw power value
         double power = this.te.power;
 
-        this.drawRect(this.guiLeft - 24, this.guiTop - 8, this.guiLeft + xSize + 24, this.guiTop - 6, 0xFF212121);
-        this.drawRect(this.guiLeft - 24, this.guiTop - 8, (int) (this.guiLeft - 24 + (double) (xSize + 48) * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
+        this.drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
+        this.drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
 
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
-                this.guiLeft - 24, this.guiTop - 18, 0xFAFAFA, false);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
+                this.guiLeft, this.guiTop - 18, 0xFAFAFA, false);
 
     }
 

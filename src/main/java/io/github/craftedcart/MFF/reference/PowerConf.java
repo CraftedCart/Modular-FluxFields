@@ -21,6 +21,5 @@ public final class PowerConf {
     public static final double crystalConstructorUsage = 16.32;
 
     public static final int crystalRefineryBaseTime = 2400; //120s (2400t)
-    public static final int crystalConstructorBaseTime = 72000; //3600s / 1hr (72000t)
 
 }

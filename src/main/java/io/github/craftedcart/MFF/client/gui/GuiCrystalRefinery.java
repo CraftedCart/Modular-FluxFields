@@ -9,8 +9,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-import java.lang.reflect.Field;
-
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
@@ -39,48 +37,38 @@ public class GuiCrystalRefinery extends GuiContainer {
         this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/crystalRefinery.png"));
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
-        try {
+        //Draw power value
+        double power = te.power;
 
-            //Draw power value
-            Field fPower = te.getClass().getField("power");
-            double power = fPower.getDouble(te);
+        drawRect(this.guiLeft, this.guiTop - 24, this.guiLeft + xSize, this.guiTop - 22, 0xFF212121);
+        drawRect(this.guiLeft, this.guiTop - 24, (int) (this.guiLeft + (double) xSize * power / PowerConf.crystalRefineryMaxPower), this.guiTop - 22, 0xFF2196F3);
 
-            this.drawRect(this.guiLeft - 24, this.guiTop - 24, this.guiLeft + xSize + 24, this.guiTop - 22, 0xFF212121);
-            this.drawRect(this.guiLeft - 24, this.guiTop - 24, (int) (this.guiLeft - 24 + (double) (xSize + 48) * power / PowerConf.crystalRefineryMaxPower), this.guiTop - 22, 0xFF2196F3);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%09.2f", power) + " / " + String.format("%09.2f", PowerConf.crystalRefineryMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
+                this.guiLeft, this.guiTop - 34, 0xFAFAFA, false);
 
-            this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%09.2f", power) + " / " + String.format("%09.2f", PowerConf.crystalRefineryMaxPower) + " FE",
-                    this.guiLeft - 24, this.guiTop - 34, 0xFAFAFA, false);
+        //Draw progress value
+        int progress = te.progress;
+        int maxProgress = te.maxProgress;
+        double powerMultiplier = te.powerMultiplier;
 
-            //Draw progress value
-            Field fProgress = te.getClass().getField("progress");
-            int progress = fProgress.getInt(te);
-            Field fMaxProgress = te.getClass().getField("maxProgress");
-            int maxProgress = fMaxProgress.getInt(te);
-            Field fPowerMultiplier = te.getClass().getField("powerMultiplier");
-            double powerMultiplier = fPowerMultiplier.getDouble(te);
-
-            final float ticksLeft;
-            if (power >= PowerConf.crystalRefineryUsage * powerMultiplier) {
-                ticksLeft = (progress == 0 || maxProgress - progress - partialTicks < 0) ? maxProgress : maxProgress - progress - partialTicks;
-            } else {
-                ticksLeft = maxProgress - progress;
-            }
-
-            this.drawRect(this.guiLeft - 24, this.guiTop - 8, this.guiLeft + xSize + 24, this.guiTop - 6, 0xFF212121);
-            this.drawRect(this.guiLeft - 24, this.guiTop - 8, (int) (this.guiLeft - 24 + (xSize + 48) * (1 - ticksLeft / maxProgress)), this.guiTop - 6, 0xFF4CAF50);
-
-            final int minsLeft = (int) Math.floor(ticksLeft / 20 / 60);
-            final int secsLeft = (int) Math.floor(ticksLeft / 20 - minsLeft * 60);
-            final int partSecsLeft = (int) (Math.abs(Math.floor(ticksLeft / 20) - (ticksLeft / 20)) * 100);
-
-            this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:remaining") + ": " + String.format("%02d : %02d . %02d", minsLeft, secsLeft, partSecsLeft),
-                    this.guiLeft - 24, this.guiTop - 18, 0xFAFAFA, false);
-
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        final float ticksLeft;
+        if (power >= PowerConf.crystalRefineryUsage * powerMultiplier) {
+            ticksLeft = (progress == 0 || maxProgress - progress - partialTicks < 0) ? maxProgress : maxProgress - progress - partialTicks;
+        } else {
+            ticksLeft = maxProgress - progress;
         }
+
+        drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
+        if (maxProgress != 0) {
+            drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + xSize * (1 - ticksLeft / maxProgress)), this.guiTop - 6, 0xFF4CAF50);
+        }
+
+        final int minsLeft = (int) Math.floor(ticksLeft / 20 / 60);
+        final int secsLeft = (int) Math.floor(ticksLeft / 20 - minsLeft * 60);
+        final int partSecsLeft = (int) (Math.abs(Math.floor(ticksLeft / 20) - (ticksLeft / 20)) * 100);
+
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:remaining") + ": " + String.format("%02d : %02d . %02d", minsLeft, secsLeft, partSecsLeft),
+                this.guiLeft, this.guiTop - 18, 0xFAFAFA, false);
 
     }
 

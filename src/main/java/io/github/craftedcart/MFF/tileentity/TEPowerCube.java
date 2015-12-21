@@ -8,7 +8,6 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -62,17 +61,10 @@ public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
             if (worldObj.getTileEntity(pos) != null) {
                 if (worldObj.getTileEntity(pos) instanceof TEPowerCube) {
                     TEPowerCube pc = (TEPowerCube) worldObj.getTileEntity(pos);
-                    try {
-                        Field f = pc.getClass().getField("power");
-                        double pcPower = f.getDouble(pc);
-                        if (pcPower < power) {
-                            powerCubeLinksTotalPower += pcPower;
-                            powerCubeLinksToTransferEnergyTo.add(pos);
-                        }
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                    double pcPower = pc.power;
+                    if (pcPower < power) {
+                        powerCubeLinksTotalPower += pcPower;
+                        powerCubeLinksToTransferEnergyTo.add(pos);
                     }
                 }
             } else {
@@ -87,16 +79,8 @@ public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
             if (worldObj.getTileEntity(pos) != null) {
                 if (worldObj.getTileEntity(pos) instanceof TEPowerCube) {
                     TEPowerCube pc = (TEPowerCube) worldObj.getTileEntity(pos);
-                    try {
-                        Field f = pc.getClass().getField("power");
-                        power = averagePower;
-                        f.setDouble(pc, averagePower);
-
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+                    power = averagePower;
+                    pc.power = averagePower;
                 }
             } else {
                 obj.remove();

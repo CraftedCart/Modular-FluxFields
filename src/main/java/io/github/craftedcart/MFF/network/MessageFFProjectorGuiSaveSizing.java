@@ -11,9 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Created by CraftedCart on 22/11/2015 (DD/MM/YYYY)
  */
@@ -83,33 +80,14 @@ public class MessageFFProjectorGuiSaveSizing implements IMessage {
 
                     TEFFProjector te = (TEFFProjector) ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.pos);
 
-                    try {
+                    te.minX = message.x1;
+                    te.maxX = message.x2;
+                    te.minY = message.y1;
+                    te.maxY = message.y2;
+                    te.minZ = message.z1;
+                    te.maxZ = message.z2;
 
-                        Field fX1 = te.getClass().getField("minX");
-                        Field fY1 = te.getClass().getField("minY");
-                        Field fZ1 = te.getClass().getField("minZ");
-                        Field fX2 = te.getClass().getField("maxX");
-                        Field fY2 = te.getClass().getField("maxY");
-                        Field fZ2 = te.getClass().getField("maxZ");
-
-                        fX1.setInt(te, message.x1);
-                        fY1.setInt(te, message.y1);
-                        fZ1.setInt(te, message.z1);
-                        fX2.setInt(te, message.x2);
-                        fY2.setInt(te, message.y2);
-                        fZ2.setInt(te, message.z2);
-
-                        te.getClass().getMethod("getBlocks").invoke(te);
-
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
+                    te.getBlocks();
 
                 }
             });

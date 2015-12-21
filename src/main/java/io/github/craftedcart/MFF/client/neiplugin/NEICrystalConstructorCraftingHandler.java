@@ -4,6 +4,8 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.ICraftingHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipe;
+import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipeHandler;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.item.*;
 import io.github.craftedcart.MFF.reference.CrystalConstructorTimings;
@@ -21,18 +23,20 @@ import java.util.List;
 
 public class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler implements ICraftingHandler {
 
-    public class CachedCrystalRefineryRecipe extends CachedRecipe
+    public class CachedCrystalConstructorRecipe extends CachedRecipe
     {
         public ArrayList<PositionedStack> ingredients;
         public PositionedStack result;
 
-        public CachedCrystalRefineryRecipe(int width, int height, Object[] items, ItemStack out) {
+        public CachedCrystalConstructorRecipe(int width, int height, Object[] items, ItemStack out) {
             result = new PositionedStack(out, 119, 24);
             ingredients = new ArrayList<PositionedStack>();
             setIngredients(width, height, items);
         }
 
         /**
+         * @param width How many slots wide the recipe is
+         * @param height How many slots tall the recipe is
          * @param items An ItemStack[] or ItemStack[][]
          */
         public void setIngredients(int width, int height, Object[] items) {
@@ -66,25 +70,22 @@ public class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
 
-        if (result.getItem() instanceof ItemAluriteBase) {
-            //Add Alurite Base recipe
-            CachedCrystalRefineryRecipe recipeAluriteBase = new CachedCrystalRefineryRecipe(2, 2,
-                    new ItemStack[]{
-                            new ItemStack(ModItems.aluriteIngot), null,
-                            null, new ItemStack(Items.redstone)},
-                    new ItemStack(ModItems.aluriteBase));
-            recipeAluriteBase.computeVisuals();
-            arecipes.add(recipeAluriteBase);
+        for (CrystalConstructorRecipe recipe : CrystalConstructorRecipeHandler.recipes) {
 
-        } else if (result.getItem() instanceof ItemCrystalSheet) {
-            //Add Crystal Sheet recipe
-            CachedCrystalRefineryRecipe recipeCrystalSheet = new CachedCrystalRefineryRecipe(2, 2,
-                    new ItemStack[]{
-                            new ItemStack(Items.emerald), new ItemStack(ModItems.refinedRuby),
-                            new ItemStack(ModItems.refinedAmethyst), new ItemStack(Items.diamond)},
-                    new ItemStack(ModItems.crystalSheet, 4));
-            recipeCrystalSheet.computeVisuals();
-            arecipes.add(recipeCrystalSheet);
+            if (result.isItemEqual(recipe.result)) {
+
+                ItemStack[] ingredients = new ItemStack[recipe.ingredients.length];
+                for (int i = 0; i < recipe.ingredients.length; i++) {
+                    if (recipe.ingredients[i] != null) {
+                        ingredients[i] = new ItemStack(recipe.ingredients[i]);
+                    }
+                }
+                CachedCrystalConstructorRecipe cachedRecipe = new CachedCrystalConstructorRecipe(recipe.width, recipe.height, ingredients, recipe.result);
+                cachedRecipe.computeVisuals();
+                arecipes.add(cachedRecipe);
+
+            }
+
         }
 
     }
@@ -92,30 +93,24 @@ public class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
 
-        LogHelper.info(ItemStack.areItemsEqual(ingredient, new ItemStack(Items.emerald)));
+        for (CrystalConstructorRecipe recipe : CrystalConstructorRecipeHandler.recipes) {
 
-        if (ItemStack.areItemsEqual(ingredient, new ItemStack(Items.emerald)) || ingredient.getItem() instanceof ItemRefinedRuby ||
-                ingredient.getItem() instanceof ItemRefinedAmethyst || ItemStack.areItemsEqual(ingredient, new ItemStack(Items.diamond))) {
-            //Add Alurite Base recipe
-            CachedCrystalRefineryRecipe recipeAluriteBase = new CachedCrystalRefineryRecipe(2, 2,
-                    new ItemStack[]{
-                            new ItemStack(Items.emerald), new ItemStack(ModItems.refinedRuby),
-                            new ItemStack(ModItems.refinedAmethyst), new ItemStack(Items.diamond)},
-                    new ItemStack(ModItems.crystalSheet, 4));
-            recipeAluriteBase.computeVisuals();
-            arecipes.add(recipeAluriteBase);
+            for (int i = 0; i < recipe.ingredients.length; i ++) {
+                if (ingredient.isItemEqual(new ItemStack(recipe.ingredients[i]))) {
 
-        }
+                    ItemStack[] ingredients = new ItemStack[recipe.ingredients.length];
+                    for (int j = 0; j < recipe.ingredients.length; j++) {
+                        if (recipe.ingredients[j] != null) {
+                            ingredients[j] = new ItemStack(recipe.ingredients[j]);
+                        }
+                    }
+                    CachedCrystalConstructorRecipe cachedRecipe = new CachedCrystalConstructorRecipe(recipe.width, recipe.height, ingredients, recipe.result);
+                    cachedRecipe.computeVisuals();
+                    arecipes.add(cachedRecipe);
 
-        if (ingredient.getItem() instanceof ItemAluriteIngot || ItemStack.areItemsEqual(ingredient, new ItemStack(Items.redstone))) {
-            //Add Crystal Sheet recipe
-            CachedCrystalRefineryRecipe recipeCrystalSheet = new CachedCrystalRefineryRecipe(2, 2,
-                    new ItemStack[]{
-                            new ItemStack(ModItems.aluriteIngot), null,
-                            null, new ItemStack(Items.redstone)},
-                    new ItemStack(ModItems.aluriteBase));
-            recipeCrystalSheet.computeVisuals();
-            arecipes.add(recipeCrystalSheet);
+                }
+            }
+
         }
 
     }
@@ -134,25 +129,22 @@ public class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler 
     public void drawForeground(int recipe) {
         super.drawForeground(recipe);
 
-        final int ticksTime;
+        int ticksTime = 0;
 
-        switch (recipe) {
-            case 0: //Alurite Base
-                ticksTime = CrystalConstructorTimings.aluriteBase;
-                break;
-            case 1: //Crystal Sheet
-                ticksTime = CrystalConstructorTimings.crystalSheet;
-                break;
-            default: //Error prevention
-                ticksTime = 0;
-                break;
+        ccRecipeLoop:
+        for (CrystalConstructorRecipe ccRecipe : CrystalConstructorRecipeHandler.recipes) {
+            for (CachedRecipe cachedRecipe : arecipes) {
+                if (cachedRecipe.getResult().item.getIsItemStackEqual(ccRecipe.result)) {
+                    ticksTime = ccRecipe.ticksToCraft;
+                    break ccRecipeLoop;
+                }
+            }
         }
 
         final int minsLeft = (int) Math.floor(ticksTime / 20 / 60);
         final int secsLeft = (int) Math.floor(ticksTime / 20 - minsLeft * 60);
-        final int partSecsLeft = (int) (Math.abs(Math.floor(ticksTime / 20) - (ticksTime / 20)) * 100);
 
-        GuiContainerManager.getFontRenderer(null).drawString(StatCollector.translateToLocal("gui.mff:time") + ": " + String.format("%02d : %02d . %02d", minsLeft, secsLeft, partSecsLeft),
+        GuiContainerManager.getFontRenderer(null).drawString(StatCollector.translateToLocal("gui.mff:time") + ": " + String.format("%02d : %02d", minsLeft, secsLeft),
                 80, 7, 0xFF212121);
 
     }

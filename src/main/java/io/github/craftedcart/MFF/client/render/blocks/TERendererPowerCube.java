@@ -1,6 +1,7 @@
 package io.github.craftedcart.MFF.client.render.blocks;
 
 import io.github.craftedcart.MFF.reference.PowerConf;
+import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,8 +11,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
@@ -39,31 +38,23 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
 
         //Display energy as cube in the middle
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/white.png"));
-        try {
 
-            Field f = te.getClass().getField("power");
-            double pcPower = f.getDouble(te); //Get Power Cube Power
-            double pcMaxPower = PowerConf.powerCubeMaxPower;
-            float pcPowerPercent = (float) pcPower / (float) pcMaxPower;
+        double pcPower = ((TEPowerCube) te).power; //Get Power Cube Power
+        double pcMaxPower = PowerConf.powerCubeMaxPower;
+        float pcPowerPercent = (float) pcPower / (float) pcMaxPower;
 
-            GlStateManager.scale(pcPowerPercent, pcPowerPercent, pcPowerPercent);
+        GlStateManager.scale(pcPowerPercent, pcPowerPercent, pcPowerPercent);
 
-            float r = MathUtils.lerp(blueR, redR, pcPowerPercent);
-            float g = MathUtils.lerp(blueG, redG, pcPowerPercent);
-            float b = MathUtils.lerp(blueB, redB, pcPowerPercent);
+        float r = MathUtils.lerp(blueR, redR, pcPowerPercent);
+        float g = MathUtils.lerp(blueG, redG, pcPowerPercent);
+        float b = MathUtils.lerp(blueB, redB, pcPowerPercent);
 
-            GL11.glColor4f(r / 255f, g / 255f, b / 255f, 0.5f);
-            wr.startDrawingQuads();
-            drawCube(cubeSize);
-            GL11.glEnable(GL11.GL_BLEND);
-            Tessellator.getInstance().draw();
-            GL11.glDisable(GL11.GL_BLEND);
-
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        GL11.glColor4f(r / 255f, g / 255f, b / 255f, 0.5f);
+        wr.startDrawingQuads();
+        drawCube(cubeSize);
+        GL11.glEnable(GL11.GL_BLEND);
+        Tessellator.getInstance().draw();
+        GL11.glDisable(GL11.GL_BLEND);
 
         GlStateManager.popMatrix();
 

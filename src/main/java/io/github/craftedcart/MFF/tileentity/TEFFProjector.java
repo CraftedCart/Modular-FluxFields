@@ -3,7 +3,6 @@ package io.github.craftedcart.MFF.tileentity;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -20,7 +19,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -336,18 +334,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         TileEntity te = worldObj.getTileEntity(ffPos); //Get the tileentity
 
         if (te != null) { //Prevent it from trying to update forcefields that are not loaded (in an unloaded chunk)
-            try {
-                Field f = te.getClass().getField("decayTimer"); //Get its decayTimer
-                f.setInt(te, 100); //Set it to 5s
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                LogHelper.warn("Gah! Error when trying to refresh the decayTimer of the Forcefield at " + ffPos.toString()); //This shouldn't happen ever
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            ((TEForcefield) te).decayTimer = 100;
         }
 
     }
@@ -358,39 +345,28 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         double powerDrawRate = PowerConf.ffProjectorDrawRate;
         double powerMax = PowerConf.ffProjectorMaxPower;
 
-        if (power < powerMax) { //If we have space for more power
+        if (power < powerMax) {
 
-            double pcPower; //Power Cube Power
+            double pcPower = powerCube.power;
 
-            try {
-
-                Field f = powerCube.getClass().getField("power");
-                pcPower = f.getDouble(powerCube); //Get the power cube's power level
-
-                if (pcPower > 0) { //If the power cube has more than 0 power
-                    if (pcPower < powerDrawRate) { //If the power cube has less power than what the FF Projector draws in 1 tick
-                        if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
-                            power += pcPower; //Draw all power from the power cube
-                            f.setDouble(powerCube, 0); //Set the power cube's power level to 0
-                        } else {
-                            f.setDouble(powerCube, powerMax - power); //Set the power cube's power level to the difference between the projector's power and max power
-                            power = powerMax; //Set the projector's power level to the max
-                        }
+            if (pcPower > 0) {
+                if (pcPower < powerDrawRate) {
+                    if (power + pcPower <= powerMax) {
+                        power += pcPower;
+                        powerCube.power = 0;
                     } else {
-                        if (power + powerDrawRate <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
-                            power += powerDrawRate; //Draw some power from the power cube
-                            f.setDouble(powerCube, pcPower - powerDrawRate); //Minus the power drawn from the power cube
-                        } else {
-                            f.setDouble(powerCube, pcPower - (powerMax - power)); //Draw the power difference between the projector's power and max power
-                            power = powerMax; //Set the projector's power to the max
-                        }
+                        powerCube.power = powerMax - power;
+                        power = powerMax;
+                    }
+                } else {
+                    if (power + powerDrawRate <= powerMax) {
+                        power += powerDrawRate;
+                        powerCube.power = pcPower - powerDrawRate;
+                    } else {
+                        powerCube.power = pcPower - (powerMax - power);
+                        power = powerMax;
                     }
                 }
-
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
 
         }

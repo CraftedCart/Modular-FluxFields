@@ -1,11 +1,13 @@
 package io.github.craftedcart.MFF.tileentity;
 
+import io.github.craftedcart.MFF.crafting.CraftOverTimeResult;
+import io.github.craftedcart.MFF.crafting.CrystalRefineryRecipeHandler;
 import io.github.craftedcart.MFF.init.ModItems;
-import io.github.craftedcart.MFF.item.ModItem;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -19,8 +21,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
-import java.lang.reflect.Field;
-
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
@@ -32,7 +32,7 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
     public double power = 0;
     public int progress = 0;
-    public int maxProgress = PowerConf.crystalRefineryBaseTime;
+    public int maxProgress;
 
     public double speedMultiplier = 1;
     public double powerMultiplier = 1;
@@ -290,17 +290,15 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
         ItemStack upgrade1 = getStackInSlot(2);
         ItemStack upgrade2 = getStackInSlot(3);
         ItemStack upgrade3 = getStackInSlot(4);
+        final int baseTicksToCraft;
 
-        if (input != null) {
-            if (input.getItem() == ModItems.rawAmethyst) {
-                craftTick(output, ModItems.refinedAmethyst);
-            } else if (input.getItem() == ModItems.rawRuby) {
-                craftTick(output, ModItems.refinedRuby);
-            } else {
-                progress = 0;
-            }
+        CraftOverTimeResult result = CrystalRefineryRecipeHandler.checkRecipe(input);
+        if (result != null) {
+            baseTicksToCraft = result.ticksToCraft;
+            craftTick(output, result.result.getItem());
         } else {
             progress = 0;
+            baseTicksToCraft = 0;
         }
 
         //Check for upgrades
@@ -311,13 +309,13 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
         checkForUpgrade(upgrade1);
         checkForUpgrade(upgrade2);
         checkForUpgrade(upgrade3);
-        maxProgress = (int) (PowerConf.crystalRefineryBaseTime / speedMultiplier);
+        maxProgress = (int) (baseTicksToCraft / speedMultiplier);
         powerMultiplier *= powerTimser;
         powerMultiplier /= powerDivider;
 
     }
 
-    private void craftTick(ItemStack outputSlot, ModItem outputItem) {
+    private void craftTick(ItemStack outputSlot, Item outputItem) {
         if (progress <= maxProgress && power > PowerConf.crystalRefineryUsage * powerMultiplier) {
             progress++;
             power -= PowerConf.crystalRefineryUsage * powerMultiplier;
@@ -360,37 +358,26 @@ public class TECrystalRefinery extends TileEntity implements IInventory, ISidedI
 
         if (power < powerMax) {
 
-            double pcPower; //Power Cube Power
+            double pcPower = powerCube.power;
 
-            try {
-
-                Field f = powerCube.getClass().getField("power");
-                pcPower = f.getDouble(powerCube);
-
-                if (pcPower > 0) {
-                    if (pcPower < powerDrawRate) {
-                        if (power + pcPower <= powerMax) {
-                            power += pcPower;
-                            f.setDouble(powerCube, 0);
-                        } else {
-                            f.setDouble(powerCube, powerMax - power);
-                            power = powerMax;
-                        }
+            if (pcPower > 0) {
+                if (pcPower < powerDrawRate) {
+                    if (power + pcPower <= powerMax) {
+                        power += pcPower;
+                        powerCube.power = 0;
                     } else {
-                        if (power + powerDrawRate <= powerMax) {
-                            power += powerDrawRate;
-                            f.setDouble(powerCube, pcPower - powerDrawRate);
-                        } else {
-                            f.setDouble(powerCube, pcPower - (powerMax - power));
-                            power = powerMax;
-                        }
+                        powerCube.power = powerMax - power;
+                        power = powerMax;
+                    }
+                } else {
+                    if (power + powerDrawRate <= powerMax) {
+                        power += powerDrawRate;
+                        powerCube.power = pcPower - powerDrawRate;
+                    } else {
+                        powerCube.power = pcPower - (powerMax - power);
+                        power = powerMax;
                     }
                 }
-
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
 
         }
