@@ -12,11 +12,12 @@
 }
 
 .docs-block-preview {
-	width: 150px;
+	width: 128px;
 }
 
 .docs-image-thumb {
-	height: 256px;
+	max-height: 256px;
+	max-width: 100%;
 }
 
 .docs-image-full {
@@ -35,7 +36,7 @@
    width: auto !important;
 }
 
-.release-panel .panel-heading .panel-title button {
+.panel-expand-button {
 	height: 100%;
 	padding: 0;
 	width: 40px;

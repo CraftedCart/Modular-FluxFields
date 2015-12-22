@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="A mod that adds forcefields to protect your Minecraft base">
+    <meta name="author" content="CraftedCart">
+    <link rel="icon" href="/Modular-FluxFields/img/favicon.ico">
+
+    <title>Modular FluxFields</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/Modular-FluxFields/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="/Modular-FluxFields/css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div id="navbarWrapper"></div>
+
+    <div class="jumbotron main-banner">
+      <div class="container">
+        <h1>Modular FluxFields</h1>
+        <h2>Official Documentation</h2>
+      </div>
+    </div>
+
+		<div class="container-fluid">
+			<div class="col-md-3">
+				<table class="table">
+					<tr>
+						<th>Stat</th>
+						<th>Info</th>
+					</tr>
+					<tr>
+						<td>Block</td>
+						<td><img src="/Modular-FluxFields/img/machines/forcefieldProjector.png" class="docs-block-preview"></td>
+					</tr>
+					<tr>
+						<td>Unlocalised Name</td>
+						<td>mff:ffProjector</td>
+					</tr>
+					<tr>
+						<td>Localised Name (en_US)</td>
+						<td>Forcefield Projector</td>
+					</tr>
+					<tr>
+						<td>Hardness</td>
+						<td>6</td>
+					</tr>
+					<tr>
+						<td>Harvest Level</td>
+						<td>
+							<a href="http://minecraft.gamepedia.com/Pickaxe">
+								<img src="/Modular-FluxFields/img/vanilla/ironPickaxe.png" title="Iron Pickaxe"> Iron Pickaxe
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td>Max Power Storage</td>
+						<td>100,000,000 FE</td>
+					</tr>
+					<tr>
+						<td>Power Draw Rate</td>
+						<td>50,000 FE / t</td>
+					</tr>
+					<tr>
+						<td>Base Power Usage</td>
+						<td>
+							150 FE / block to generate a forcefield block<br>
+							0.21 FE / t / block to sustain a forcefield
+						</td>
+					</tr>
+					<tr>
+						<td>Accepted Upgrades</td>
+						<td>
+							None. The upgrade system hasn't been implemented yet.
+						</td>
+					</tr>
+				</table>
+			</div>
+
+    	<div class="container col-md-9">
+
+				<ol class="breadcrumb">
+  				<li><a href="/Modular-FluxFields/documentation/index.html">Documentation</a></li>
+					<li><a href="/Modular-FluxFields/documentation/machines/index.html">Machines</a></li>
+					<li class="active">Forcefield Projector</li>
+				</ol>
+
+				<h1>Forcefield Projector</h1>
+
+		  	<p class="lead">
+					The Forcefield Projector has the ability to create and sustain a forcefield protecting your base
+		  	</p>
+
+				<p>
+					The main feature of the mod, the ability to create and sustain indestructible protecting forcefields, is contained within this block. This block requires power to function, a lot of it. Place a
+					<a href="/Modular-FluxFields/documentation/power/powerCube.html"><img src="/Modular-FluxFields/img/power/powerCubeItem.png" class="docs-text-icon"> Power Cube</a>
+					on top of the projector to supply it.
+					The forcefield projector has enough internal power storage to store a whole power cube's worth of energy, so don't be surprised when it drains the whole thing.
+				</p>
+
+				<h2>GUI</h2>
+				<p>
+					The Forcefield Projector's GUI is split up into various tabs. They are:
+					<ul>
+						<li>Info</li>
+						<li>Sizing</li>
+						<li>Security <span class="label label-warning">In development</span></li>
+						<li>Upgrades <span class="label label-danger">In development - Currently non-existent</span></li>
+						<li>Power Statistics <span class="label label-danger">In development - Currently non-existent</span></li>
+					</ul>
+					In all of the GUI screens, the current power level is displayed at the top.
+				</p>
+
+				<div class="container col-xs-12"> <!-- Info GUI -->
+					<div class="panel panel-default">
+  					<div class="panel-heading clearfix">
+    					<h3 class="panel-title">Info
+								<span class="pull-right"><button type="button" class="btn btn-info panel-expand-button" data-toggle="collapse" data-target="#ffpGuiInfo"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+							</h3>
+						</div>
+  					<div class="panel-body collapse" id="ffpGuiInfo">
+
+							<a data-toggle="modal" data-target="#ffInfoGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/ffGuiInfo.png" class="docs-image-thumb center-block"></a>
+
+							<div class="modal fade" id="ffInfoGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
+					  		<div class="modal-dialog modal-lg" role="document">
+					    		<div class="modal-content">
+					      		<div class="modal-header">
+					        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        		<h4 class="modal-title">Forcefield Projector: Info GUI</h4>
+					      		</div>
+					      		<div class="modal-body">
+					        		<img src="/Modular-FluxFields/img/gui/ffGuiInfo.png" class="docs-image-full">
+					      		</div>
+					    		</div>
+					  		</div>
+							</div> <!-- / modal -->
+
+							<br>
+							<p>
+								Data displayed on the info screen includes:
+								<ul>
+									<li>The current amount of power stored</li>
+									<li>The power usage per tick and per second</li>
+									<li>The size of the projected forcefield</li>
+									<li>Who owns the Forcefield Projector</li>
+									<li>How long the forcefield has been up for</li>
+								</ul>
+							</p>
+
+  					</div>
+					</div>
+				</div>
+
+				<div class="container col-xs-12"> <!-- Sizing GUI -->
+					<div class="panel panel-default">
+  					<div class="panel-heading clearfix">
+    					<h3 class="panel-title">Sizing
+								<span class="pull-right"><button type="button" class="btn btn-info panel-expand-button" data-toggle="collapse" data-target="#ffpGuiSizing"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+							</h3>
+						</div>
+  					<div class="panel-body collapse" id="ffpGuiSizing">
+
+							<a data-toggle="modal" data-target="#ffSizingGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/ffGuiSizing.png" class="docs-image-thumb center-block"></a>
+
+							<div class="modal fade" id="ffSizingGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
+					  		<div class="modal-dialog modal-lg" role="document">
+					    		<div class="modal-content">
+					      		<div class="modal-header">
+					        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        		<h4 class="modal-title">Forcefield Projector: Sizing GUI</h4>
+					      		</div>
+					      		<div class="modal-body">
+					        		<img src="/Modular-FluxFields/img/gui/ffGuiSizing.png" class="docs-image-full">
+					      		</div>
+					    		</div>
+					  		</div>
+							</div> <!-- / modal -->
+
+							<br>
+							<p>
+								Here is where you can set the size of the forcefield to be projected.
+								Drag the sliders to set the X, Y, and Z offset relative to the Forcefield Projector block.
+								Using Minecraft's <a href="http://minecraft.gamepedia.com/Debug_screen">debug screen</a> (F3) will help a lot in figuring out the sizing.
+							</p>
+
+  					</div>
+					</div>
+				</div>
+
+				<div class="container col-xs-12"> <!-- Security GUI -->
+					<div class="panel panel-default">
+  					<div class="panel-heading clearfix">
+    					<h3 class="panel-title">Security
+								<span class="pull-right"><button type="button" class="btn btn-info panel-expand-button" data-toggle="collapse" data-target="#ffpGuiSecurity"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+								<span class="pull-right"><span class="label label-warning">In development</span>&nbsp;</span>
+							</h3>
+						</div>
+  					<div class="panel-body collapse" id="ffpGuiSecurity">
+
+							<a data-toggle="modal" data-target="#ffSecurityGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/ffGuiSecurityPlayers.png" class="docs-image-thumb center-block"></a>
+
+							<div class="modal fade" id="ffSecurityGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
+					  		<div class="modal-dialog modal-lg" role="document">
+					    		<div class="modal-content">
+					      		<div class="modal-header">
+					        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        		<h4 class="modal-title">Forcefield Projector: Security GUI - Managing players</h4>
+					      		</div>
+					      		<div class="modal-body">
+					        		<img src="/Modular-FluxFields/img/gui/ffGuiSecurityPlayers.png" class="docs-image-full">
+					      		</div>
+					    		</div>
+					  		</div>
+							</div> <!-- / modal -->
+
+							<br>
+							<p>
+								Here, you can manage the security system of the forcefield.
+								A security upgrade will be needed for this to function, but as there is no upgrade system for the Forcefield Projector yet, this requirement is overridden.
+								There are two tabs (found at the bottom) to this GUI screen, manage players mode (the person icon), and manage groups &amp; permissions mode (the padlock icon).<br>
+								<br>
+								In manage players mode, players can be added to the system, assigned a group and removed.
+								Adding players is as simple as entering their username into the text field (make sure they're online) and hitting return, selecting them, clicking "Add to group" and then selecting a group to assign them to.
+								Deleting a player is done by selecting their username on the sidebar, followed by pressing "Remove".
+								There is no warning dialog; once you've deleted them, they're gone and automatically assigned to the "Everyone" group.<br>
+								<br>
+								In manage groups mode, you can create groups by entering its name into the text field and hitting return.
+								You will have the ability to set permissions on a group, however the security system is still a work in progress and as such, this feature doesn't exist yet.
+								Removing a group is done by selecting it, followed by pressing "Remove".
+								The only group that can't be removed is the "Everyone" group.
+								As the name implies, the "Everyone" groups is used to manage permissions for all players not on the security system.
+								As with manage players mode, there is no warning dialog; Make sure you're certain when deleting a group, as you will have to reassign each player in that group to a new group.
+							</p>
+
+  					</div>
+					</div>
+				</div>
+
+				<div class="container col-xs-12"> <!-- Upgrades GUI -->
+					<div class="panel panel-default">
+  					<div class="panel-heading clearfix">
+    					<h3 class="panel-title">Upgrades
+								<span class="pull-right"><button type="button" class="btn btn-info panel-expand-button" data-toggle="collapse" data-target="#ffpGuiUpgrades"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+								<span class="pull-right"><span class="label label-danger">In development - Currently non-existent</span>&nbsp;</span>
+							</h3>
+						</div>
+  					<div class="panel-body collapse" id="ffpGuiUpgrades">
+
+							<p>
+								This GUI screen doesn't exist yet.
+							</p>
+
+  					</div>
+					</div>
+				</div>
+
+				<div class="container col-xs-12"> <!-- Power Statistics GUI -->
+					<div class="panel panel-default">
+  					<div class="panel-heading clearfix">
+    					<h3 class="panel-title">Power Statistics
+								<span class="pull-right"><button type="button" class="btn btn-info panel-expand-button" data-toggle="collapse" data-target="#ffpGuiPowerStatistics"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+								<span class="pull-right"><span class="label label-danger">In development - Currently non-existent</span>&nbsp;</span>
+							</h3>
+						</div>
+  					<div class="panel-body collapse" id="ffpGuiPowerStatistics">
+
+							<p>
+								This GUI screen doesn't exist yet.
+							</p>
+
+  					</div>
+					</div>
+				</div>
+
+    	</div><!-- /.container -->
+		</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/Modular-FluxFields/js/jquery-1.11.3.min.js"></script>
+    <script src="/Modular-FluxFields/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script type="text/javascript">
+      $("#navbarWrapper").load("/Modular-FluxFields/navbar.html"); // Load the navbar
+    </script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-68151228-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>

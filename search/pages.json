@@ -1,6 +1,29 @@
 {
 	"pages": [
 		{
+			"title": "Forcefield Projector",
+			"path": "/Modular-FluxFields/documentation/machines/forcefieldProjector.html",
+			"tags": [
+				"forcefield",
+				"fluxfield",
+				"ff",
+				"projector",
+				"proj",
+				"project",
+				"projects",
+				"create",
+				"creator",
+				"creates",
+				"make",
+				"maker",
+				"makes",
+				"ffp",
+				"ffproj",
+				"mff",
+				"machine"
+			]
+		},
+		{
 			"title": "Crystal Refinery",
 			"path": "/Modular-FluxFields/documentation/machines/crystalRefinery.html",
 			"tags": [
