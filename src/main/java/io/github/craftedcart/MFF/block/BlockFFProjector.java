@@ -51,4 +51,14 @@ public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
 
     }
 
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public int getRenderType() {
+        return -1;
+    }
+
 }

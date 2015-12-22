@@ -387,7 +387,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             //Clear text field
             this.addItemTextField.setText("");
 
-        } else if (!(keyCode == Keyboard.KEY_E  &&  this.addItemTextField.isFocused()) ){ //Prevent typing E from closing the gui if a text box is focused
+        } else if (!this.addItemTextField.isFocused() || keyCode == 1){ //Prevent typing any keys (apart from ESC) from closing the gui if the text box is focused
             try {
                 super.keyTyped(typedChar, keyCode);
             } catch (IOException e) {

@@ -51,7 +51,7 @@ public class ModBlocks {
 
         //Register Block Renders
         registerRender(forcefield);
-        registerRender(ffProjector);
+        registerBlockRenderAsItem(ffProjector, Names.BlockFFProjector);
         registerBlockRenderAsItem(powerCube, Names.BlockPowerCube);
         registerRender(crystalRefinery);
         registerRender(crystalConstructor);

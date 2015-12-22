@@ -27,6 +27,7 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.5f, y + 0.5f, z + 0.5f);
+        GL11.glColor4f(1, 1, 1, 0.5f);
         GlStateManager.rotate((te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, 0);
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/powerCubeFrame.png"));
@@ -55,6 +56,7 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
         GL11.glEnable(GL11.GL_BLEND);
         Tessellator.getInstance().draw();
         GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor4f(1, 1, 1, 0.5f);
 
         GlStateManager.popMatrix();
 
