@@ -62,9 +62,32 @@
 		},
 		{
 			"title": "Amethyst",
-			"path": "/Modular-FluxFields/documentation/components/prism.html",
+			"path": "/Modular-FluxFields/documentation/crystals/amethyst.html",
 			"tags": [
 				"amethyst",
+				"ore",
+				"raw",
+				"refined",
+				"crystal",
+				"crystals",
+				"gem",
+				"gems",
+				"component",
+				"components",
+				"element",
+				"elements",
+				"crafting",
+				"ingredient",
+				"ingredients",
+				"recipe",
+				"recipes"
+			]
+		},
+		{
+			"title": "Ruby",
+			"path": "/Modular-FluxFields/documentation/crystals/ruby.html",
+			"tags": [
+				"ruby",
 				"ore",
 				"raw",
 				"refined",
