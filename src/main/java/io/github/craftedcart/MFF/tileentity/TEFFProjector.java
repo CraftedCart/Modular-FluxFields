@@ -46,7 +46,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     private int updateTime = 1;
     public ArrayList<BlockPos> blockList = new ArrayList<BlockPos>(); //The list of blockposes of the forcefield walls
     public int blockPlaceProgress = 0;
-    public int sizeModifiedCheckSeed = MathUtils.randInt(0, Integer.MAX_VALUE - 1); //Sent to the client to check if the blocks have changed
     private boolean doWorldLoadSetup = false; //Used to make sure a block of code only runs once on chunk load
     public boolean isPowered = false; //Does the FF Projector has enough power to keep running
     private ItemStack[] inventory; //The inventory of the FF Projector
@@ -286,9 +285,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         }
 
         updateTime--;
-        if (blockPlaceProgress < blockList.size()) {
-            blockPlaceProgress++;
-        }
 
         //Draw power from above
         if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) { //If a tile entity exists above
@@ -339,6 +335,12 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
             }
 
+        }
+
+        if (blockPlaceProgress < blockList.size() && isPowered) {
+            blockPlaceProgress++;
+        } else if (!isPowered) {
+            blockPlaceProgress = 0;
         }
 
     }
@@ -406,7 +408,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         tagCompound.setString("owner", owner);
         tagCompound.setString("ownerName", ownerName);
         tagCompound.setInteger("blockPlaceProgress", blockPlaceProgress);
-        tagCompound.setInteger("sizeModifiedCheckSeed", sizeModifiedCheckSeed);
 
         //Set players list
         NBTTagCompound players = new NBTTagCompound();
@@ -442,22 +443,19 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
         power = tagCompound.getDouble("power");
 
-        minX = tagCompound.getInteger("x1");
-        minY = tagCompound.getInteger("y1");
-        minZ = tagCompound.getInteger("z1");
-        maxX = tagCompound.getInteger("x2");
-        maxY = tagCompound.getInteger("y2");
-        maxZ = tagCompound.getInteger("z2");
-
         uptime = tagCompound.getInteger("uptime");
         owner = tagCompound.getString("owner");
         ownerName = tagCompound.getString("ownerName");
         blockPlaceProgress = tagCompound.getInteger("blockPlaceProgress");
 
-        if (tagCompound.getInteger("sizeModifiedCheckSeed") != sizeModifiedCheckSeed) { //The sizing changed on the server side - Recalculate the sizing
-            LogHelper.info(tagCompound.getInteger("sizeModifiedCheckSeed"));
-            LogHelper.info(sizeModifiedCheckSeed);
-            sizeModifiedCheckSeed = tagCompound.getInteger("sizeModifiedCheckSeed");
+        if (tagCompound.getInteger("x1") != minX || tagCompound.getInteger("y1") != minY || tagCompound.getInteger("z1") != minZ ||
+                tagCompound.getInteger("x2") != maxX || tagCompound.getInteger("y2") != maxY || tagCompound.getInteger("z2") != maxZ) { //The sizing changed on the server side - Recalculate the sizing
+            minX = tagCompound.getInteger("x1");
+            minY = tagCompound.getInteger("y1");
+            minZ = tagCompound.getInteger("z1");
+            maxX = tagCompound.getInteger("x2");
+            maxY = tagCompound.getInteger("y2");
+            maxZ = tagCompound.getInteger("z2");
             getBlocks();
         }
 

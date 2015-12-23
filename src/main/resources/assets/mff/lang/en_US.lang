@@ -59,6 +59,7 @@ gui.mff:chooseAName=Choose a name
 gui.mff:addToGroup=Add to group
 gui.mff:group=Group
 gui.mff:everyone=Everyone
+gui.mff:calculating=Calculating
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed

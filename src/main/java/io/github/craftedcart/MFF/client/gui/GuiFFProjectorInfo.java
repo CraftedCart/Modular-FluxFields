@@ -87,8 +87,9 @@ public class GuiFFProjectorInfo extends GuiContainer {
                 15, 54, 0x404040, false); //Draw owner
         this.fontRendererObj.drawString(String.format("%s: %s : %s : %s", StatCollector.translateToLocal("gui.mff:uptime"), hrStr, mnStr, secStr),
                 15, 63, 0x404040, false); //Draw uptime
-        this.fontRendererObj.drawString(String.format("STATUS: %d / %d", this.te.blockPlaceProgress, this.te.blockList.size()),
-                15, 72, 0x404040, false); //Draw status
+        this.fontRendererObj.drawString(String.format("%s: %06.2f%% (%d / %d)", StatCollector.translateToLocal("gui.mff:calculating"), (float) this.te.blockPlaceProgress / this.te.blockList.size() * 100,
+                this.te.blockPlaceProgress, this.te.blockList.size()),
+                15, 72, 0x404040, false); //Draw calculating progress
 
     }
 

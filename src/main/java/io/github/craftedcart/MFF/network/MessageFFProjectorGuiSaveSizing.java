@@ -81,31 +81,14 @@ public class MessageFFProjectorGuiSaveSizing implements IMessage {
 
                     TEFFProjector te = (TEFFProjector) ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.pos);
 
-                    try {
+                    te.minX = message.x1;
+                    te.maxX = message.x2;
+                    te.minY = message.y1;
+                    te.maxY = message.y2;
+                    te.minZ = message.z1;
+                    te.maxZ = message.z2;
 
-                        //TODO I don't need to use Java's Reflection to do this
-                        Field fX1 = te.getClass().getField("minX");
-                        Field fY1 = te.getClass().getField("minY");
-                        Field fZ1 = te.getClass().getField("minZ");
-                        Field fX2 = te.getClass().getField("maxX");
-                        Field fY2 = te.getClass().getField("maxY");
-                        Field fZ2 = te.getClass().getField("maxZ");
-
-                        fX1.setInt(te, message.x1);
-                        fY1.setInt(te, message.y1);
-                        fZ1.setInt(te, message.z1);
-                        fX2.setInt(te, message.x2);
-                        fY2.setInt(te, message.y2);
-                        fZ2.setInt(te, message.z2);
-
-                        te.sizeModifiedCheckSeed = MathUtils.randInt(0, Integer.MAX_VALUE - 1); //Sent to the client to check if the blocks have changed
-                        te.getBlocks(); //Recalculate the blocks
-
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+                    te.getBlocks();
 
                 }
             });
