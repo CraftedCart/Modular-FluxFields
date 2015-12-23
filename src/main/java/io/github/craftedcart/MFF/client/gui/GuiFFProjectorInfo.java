@@ -65,11 +65,11 @@ public class GuiFFProjectorInfo extends GuiContainer {
 
         int hr = seconds / 3600;
         int rem = seconds % 3600;
-        int mn = rem/60;
-        int sec = rem%60;
-        String hrStr = (hr<10 ? "0" : "")+hr;
-        String mnStr = (mn<10 ? "0" : "")+mn;
-        String secStr = (sec<10 ? "0" : "")+sec;
+        int mn = rem / 60;
+        int sec = rem % 60;
+        String hrStr = (hr<10 ? "0" : "") + hr;
+        String mnStr = (mn<10 ? "0" : "") + mn;
+        String secStr = (sec<10 ? "0" : "") + sec;
 
         String s = this.te.getDisplayName().getUnformattedText();
         this.fontRendererObj.drawString(s, 75, 4, 0x404040); //Draw block name
@@ -87,6 +87,9 @@ public class GuiFFProjectorInfo extends GuiContainer {
                 15, 54, 0x404040, false); //Draw owner
         this.fontRendererObj.drawString(String.format("%s: %s : %s : %s", StatCollector.translateToLocal("gui.mff:uptime"), hrStr, mnStr, secStr),
                 15, 63, 0x404040, false); //Draw uptime
+        this.fontRendererObj.drawString(String.format("%s: %06.2f%% (%d / %d)", StatCollector.translateToLocal("gui.mff:calculating"), (float) this.te.blockPlaceProgress / this.te.blockList.size() * 100,
+                this.te.blockPlaceProgress, this.te.blockList.size()),
+                15, 72, 0x404040, false); //Draw calculating progress
 
     }
 

@@ -1,7 +1,7 @@
 package io.github.craftedcart.MFF.tileentity;
 
-import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipeHandler;
 import io.github.craftedcart.MFF.crafting.CraftOverTimeResult;
+import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipeHandler;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import net.minecraft.entity.player.EntityPlayer;

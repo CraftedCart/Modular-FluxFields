@@ -41,8 +41,9 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public boolean hasSecurityUpgrade = true;
 
     //Not so config-y stuff
-    private int updateTime = 100;
+    private int updateTime = 1;
     public ArrayList<BlockPos> blockList = new ArrayList<BlockPos>(); //The list of blockposes of the forcefield walls
+    public int blockPlaceProgress = 0;
     private boolean doWorldLoadSetup = false; //Used to make sure a block of code only runs once on chunk load
     public boolean isPowered = false; //Does the FF Projector has enough power to keep running
     private ItemStack[] inventory; //The inventory of the FF Projector
@@ -55,6 +56,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public List<List<Object>> permissionGroups = new ArrayList<List<Object>>(Arrays.asList(Arrays.asList((Object) "gui.mff:everyone")));
     //List containing lists of groups containing the group ID and its permissions (in that order) defined by the security tab on the gui
 
+    //<editor-fold desc="Inventory stuff"> Used by IntelliJ to define a custom code folding section
     public TEFFProjector() {
         this.inventory = new ItemStack[this.getSizeInventory()];
     }
@@ -193,6 +195,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public void setCustomName(String customName) {
         this.customName = customName;
     }
+    //</editor-fold>
 
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
@@ -268,7 +271,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     }
 
     @Override
-    public void update() { //Runs every game tick (20 times a second)q
+    public void update() { //Runs every game tick (20 times a second)
 
         if (!doWorldLoadSetup) { //This only runs when the chunk loads
             ArrayList<Object> al = new ArrayList<Object>();
@@ -276,6 +279,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             al.add(this.getPos()); //Add this blockpos to the list
             PreventFFBlockBreak.ffProjectors.add(al); //Register itself with the event handler which prevents FF block breaking
             doWorldLoadSetup = true;
+            getBlocks(); //Calculate the blockposes of the walls
         }
 
         updateTime--;
@@ -287,7 +291,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             }
         }
 
-        //Use 2 power/block/t
+        //Use some power/block/t
         if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
             power -= PowerConf.ffProjectorUsagePerBlock * blockList.size();
             isPowered = true;
@@ -297,16 +301,15 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             uptime = 0;
         }
 
-        //Executed every 4.95s (99t)
+        //Executed every 5s (100t)
         if (updateTime <= 0) {
-            updateTime = 99; //4.95s (99t)
+            updateTime = 100; //5s (100t)
 
             //Send info to client
             worldObj.markBlockForUpdate(this.getPos());
             markDirty();
 
-            getBlocks(); //Calculate the blockposes of the walls
-
+            int index = 0;
             for (BlockPos ffPos : blockList) { //Loop through every blockpos
 
                 if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) { //If the block found is air
@@ -322,8 +325,20 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
                     }
                 }
 
+                if (index > blockPlaceProgress) {
+                    break;
+                }
+
+                index++;
+
             }
 
+        }
+
+        if (blockPlaceProgress < blockList.size() && isPowered) {
+            blockPlaceProgress++;
+        } else if (!isPowered) {
+            blockPlaceProgress = 0;
         }
 
     }
@@ -334,7 +349,9 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         TileEntity te = worldObj.getTileEntity(ffPos); //Get the tileentity
 
         if (te != null) { //Prevent it from trying to update forcefields that are not loaded (in an unloaded chunk)
-            ((TEForcefield) te).decayTimer = 100;
+            if (te instanceof TEForcefield) {
+                ((TEForcefield) te).decayTimer = 200; //10s (200t)
+            }
         }
 
     }
@@ -345,26 +362,28 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         double powerDrawRate = PowerConf.ffProjectorDrawRate;
         double powerMax = PowerConf.ffProjectorMaxPower;
 
-        if (power < powerMax) {
+        if (power < powerMax) { //If we have space for more power
 
-            double pcPower = powerCube.power;
+            double pcPower; //Power Cube Power
 
-            if (pcPower > 0) {
-                if (pcPower < powerDrawRate) {
-                    if (power + pcPower <= powerMax) {
-                        power += pcPower;
-                        powerCube.power = 0;
+            pcPower = powerCube.power; //Get the power cube's power level
+
+            if (pcPower > 0) { //If the power cube has more than 0 power
+                if (pcPower < powerDrawRate) { //If the power cube has less power than what the FF Projector draws in 1 tick
+                    if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
+                        power += pcPower; //Draw all power from the power cube
+                        powerCube.power = 0; //Set the power cube's power level to 0
                     } else {
-                        powerCube.power = powerMax - power;
-                        power = powerMax;
+                        powerCube.power = powerMax - power; //Set the power cube's power level to the difference between the projector's power and max power
+                        power = powerMax; //Set the projector's power level to the max
                     }
                 } else {
-                    if (power + powerDrawRate <= powerMax) {
-                        power += powerDrawRate;
-                        powerCube.power = pcPower - powerDrawRate;
+                    if (power + powerDrawRate <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
+                        power += powerDrawRate; //Draw some power from the power cube
+                        powerCube.power = pcPower - powerDrawRate; //Minus the power drawn from the power cube
                     } else {
-                        powerCube.power = pcPower - (powerMax - power);
-                        power = powerMax;
+                        powerCube.power = pcPower - (powerMax - power); //Draw the power difference between the projector's power and max power
+                        power = powerMax; //Set the projector's power to the max
                     }
                 }
             }
@@ -386,6 +405,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         tagCompound.setInteger("uptime", uptime);
         tagCompound.setString("owner", owner);
         tagCompound.setString("ownerName", ownerName);
+        tagCompound.setInteger("blockPlaceProgress", blockPlaceProgress);
 
         //Set players list
         NBTTagCompound players = new NBTTagCompound();
@@ -421,16 +441,21 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
         power = tagCompound.getDouble("power");
 
-        minX = tagCompound.getInteger("x1");
-        minY = tagCompound.getInteger("y1");
-        minZ = tagCompound.getInteger("z1");
-        maxX = tagCompound.getInteger("x2");
-        maxY = tagCompound.getInteger("y2");
-        maxZ = tagCompound.getInteger("z2");
-
         uptime = tagCompound.getInteger("uptime");
         owner = tagCompound.getString("owner");
         ownerName = tagCompound.getString("ownerName");
+        blockPlaceProgress = tagCompound.getInteger("blockPlaceProgress");
+
+        if (tagCompound.getInteger("x1") != minX || tagCompound.getInteger("y1") != minY || tagCompound.getInteger("z1") != minZ ||
+                tagCompound.getInteger("x2") != maxX || tagCompound.getInteger("y2") != maxY || tagCompound.getInteger("z2") != maxZ) { //The sizing changed on the server side - Recalculate the sizing
+            minX = tagCompound.getInteger("x1");
+            minY = tagCompound.getInteger("y1");
+            minZ = tagCompound.getInteger("z1");
+            maxX = tagCompound.getInteger("x2");
+            maxY = tagCompound.getInteger("y2");
+            maxZ = tagCompound.getInteger("z2");
+            getBlocks();
+        }
 
         //Read players
         if (tagCompound.hasKey("permittedPlayers")) {
