@@ -2,6 +2,7 @@ package io.github.craftedcart.MFF.client.render.blocks;
 
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -9,8 +10,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
@@ -27,11 +31,47 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.5f, y + 0.5f, z + 0.5f);
-        GL11.glColor4f(1, 1, 1, 0.5f);
+        WorldRenderer wr = Tessellator.getInstance().getWorldRenderer();
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/white.png"));
+
+        //Draw lines between connected power cubes
+        List<BlockPos> powerCubeLinks =  ((TEPowerCube) te).powerCubeLinks;
+
+        for (BlockPos pos : powerCubeLinks) {
+            BlockPos posDiff = pos.subtract(te.getPos());
+
+            double pcPower = ((TEPowerCube) te).power; //Get Power Cube Power
+            double pcMaxPower = PowerConf.powerCubeMaxPower;
+            float pcPowerPercent = (float) pcPower / (float) pcMaxPower;
+            float r = MathUtils.lerp(blueR, redR, pcPowerPercent);
+            float g = MathUtils.lerp(blueG, redG, pcPowerPercent);
+            float b = MathUtils.lerp(blueB, redB, pcPowerPercent);
+            double pcPower2 = 0;
+            if (te.getWorld().getTileEntity(pos) instanceof TEPowerCube) {
+                pcPower2 = ((TEPowerCube) te.getWorld().getTileEntity(pos)).power; //Get Power Cube Power
+            }
+            float pcPowerPercent2 = (float) pcPower2 / (float) pcMaxPower;
+            float r2 = MathUtils.lerp(blueR, redR, pcPowerPercent);
+            float g2 = MathUtils.lerp(blueG, redG, pcPowerPercent);
+            float b2 = MathUtils.lerp(blueB, redB, pcPowerPercent);
+
+            GL11.glShadeModel(GL11.GL_SMOOTH);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glColor4f(r / 255f, g / 255f, b / 255f, 1);
+            GL11.glLineWidth(4);
+            GL11.glBegin(GL11.GL_LINES);
+            GL11.glVertex3f(0.0f, 0.0f, 0.0f);
+            GL11.glColor4f(r2 / 255f, g2 / 255f, b2 / 255f, 1);
+            GL11.glVertex3f(posDiff.getX(), posDiff.getY(), posDiff.getZ());
+            GL11.glEnd();
+            GL11.glDisable(GL11.GL_BLEND);
+        }
+
+
         GlStateManager.rotate((te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, 0);
 
+        //Draw the Power Cube frame
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/powerCubeFrame.png"));
-        WorldRenderer wr = Tessellator.getInstance().getWorldRenderer();
         wr.startDrawingQuads();
         wr.setBrightness(240);
         drawCube(cubeSize + 0.02f);
@@ -56,7 +96,7 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
         GL11.glEnable(GL11.GL_BLEND);
         Tessellator.getInstance().draw();
         GL11.glDisable(GL11.GL_BLEND);
-        GL11.glColor4f(1, 1, 1, 0.5f);
+        GL11.glColor4f(1, 1, 1, 1f);
 
         GlStateManager.popMatrix();
 

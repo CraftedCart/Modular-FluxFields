@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.tileentity;
 
+import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -41,7 +42,7 @@ public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
                 for (int y = -16; y <= 16; y++) {
                     for (int z = -16; z <= 16; z++) {
                         if (worldObj.getTileEntity(this.getPos().add(x, y, z)) != null &&
-                                new BlockPos(x, y, z).add(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()) != this.getPos()) {
+                                !new BlockPos(x, y, z).add(this.getPos()).equals(this.getPos())) {
                             if (worldObj.getTileEntity(this.getPos().add(x, y, z)) instanceof TEPowerCube) {
                                 //We found another Power Sphere in a radius of 32 blocks
                                 powerCubeLinks.add(this.getPos().add(x, y, z));
@@ -115,7 +116,6 @@ public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
         power = tagCompound.getDouble("power");
-
     }
 
     @Override

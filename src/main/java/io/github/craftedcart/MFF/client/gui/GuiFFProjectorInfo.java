@@ -67,9 +67,9 @@ public class GuiFFProjectorInfo extends GuiContainer {
         int rem = seconds % 3600;
         int mn = rem / 60;
         int sec = rem % 60;
-        String hrStr = (hr<10 ? "0" : "") + hr;
-        String mnStr = (mn<10 ? "0" : "") + mn;
-        String secStr = (sec<10 ? "0" : "") + sec;
+        String hrStr = (hr < 10 ? "0" : "") + hr;
+        String mnStr = (mn < 10 ? "0" : "") + mn;
+        String secStr = (sec < 10 ? "0" : "") + sec;
 
         String s = this.te.getDisplayName().getUnformattedText();
         this.fontRendererObj.drawString(s, 75, 4, 0x404040); //Draw block name
@@ -87,9 +87,24 @@ public class GuiFFProjectorInfo extends GuiContainer {
                 15, 54, 0x404040, false); //Draw owner
         this.fontRendererObj.drawString(String.format("%s: %s : %s : %s", StatCollector.translateToLocal("gui.mff:uptime"), hrStr, mnStr, secStr),
                 15, 63, 0x404040, false); //Draw uptime
-        this.fontRendererObj.drawString(String.format("%s: %06.2f%% (%d / %d)", StatCollector.translateToLocal("gui.mff:calculating"), (float) this.te.blockPlaceProgress / this.te.blockList.size() * 100,
-                this.te.blockPlaceProgress, this.te.blockList.size()),
-                15, 72, 0x404040, false); //Draw calculating progress
+
+        //Calculate calc time remaining
+        double calcSecsDiff = (double) (this.te.blockList.size() - this.te.blockPlaceProgress) / 20;
+        int chr = (int) (calcSecsDiff / 3600);
+        int crem = (int) (calcSecsDiff % 3600);
+        int cmn = crem / 60;
+        int csec = crem % 60;
+        String chrStr = (chr < 10 ? "0" : "") + chr;
+        String cmnStr = (cmn < 10 ? "0" : "") + cmn;
+        String csecStr = (csec < 10 ? "0" : "") + csec;
+
+        this.fontRendererObj.drawString(String.format("%s: %06.2f%% %s: %s : %s : %s",
+                StatCollector.translateToLocal("gui.mff:calculating"), (float) this.te.blockPlaceProgress / this.te.blockList.size() * 100,
+                StatCollector.translateToLocal("gui.mff:remaining"), chrStr, cmnStr, csecStr),
+                15, 72, 0x404040, false);
+
+        drawRect(4, 81, xSize - 4, 83, 0xFF212121);
+        drawRect(4, 81, (int) ((double) (xSize - 8) * (float) this.te.blockPlaceProgress / this.te.blockList.size()) + 4, 83, 0xFF4CAF50);
 
     }
 

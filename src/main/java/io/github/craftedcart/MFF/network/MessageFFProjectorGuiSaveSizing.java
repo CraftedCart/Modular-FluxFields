@@ -80,14 +80,23 @@ public class MessageFFProjectorGuiSaveSizing implements IMessage {
 
                     TEFFProjector te = (TEFFProjector) ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.pos);
 
-                    te.minX = message.x1;
-                    te.maxX = message.x2;
-                    te.minY = message.y1;
-                    te.maxY = message.y2;
-                    te.minZ = message.z1;
-                    te.maxZ = message.z2;
+                    if (te.minX != message.x1 ||
+                            te.maxX != message.x2 ||
+                            te.minY != message.y1 ||
+                            te.maxY != message.y2 ||
+                            te.minZ != message.z1 ||
+                            te.maxZ != message.z2) {
 
-                    te.getBlocks();
+                        te.minX = message.x1;
+                        te.maxX = message.x2;
+                        te.minY = message.y1;
+                        te.maxY = message.y2;
+                        te.minZ = message.z1;
+                        te.maxZ = message.z2;
+
+                        te.getBlocks();
+                        te.blockPlaceProgress = 0;
+                    }
 
                 }
             });

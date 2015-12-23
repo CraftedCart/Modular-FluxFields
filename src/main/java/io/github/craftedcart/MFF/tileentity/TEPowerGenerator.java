@@ -64,4 +64,7 @@ public class TEPowerGenerator extends TileEntity implements IUpdatePlayerListBox
             }
         }
     }
+
+    //TODO: Sync Data, Add GUI, Add Container, Add Upgrade Support
+
 }
