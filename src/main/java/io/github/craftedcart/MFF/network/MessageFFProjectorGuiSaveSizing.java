@@ -1,7 +1,6 @@
 package io.github.craftedcart.MFF.network;
 
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.utility.MathUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;

@@ -1,16 +1,13 @@
 package io.github.craftedcart.MFF.init;
 
 import io.github.craftedcart.MFF.block.*;
-import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerCube;
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.reference.Reference;
-import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 

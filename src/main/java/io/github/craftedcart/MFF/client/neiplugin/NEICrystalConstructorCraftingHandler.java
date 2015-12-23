@@ -6,11 +6,6 @@ import codechicken.nei.recipe.ICraftingHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipe;
 import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipeHandler;
-import io.github.craftedcart.MFF.init.ModItems;
-import io.github.craftedcart.MFF.item.*;
-import io.github.craftedcart.MFF.reference.CrystalConstructorTimings;
-import io.github.craftedcart.MFF.utility.LogHelper;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 

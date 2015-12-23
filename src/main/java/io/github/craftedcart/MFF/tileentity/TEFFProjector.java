@@ -3,8 +3,6 @@ package io.github.craftedcart.MFF.tileentity;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
-import io.github.craftedcart.MFF.utility.LogHelper;
-import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;

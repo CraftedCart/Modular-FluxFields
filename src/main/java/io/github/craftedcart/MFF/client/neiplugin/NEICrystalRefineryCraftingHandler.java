@@ -4,8 +4,6 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.ICraftingHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipe;
-import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipeHandler;
 import io.github.craftedcart.MFF.crafting.CrystalRefineryRecipe;
 import io.github.craftedcart.MFF.crafting.CrystalRefineryRecipeHandler;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.crafting;
 
-import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
