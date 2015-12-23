@@ -40,7 +40,7 @@ public class PreventFFBlockBreak {
             TileEntity te = world.getTileEntity(pos);
 
 
-            if (te != null) {
+            if (te instanceof TEFFProjector) {
 
                 if (((TEFFProjector) te).isPowered) {
                     ArrayList<BlockPos> blockList = ((TEFFProjector) te).blockList;

@@ -2,6 +2,7 @@ package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
+import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -12,15 +13,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
+ * Created by CraftedCart on 23/12/2015 (DD/MM/YYYY)
  */
 
-public class BlockPowerCube extends ModBlock implements ITileEntityProvider {
+public class BlockCreativePowerGenerator extends ModBlock implements ITileEntityProvider {
 
-    public BlockPowerCube() {
+    public BlockCreativePowerGenerator() {
 
         super();
-        this.setUnlocalizedName(Names.BlockPowerCube);
+        this.setUnlocalizedName(Names.BlockCreativePowerGenerator);
         this.setHardness(4f);
         this.setHarvestLevel("pickaxe", 2); //Requires iron pickaxe to harvest
 
@@ -39,7 +40,9 @@ public class BlockPowerCube extends ModBlock implements ITileEntityProvider {
     }
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TEPowerCube();
+        TEPowerGenerator tepg = new TEPowerGenerator(); //tepc, short for TileEntityPowerGenerator
+        tepg.init(-1, 100000000);
+        return tepg;
     }
 
 }

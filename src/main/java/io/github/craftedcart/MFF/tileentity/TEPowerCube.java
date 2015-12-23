@@ -18,7 +18,7 @@ import java.util.List;
 
 public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
 
-    public double power = 100000000;
+    public double power = 0;
 
     private int updateTime = 1;
     public List powerCubeLinks = new ArrayList<BlockPos>();

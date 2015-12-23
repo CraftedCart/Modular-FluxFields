@@ -78,8 +78,8 @@ public class GuiFFProjectorSizing extends GuiContainer {
         //Draw power value
         double power = this.te.power;
 
-        this.drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
-        this.drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
+        drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
+        drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
 
         this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
                 this.guiLeft, this.guiTop - 18, 0xFAFAFA, false);
@@ -109,24 +109,24 @@ public class GuiFFProjectorSizing extends GuiContainer {
         zMax = (int) (sliderPxWidth * zMaxPercent + 11);
 
         //Draw x slider
-        this.drawRect(11, 32, xSize - 4, 30, 0xFF212121); //Draw Slider Background
-        this.drawRect(xMin, 32, xMax, 30, 0xFFF44336); //Draw Selected Area
-        this.drawRect(xMin, 27, xMin + 1, 34, 0xFFD32F2F); //Draw Left Handle
-        this.drawRect(xMax, 27, xMax - 1, 34, 0xFFD32F2F); //Draw Right Handle
+        drawRect(11, 32, xSize - 4, 30, 0xFF212121); //Draw Slider Background
+        drawRect(xMin, 32, xMax, 30, 0xFFF44336); //Draw Selected Area
+        drawRect(xMin, 27, xMin + 1, 34, 0xFFD32F2F); //Draw Left Handle
+        drawRect(xMax, 27, xMax - 1, 34, 0xFFD32F2F); //Draw Right Handle
         this.fontRendererObj.drawString(String.format("X1: %d - X2: %d", x1, x2), 11, 36, 0x404040); //Draw x text
 
         //Draw y slider
-        this.drawRect(11, 49, xSize - 4, 47, 0xFF212121); //Draw Slider Background
-        this.drawRect(yMin, 49, yMax, 47, 0xFF4CAF50); //Draw Selected Area
-        this.drawRect(yMin, 44, yMin + 1, 51, 0xFF388E3C); //Draw Left Handle
-        this.drawRect(yMax, 44, yMax - 1, 51, 0xFF388E3C); //Draw Right Handle
+        drawRect(11, 49, xSize - 4, 47, 0xFF212121); //Draw Slider Background
+        drawRect(yMin, 49, yMax, 47, 0xFF4CAF50); //Draw Selected Area
+        drawRect(yMin, 44, yMin + 1, 51, 0xFF388E3C); //Draw Left Handle
+        drawRect(yMax, 44, yMax - 1, 51, 0xFF388E3C); //Draw Right Handle
         this.fontRendererObj.drawString(String.format("Y1: %d - Y2: %d", y1, y2), 11, 53, 0x404040); //Draw y text
 
         //Draw z slider
-        this.drawRect(11, 66, xSize - 4, 64, 0xFF212121); //Draw Slider Background
-        this.drawRect(zMin, 66, zMax, 64, 0xFF2196F3); //Draw Selected Area
-        this.drawRect(zMin, 61, zMin + 1, 68, 0xFF1976D2); //Draw Left Handle
-        this.drawRect(zMax, 61, zMax - 1, 68, 0xFF1976D2); //Draw Right Handle
+        drawRect(11, 66, xSize - 4, 64, 0xFF212121); //Draw Slider Background
+        drawRect(zMin, 66, zMax, 64, 0xFF2196F3); //Draw Selected Area
+        drawRect(zMin, 61, zMin + 1, 68, 0xFF1976D2); //Draw Left Handle
+        drawRect(zMax, 61, zMax - 1, 68, 0xFF1976D2); //Draw Right Handle
         this.fontRendererObj.drawString(String.format("Z1: %d - Z2: %d", z1, z2), 11, 70, 0x404040); //Draw z text
 
     }

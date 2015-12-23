@@ -2,10 +2,12 @@ package io.github.craftedcart.MFF.proxy;
 
 import io.github.craftedcart.MFF.client.render.blocks.TERendererFFProjector;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerCube;
+import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerGenerator;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
+import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 /**
@@ -23,6 +25,7 @@ public class ClientProxy extends CommonProxy {
         //TileEntity Special Renderers
         ClientRegistry.bindTileEntitySpecialRenderer(TEPowerCube.class, new TERendererPowerCube());
         ClientRegistry.bindTileEntitySpecialRenderer(TEFFProjector.class, new TERendererFFProjector());
+        ClientRegistry.bindTileEntitySpecialRenderer(TEPowerGenerator.class, new TERendererPowerGenerator());
 
     }
 

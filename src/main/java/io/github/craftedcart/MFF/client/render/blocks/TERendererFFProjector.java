@@ -27,7 +27,7 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
         wr.startDrawingQuads();
 
         // Base
-        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/ffProjectorBase.png"));
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/base.png"));
         // -Z
         wr.setNormal(0, 0, -1);
         wr.addVertexWithUV(1.0, 0.0, 0.0, 0.0, 0.5);
@@ -73,7 +73,7 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
 
         // Hologram
         wr.startDrawingQuads();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/ffProjectorHologramTriangle.png"));
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/hologramTriangle.png"));
         // -Z
         wr.setNormal(0, 0, -1);
         wr.addVertexWithUV(0.5, 0.0, 0.5, 0.5, 1.0);
@@ -99,7 +99,7 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
         wr.addVertexWithUV(1.0, 1.0, 1.0, 1.0, 0.0);
         wr.addVertexWithUV(0.5, 0.0, 0.5, 0.5, 1.0);
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/ffProjectorHologramSquare.png"));
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/hologramSquare.png"));
         // +Y
         wr.setNormal(0, 1, 0);
         wr.addVertexWithUV(1.0, 1.0, 1.0, 0.0, 1.0);
@@ -117,7 +117,7 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
         GlStateManager.translate(-0.5, 0, -0.5);
 
         // The spinny bit under the hologram
-        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/ffProjectorBase.png"));
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/base.png"));
 
         wr.startDrawingQuads();
         // -Z
@@ -176,7 +176,6 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
         wr.addVertexWithUV(0.2, 0.2, 0.8, 1.0, 0.0);
         wr.addVertexWithUV(0.0, 0.2, 1.0, 0.0, 0.0);
 
-        wr.setNormal(0, 1, 0);
         wr.addVertexWithUV(0.2, 0.2, 0.2, 0.0, 0.0);
         wr.addVertexWithUV(0.0, 0.2, 0.0, 1.0, 0.0);
         wr.addVertexWithUV(0.0, 0.2, 1.0, 1.0, 1.0);

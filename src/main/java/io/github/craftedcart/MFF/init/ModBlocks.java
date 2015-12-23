@@ -26,6 +26,8 @@ public class ModBlocks {
     //Ores
     public static final ModBlock oreAmethyst = new BlockOreAmethyst();
     public static final ModBlock oreRuby = new BlockOreRuby();
+    //Generators
+    public static final ModBlock creativePowerGenerator = new BlockCreativePowerGenerator();
 
 
     public static void init() {
@@ -41,6 +43,8 @@ public class ModBlocks {
         OreDictionary.registerOre(Names.BlockOreAmethyst, new ItemStack(oreAmethyst));
         GameRegistry.registerBlock(oreRuby, Names.BlockOreRuby);
         OreDictionary.registerOre(Names.BlockOreRuby, new ItemStack(oreRuby));
+        //Generators
+        GameRegistry.registerBlock(creativePowerGenerator, Names.BlockCreativePowerGenerator);
 
     }
 

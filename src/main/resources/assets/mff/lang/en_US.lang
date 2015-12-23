@@ -24,6 +24,8 @@ tile.mff:crystalConstructor.name=Crystal Constructor
 #Ores
 tile.mff:oreAmethyst.name=Amethyst Ore
 tile.mff:oreRuby.name=Ruby Ore
+#Power Generators
+tile.mff:creativePowerGenerator.name=Creative Power Generator
 
 #Chat
 chat.mff:bypassedFFProtection=§eMFF: Bypassed a block that was protected by a forcefield (You're in creative mode!)

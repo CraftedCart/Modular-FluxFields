@@ -15,6 +15,8 @@ public final class Names {
     //Ores
     public static final String BlockOreAmethyst = "oreAmethyst";
     public static final String BlockOreRuby = "oreRuby";
+    //Power Generators
+    public static final String BlockCreativePowerGenerator = "creativePowerGenerator";
 
     //Items
     public static final String ItemPrism = "prism";
@@ -36,4 +38,6 @@ public final class Names {
     public static final String TEPowerCube = "tePowerCube";
     public static final String TECrystalRefinery = "teCrystalRefinery";
     public static final String TECrystalConstructor = "teCrystalConstructor";
+    public static final String TEPowerGenerator = "tePowerGenerator";
+
 }

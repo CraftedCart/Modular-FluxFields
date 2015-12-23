@@ -71,8 +71,8 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         this.addItemTextField = new GuiTextField(0, this.fontRendererObj, 15, 29, 154, 9); //Create text field to add a player to the security system
         addItemTextField.setMaxStringLength(16); //Set the text field's max length to 16 (the max length of a Minecraft username)
         this.addItemTextField.setFocused(true); //Automatically focus the text box by default
-        this.buttonList.add(this.removeButton = new GuiButton(0, this.guiLeft + 7, this.guiTop + 62, 64, 20, StatCollector.translateToLocal("gui.mff:remove"))); //Create remove button
-        this.buttonList.add(this.addToGroupButton = new GuiButton(1, this.guiLeft + 73, this.guiTop + 62, 72, 20, StatCollector.translateToLocal("gui.mff:addToGroup"))); //Create add player to group button
+        buttonList.add(this.removeButton = new GuiButton(0, this.guiLeft + 7, this.guiTop + 62, 64, 20, StatCollector.translateToLocal("gui.mff:remove"))); //Create remove button
+        buttonList.add(this.addToGroupButton = new GuiButton(1, this.guiLeft + 73, this.guiTop + 62, 72, 20, StatCollector.translateToLocal("gui.mff:addToGroup"))); //Create add player to group button
     }
 
     @Override
@@ -97,8 +97,8 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         //Draw power value
         double power = this.te.power; //Get the FF Projector power value
 
-        this.drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
-        this.drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
+        drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
+        drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
 
         this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
                 this.guiLeft, this.guiTop - 18, 0xFAFAFA, false);
