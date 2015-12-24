@@ -1,8 +1,8 @@
 package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.reference.Names;
-import io.github.craftedcart.MFF.tileentity.TECreativePowerGenerator;
-import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
+import io.github.craftedcart.MFF.reference.PowerConf;
+import io.github.craftedcart.MFF.tileentity.TESolarPowerGenerator;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -16,12 +16,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Created by CraftedCart on 23/12/2015 (DD/MM/YYYY)
  */
 
-public class BlockCreativePowerGenerator extends ModBlock implements ITileEntityProvider {
+public class BlockSolarPowerGenerator8 extends ModBlock implements ITileEntityProvider {
 
-    public BlockCreativePowerGenerator() {
+    public BlockSolarPowerGenerator8() {
 
         super();
-        this.setUnlocalizedName(Names.BlockCreativePowerGenerator);
+        this.setUnlocalizedName(Names.BlockSolarPowerGenerator8);
         this.setHardness(4f);
         this.setHarvestLevel("pickaxe", 2); //Requires iron pickaxe to harvest
 
@@ -40,8 +40,9 @@ public class BlockCreativePowerGenerator extends ModBlock implements ITileEntity
     }
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        TECreativePowerGenerator tepg = new TECreativePowerGenerator(); //tepc, short for TileEntityPowerGenerator
-        tepg.init(-1);
+        TESolarPowerGenerator tepg = new TESolarPowerGenerator(); //tepc, short for TileEntityPowerGenerator
+        tepg.init(PowerConf.solarPowerGeneratorMaxPower);
+        tepg.initSolar(PowerConf.solarPowerGeneratorBaseGenRate * 8);
         return tepg;
     }
 

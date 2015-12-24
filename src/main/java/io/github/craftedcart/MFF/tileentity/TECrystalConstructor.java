@@ -4,6 +4,7 @@ import io.github.craftedcart.MFF.crafting.CraftOverTimeResult;
 import io.github.craftedcart.MFF.crafting.CrystalConstructorRecipeHandler;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.reference.PowerConf;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -33,7 +34,6 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
     public double power = 0;
     public int progress = 0;
     public int maxProgress = 0;
-    private int currentCraftingTime = 0;
 
     public double speedMultiplier = 1;
     public double powerMultiplier = 1;
@@ -129,11 +129,7 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if (index == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return index == 0;
     }
 
     @Override
@@ -248,11 +244,7 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        if (index == 9) {
-            return true;
-        } else {
-            return false;
-        }
+        return index == 9;
     }
     //</editor-fold>
 
@@ -293,15 +285,6 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
         ItemStack upgrade2 = getStackInSlot(11);
         ItemStack upgrade3 = getStackInSlot(12);
 
-        CraftOverTimeResult desiredOutput = CrystalConstructorRecipeHandler.checkRecipe(new ItemStack[]{input1, input2, input3, input4, input5, input6, input7, input8, input9});
-        if (desiredOutput != null) {
-            currentCraftingTime = desiredOutput.ticksToCraft;
-            craftTick(output, desiredOutput.result.getItem(), desiredOutput.result.stackSize);
-        } else {
-            progress = 0;
-            currentCraftingTime = 0;
-        }
-
         //Check for upgrades
         speedMultiplier = 1;
         powerMultiplier = 1;
@@ -310,9 +293,17 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
         checkForUpgrade(upgrade1);
         checkForUpgrade(upgrade2);
         checkForUpgrade(upgrade3);
-        maxProgress = (int) (currentCraftingTime / speedMultiplier);
         powerMultiplier *= powerTimser;
         powerMultiplier /= powerDivider;
+
+        CraftOverTimeResult desiredOutput = CrystalConstructorRecipeHandler.checkRecipe(new ItemStack[]{input1, input2, input3, input4, input5, input6, input7, input8, input9});
+        if (desiredOutput != null) {
+            int currentCraftingTime = desiredOutput.ticksToCraft;
+            maxProgress = (int) (currentCraftingTime / speedMultiplier);
+            craftTick(output, desiredOutput.result.getItem(), desiredOutput.result.stackSize);
+        } else {
+            progress = 0;
+        }
 
     }
     

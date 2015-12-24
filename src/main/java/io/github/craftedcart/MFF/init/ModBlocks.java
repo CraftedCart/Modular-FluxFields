@@ -28,6 +28,13 @@ public class ModBlocks {
     public static final ModBlock oreRuby = new BlockOreRuby();
     //Generators
     public static final ModBlock creativePowerGenerator = new BlockCreativePowerGenerator();
+    public static final ModBlock solarPowerGenerator1 = new BlockSolarPowerGenerator1();
+    public static final ModBlock solarPowerGenerator8 = new BlockSolarPowerGenerator8();
+    public static final ModBlock solarPowerGenerator64 = new BlockSolarPowerGenerator64();
+    public static final ModBlock solarPowerGenerator512 = new BlockSolarPowerGenerator512();
+    public static final ModBlock solarPowerGenerator4096 = new BlockSolarPowerGenerator4096();
+    public static final ModBlock solarPowerGenerator32768 = new BlockSolarPowerGenerator32768();
+    public static final ModBlock solarPowerGenerator262144 = new BlockSolarPowerGenerator262144();
 
 
     public static void init() {
@@ -45,6 +52,13 @@ public class ModBlocks {
         OreDictionary.registerOre(Names.BlockOreRuby, new ItemStack(oreRuby));
         //Generators
         GameRegistry.registerBlock(creativePowerGenerator, Names.BlockCreativePowerGenerator);
+        GameRegistry.registerBlock(solarPowerGenerator1, Names.BlockSolarPowerGenerator1);
+        GameRegistry.registerBlock(solarPowerGenerator8, Names.BlockSolarPowerGenerator8);
+        GameRegistry.registerBlock(solarPowerGenerator64, Names.BlockSolarPowerGenerator64);
+        GameRegistry.registerBlock(solarPowerGenerator512, Names.BlockSolarPowerGenerator512);
+        GameRegistry.registerBlock(solarPowerGenerator4096, Names.BlockSolarPowerGenerator4096);
+        GameRegistry.registerBlock(solarPowerGenerator32768, Names.BlockSolarPowerGenerator32768);
+        GameRegistry.registerBlock(solarPowerGenerator262144, Names.BlockSolarPowerGenerator262144);
 
     }
 

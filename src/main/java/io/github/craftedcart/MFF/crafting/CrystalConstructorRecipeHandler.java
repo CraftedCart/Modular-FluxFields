@@ -36,6 +36,7 @@ public class CrystalConstructorRecipeHandler {
     public static CraftOverTimeResult checkRecipe(ItemStack[] input) {
 
         for (CrystalConstructorRecipe recipe : recipes) {
+
             if (recipe.doesRecipeMatch(input)) {
                 return new CraftOverTimeResult(recipe.result, recipe.ticksToCraft);
             }

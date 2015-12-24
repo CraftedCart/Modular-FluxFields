@@ -80,7 +80,7 @@ public class CrystalConstructorRecipe {
 
         } else if (width == 3 && height == 3) {
             List<Integer> slots = new ArrayList<Integer>();
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 9; i++) {
                 slots.add(i);
             }
             slotsToTest.add(slots);
@@ -103,7 +103,7 @@ public class CrystalConstructorRecipe {
                 } else if (input[i] != null && !slots.contains(i)) {
                     continue slotsLoop;
                 } else if (input[i] == null && !slots.contains(i)) {
-                    //continue; (Not needed, as it's the last statement)
+                    //continue slotsLoop; (Not needed, as it's the last statement)
                 } else if (input[i] != null && ingredients[ingredientSlot] == null) {
                     continue slotsLoop;
                 } else if (input[i] == null && ingredients[ingredientSlot] != null) {

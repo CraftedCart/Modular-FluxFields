@@ -17,7 +17,8 @@ public class ModTileEntities {
         GameRegistry.registerTileEntity(TEPowerCube.class, Names.TEPowerCube);
         GameRegistry.registerTileEntity(TECrystalRefinery.class, Names.TECrystalRefinery);
         GameRegistry.registerTileEntity(TECrystalConstructor.class, Names.TECrystalConstructor);
-        GameRegistry.registerTileEntity(TEPowerGenerator.class, Names.TEPowerGenerator);
+        GameRegistry.registerTileEntity(TECreativePowerGenerator.class, Names.TECreativePowerGenerator);
+        GameRegistry.registerTileEntity(TESolarPowerGenerator.class, Names.TESolarPowerGenerator);
 
     }
 

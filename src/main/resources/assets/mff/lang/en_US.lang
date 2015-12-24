@@ -6,6 +6,7 @@ item.mff:prism.name=Prism
 item.mff:crystalSheet.name=Crystal Sheet
 item.mff:aluriteIngot.name=Alurite Ingot
 item.mff:aluriteBase.name=Alurite Base
+item.mff:powerTransceiver.name=Power Transceiver
 #Crystals
 item.mff:refinedAmethyst.name=Refined Amethyst
 item.mff:rawAmethyst.name=Raw Amethyst
@@ -26,6 +27,13 @@ tile.mff:oreAmethyst.name=Amethyst Ore
 tile.mff:oreRuby.name=Ruby Ore
 #Power Generators
 tile.mff:creativePowerGenerator.name=Creative Power Generator
+tile.mff:solarPowerGenerator1.name=Solar (x1) Power Generator
+tile.mff:solarPowerGenerator8.name=Solar (x8) Power Generator
+tile.mff:solarPowerGenerator64.name=Solar (x64) Power Generator
+tile.mff:solarPowerGenerator512.name=Solar (x512) Power Generator
+tile.mff:solarPowerGenerator4096.name=Solar (x4096) Power Generator
+tile.mff:solarPowerGenerator32768.name=Solar (x32768) Power Generator
+tile.mff:solarPowerGenerator262144.name=Solar (x262144) Power Generator
 
 #Chat
 chat.mff:bypassedFFProtection=§eMFF: Bypassed a block that was protected by a forcefield (You're in creative mode!)

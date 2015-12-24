@@ -17,12 +17,20 @@ public final class Names {
     public static final String BlockOreRuby = "oreRuby";
     //Power Generators
     public static final String BlockCreativePowerGenerator = "creativePowerGenerator";
+    public static final String BlockSolarPowerGenerator1 = "solarPowerGenerator1";
+    public static final String BlockSolarPowerGenerator8 = "solarPowerGenerator8";
+    public static final String BlockSolarPowerGenerator64 = "solarPowerGenerator64";
+    public static final String BlockSolarPowerGenerator512 = "solarPowerGenerator512";
+    public static final String BlockSolarPowerGenerator4096 = "solarPowerGenerator4096";
+    public static final String BlockSolarPowerGenerator32768 = "solarPowerGenerator32768";
+    public static final String BlockSolarPowerGenerator262144 = "solarPowerGenerator262144";
 
     //Items
     public static final String ItemPrism = "prism";
     public static final String ItemCrystalSheet = "crystalSheet";
     public static final String ItemAluriteIngot = "aluriteIngot";
     public static final String ItemAluriteBase = "aluriteBase";
+    public static final String ItemPowerTransceiver = "powerTransceiver";
     //Crystals
     public static final String ItemRefinedAmethyst = "refinedAmethyst";
     public static final String ItemRawAmethyst = "rawAmethyst";
@@ -38,6 +46,7 @@ public final class Names {
     public static final String TEPowerCube = "tePowerCube";
     public static final String TECrystalRefinery = "teCrystalRefinery";
     public static final String TECrystalConstructor = "teCrystalConstructor";
-    public static final String TEPowerGenerator = "tePowerGenerator";
+    public static final String TECreativePowerGenerator = "teCreativePowerGenerator";
+    public static final String TESolarPowerGenerator = "teSolarPowerGenerator";
 
 }

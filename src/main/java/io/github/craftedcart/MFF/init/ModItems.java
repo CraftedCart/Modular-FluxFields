@@ -19,6 +19,7 @@ public class ModItems {
     public static final ModItem crystalSheet = new ItemCrystalSheet();
     public static final ModItem aluriteIngot = new ItemAluriteIngot();
     public static final ModItem aluriteBase = new ItemAluriteBase();
+    public static final ModItem powerTransceiver = new ItemPowerTransceiver();
     //Crystals
     public static final ModItem refinedAmethyst = new ItemRefinedAmethyst();
     public static final ModItem rawAmethyst = new ItemRawAmethyst();
@@ -36,6 +37,7 @@ public class ModItems {
         GameRegistry.registerItem(aluriteIngot, Names.ItemAluriteIngot);
         OreDictionary.registerOre("ingotAlurite", aluriteIngot);
         GameRegistry.registerItem(aluriteBase, Names.ItemAluriteBase);
+        GameRegistry.registerItem(powerTransceiver, Names.ItemPowerTransceiver);
         //Crystals
         GameRegistry.registerItem(refinedAmethyst, Names.ItemRefinedAmethyst);
         GameRegistry.registerItem(rawAmethyst, Names.ItemRawAmethyst);
@@ -56,6 +58,7 @@ public class ModItems {
         registerRender(crystalSheet);
         registerRender(aluriteIngot);
         registerRender(aluriteBase);
+        registerRender(powerTransceiver);
         //Crystals
         registerRender(refinedAmethyst);
         registerRender(rawAmethyst);

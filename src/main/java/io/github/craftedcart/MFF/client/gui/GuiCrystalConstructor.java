@@ -43,7 +43,7 @@ public class GuiCrystalConstructor extends GuiContainer {
         drawRect(this.guiLeft, this.guiTop - 24, this.guiLeft + xSize, this.guiTop - 22, 0xFF212121);
         drawRect(this.guiLeft, this.guiTop - 24, (int) (this.guiLeft + (double) xSize * power / PowerConf.crystalConstructorMaxPower), this.guiTop - 22, 0xFF2196F3);
 
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%09.2f", power) + " / " + String.format("%09.2f", PowerConf.crystalConstructorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%07.2f", power) + " / " + String.format("%07.2f", PowerConf.crystalConstructorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
                 this.guiLeft, this.guiTop - 34, 0xFAFAFA, false);
 
         //Draw progress value

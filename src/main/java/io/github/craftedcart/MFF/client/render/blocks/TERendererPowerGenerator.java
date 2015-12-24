@@ -1,10 +1,7 @@
 package io.github.craftedcart.MFF.client.render.blocks;
 
 import io.github.craftedcart.MFF.init.ModBlocks;
-import io.github.craftedcart.MFF.reference.PowerConf;
-import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -35,7 +32,7 @@ public class TERendererPowerGenerator extends TileEntitySpecialRenderer {
 
         //<editor-fold desc="Draw line between power cube above and the ff projector">
         //Draw line between power cube above and the ff projector
-        if (te.getWorld().getBlockState(te.getPos().add(0, -1, 0)) == ModBlocks.powerCube.getDefaultState()) {
+        if (te.getWorld().getBlockState(te.getPos().add(0, -1, 0)) == ModBlocks.powerCube.getDefaultState() && ((TEPowerGenerator) te).isSendingPower) {
             float powerPercent;
             if (((TEPowerGenerator) te).maxPower == -1) { //If it's a creative power generator
                 powerPercent = 1;
