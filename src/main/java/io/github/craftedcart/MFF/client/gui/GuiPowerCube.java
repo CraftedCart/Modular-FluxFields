@@ -23,11 +23,12 @@ public class GuiPowerCube extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         double power = pc.power;
+        double maxPower = pc.maxPower;
 
         drawRect(this.width / 2 - 150, this.height / 2 - 1, this.width / 2 + 150, this.height / 2 + 1, 0xFF212121);
-        drawRect(this.width / 2 - 150, this.height / 2 - 1, (int) (this.width / 2 - 150 + (double) 300 * power / PowerConf.ffProjectorMaxPower), this.height / 2 + 1, 0xFF2196F3);
+        drawRect(this.width / 2 - 150, this.height / 2 - 1, (int) (this.width / 2 - 150 + (double) 300 * power / maxPower), this.height / 2 + 1, 0xFF2196F3);
 
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", maxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
                 this.width / 2 - 150, this.height / 2 - 11, 0xFAFAFA, false);
 
     }

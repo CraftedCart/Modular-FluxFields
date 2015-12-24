@@ -3,16 +3,12 @@ package io.github.craftedcart.MFF.tileentity;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -28,7 +24,7 @@ import java.util.List;
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
 
-public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, IInventory {
+public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBox, IInventory {
 
     //Config-y stuff
     public int minX = -5;
@@ -52,7 +48,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public boolean isPowered = false; //Does the FF Projector has enough power to keep running
     private ItemStack[] inventory; //The inventory of the FF Projector
     private String customName;
-    public double power = 0;
     public int uptime = 0;
     public String owner = ""; //The owner UUID
     public String ownerName = ""; //The owner username
@@ -307,14 +302,15 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             doWorldLoadSetup = true;
             getWallBlocks(); //Calculate the blockposes of the walls
             getInnerBlocks(); //Calculate the blockposes of the inner blocks
+            init(PowerConf.ffProjectorMaxPower, PowerConf.ffProjectorDrawRate);
         }
 
         updateTime--;
 
         //Draw power from above
         if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) { //If a tile entity exists above
-            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerCube) { //If the tile entity is a power cube
-                drawPower((TEPowerCube) worldObj.getTileEntity(this.getPos().add(0, 1, 0))); //Draw some power
+            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPoweredBlock) { //If the tile entity is a power cube
+                drawPower((TEPoweredBlock) worldObj.getTileEntity(this.getPos().add(0, 1, 0))); //Draw some power
             }
         }
 
@@ -390,44 +386,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
     }
 
-    //Draw power from a Power Cube
-    private void drawPower(TEPowerCube powerCube) {
-
-        double powerDrawRate = PowerConf.ffProjectorDrawRate;
-        double powerMax = PowerConf.ffProjectorMaxPower;
-
-        if (power < powerMax) { //If we have space for more power
-
-            double pcPower; //Power Cube Power
-
-            pcPower = powerCube.power; //Get the power cube's power level
-
-            if (pcPower > 0) { //If the power cube has more than 0 power
-                if (pcPower < powerDrawRate) { //If the power cube has less power than what the FF Projector draws in 1 tick
-                    if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is less than or equal to the projector's max power value
-                        power += pcPower; //Draw all power from the power cube
-                        powerCube.power = 0; //Set the power cube's power level to 0
-                    } else {
-                        powerCube.power -= powerMax - power; //Minus the power cube's power level from the difference between the projector's power and max power
-                        power = powerMax; //Set the projector's power level to the max
-                    }
-                } else {
-                    if (power + powerDrawRate <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
-                        power += powerDrawRate; //Draw some power from the power cube
-                        powerCube.power -= pcPower - powerDrawRate; //Minus the power drawn from the power cube
-                    } else {
-                        powerCube.power -= powerMax - power; //Draw the power difference between the projector's power and max power
-                        power = powerMax; //Set the projector's power to the max
-                    }
-                }
-            }
-
-        }
-
-    }
-
     void writeSyncableDataToNBT(NBTTagCompound tagCompound) {
-        tagCompound.setDouble("power", power);
+        super.writeSyncableDataToNBT(tagCompound);
 
         tagCompound.setInteger("x1", minX);
         tagCompound.setInteger("y1", minY);
@@ -473,7 +433,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
-        power = tagCompound.getDouble("power");
+        super.readSyncableDataFromNBT(tagCompound);
 
         uptime = tagCompound.getInteger("uptime");
         owner = tagCompound.getString("owner");
@@ -532,20 +492,6 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             this.permissionGroups = groupsList;
         }
 
-    }
-
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        NBTTagCompound syncData = new NBTTagCompound();
-        this.writeSyncableDataToNBT(syncData);
-        return new S35PacketUpdateTileEntity(this.getPos(), 1, syncData);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-    {
-        readSyncableDataFromNBT(pkt.getNbtCompound());
     }
 
 }

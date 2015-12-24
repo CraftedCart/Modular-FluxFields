@@ -1,11 +1,7 @@
 package io.github.craftedcart.MFF.tileentity;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import io.github.craftedcart.MFF.reference.PowerConf;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
@@ -16,15 +12,19 @@ import java.util.List;
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
  */
 
-public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
+public class TEPowerCube extends TEPoweredBlock implements IUpdatePlayerListBox {
 
-    public double power = 0;
-
+    private boolean doneWorldSetup = false;
     private int updateTime = 1;
     public List powerCubeLinks = new ArrayList<BlockPos>();
 
     @Override
     public void update() {
+
+        if (!doneWorldSetup) {
+            init(PowerConf.powerCubeMaxPower);
+            doneWorldSetup = true;
+        }
 
         updateTime--;
 
@@ -88,48 +88,6 @@ public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
             }
         }
 
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tagCompound)
-    {
-        super.writeToNBT(tagCompound);
-
-        writeSyncableDataToNBT(tagCompound);
-
-        // ... Continue writing non-syncable data
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tagCompound)
-    {
-        super.readFromNBT(tagCompound);
-
-        readSyncableDataFromNBT(tagCompound);
-
-        // ... Continue reading non-syncable data
-    }
-
-    void writeSyncableDataToNBT(NBTTagCompound tagCompound) {
-        tagCompound.setDouble("power", power);
-    }
-
-    void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
-        power = tagCompound.getDouble("power");
-    }
-
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        NBTTagCompound syncData = new NBTTagCompound();
-        this.writeSyncableDataToNBT(syncData);
-        return new S35PacketUpdateTileEntity(this.getPos(), 1, syncData);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-    {
-        readSyncableDataFromNBT(pkt.getNbtCompound());
     }
 
 }

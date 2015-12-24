@@ -1,8 +1,6 @@
 package io.github.craftedcart.MFF.client.render.blocks;
 
-import io.github.craftedcart.MFF.init.ModBlocks;
-import io.github.craftedcart.MFF.reference.PowerConf;
-import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.tileentity.TEPoweredBlock;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,8 +31,8 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
 
         //<editor-fold desc="Draw line between power cube above and the ff projector">
         //Draw line between power cube above and the ff projector
-        if (te.getWorld().getBlockState(te.getPos().add(0, 1, 0)) == ModBlocks.powerCube.getDefaultState()) {
-            float powerPercent = (float) (((TEFFProjector) te).power / PowerConf.ffProjectorMaxPower);
+        if (te.getWorld().getTileEntity(te.getPos().add(0, 1, 0)) instanceof TEPoweredBlock) {
+            float powerPercent = (float) (((TEPoweredBlock) te).power / ((TEPoweredBlock) te).maxPower);
             float r = MathUtils.lerp(blueR, redR, powerPercent);
             float g = MathUtils.lerp(blueG, redG, powerPercent);
             float b = MathUtils.lerp(blueB, redB, powerPercent);

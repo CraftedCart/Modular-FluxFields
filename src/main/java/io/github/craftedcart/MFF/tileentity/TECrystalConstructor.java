@@ -26,12 +26,11 @@ import net.minecraft.util.IChatComponent;
  * Created by CraftedCart on 14/12/2015 (DD/MM/YYYY)
  */
 
-public class TECrystalConstructor extends TileEntity implements IInventory, ISidedInventory, IUpdatePlayerListBox {
+public class TECrystalConstructor extends TEPoweredBlock implements IInventory, ISidedInventory, IUpdatePlayerListBox {
 
     private ItemStack[] inventory;
     private String customName;
 
-    public double power = 0;
     public int progress = 0;
     public int maxProgress = 0;
 
@@ -39,6 +38,8 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
     public double powerMultiplier = 1;
     public double powerTimser = 1;
     public double powerDivider = 1;
+
+    private boolean doneWorldSetup = false;
 
     public TECrystalConstructor() {
         this.inventory = new ItemStack[this.getSizeInventory()];
@@ -221,14 +222,14 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
 
     }
 
-    private void writeSyncableDataToNBT(NBTTagCompound nbt) {
+    protected void writeSyncableDataToNBT(NBTTagCompound nbt) {
+        super.writeSyncableDataToNBT(nbt);
         nbt.setInteger("progress", progress);
-        nbt.setDouble("power", power);
     }
 
-    private void readSyncableDataFromNBT(NBTTagCompound nbt) {
+    protected void readSyncableDataFromNBT(NBTTagCompound nbt) {
+        super.readSyncableDataFromNBT(nbt);
         progress = nbt.getInteger("progress");
-        power = nbt.getInteger("power");
     }
 
     //<editor-fold desc="ISidedInventory Stuff">
@@ -253,6 +254,11 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
     @Override
     public void update() {
 
+        if (!doneWorldSetup) {
+            init(PowerConf.crystalConstructorMaxPower, PowerConf.crystalConstructorDrawRate);
+            doneWorldSetup = true;
+        }
+
         updateTime--;
 
         //Executed every 5 seconds
@@ -266,8 +272,8 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
 
         //Draw power from above
         if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) != null) {
-            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPowerCube) {
-                drawPower((TEPowerCube) worldObj.getTileEntity(this.getPos().add(0, 1, 0)));
+            if (worldObj.getTileEntity(this.getPos().add(0, 1, 0)) instanceof TEPoweredBlock) {
+                drawPower((TEPoweredBlock) worldObj.getTileEntity(this.getPos().add(0, 1, 0)));
             }
         }
 
@@ -303,6 +309,7 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
             craftTick(output, desiredOutput.result.getItem(), desiredOutput.result.stackSize);
         } else {
             progress = 0;
+            maxProgress = 0;
         }
 
     }
@@ -357,56 +364,6 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
             }
         }
 
-    }
-
-    //Draw power from a Power Cube
-    private void drawPower(TEPowerCube powerCube) {
-
-        double powerDrawRate = PowerConf.crystalConstructorDrawRate;
-        double powerMax = PowerConf.crystalConstructorMaxPower;
-
-        if (power < powerMax) { //If we have space for more power
-
-            double pcPower; //Power Cube Power
-
-            pcPower = powerCube.power; //Get the power cube's power level
-
-            if (pcPower > 0) { //If the power cube has more than 0 power
-                if (pcPower < powerDrawRate) { //If the power cube has less power than what the FF Projector draws in 1 tick
-                    if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is less than or equal to the projector's max power value
-                        power += pcPower; //Draw all power from the power cube
-                        powerCube.power = 0; //Set the power cube's power level to 0
-                    } else {
-                        powerCube.power -= powerMax - power; //Minus the power cube's power level from the difference between the projector's power and max power
-                        power = powerMax; //Set the projector's power level to the max
-                    }
-                } else {
-                    if (power + powerDrawRate <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
-                        power += powerDrawRate; //Draw some power from the power cube
-                        powerCube.power -= pcPower - powerDrawRate; //Minus the power drawn from the power cube
-                    } else {
-                        powerCube.power -= powerMax - power; //Draw the power difference between the projector's power and max power
-                        power = powerMax; //Set the projector's power to the max
-                    }
-                }
-            }
-
-        }
-
-    }
-
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        NBTTagCompound syncData = new NBTTagCompound();
-        this.writeSyncableDataToNBT(syncData);
-        return new S35PacketUpdateTileEntity(this.getPos(), 1, syncData);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-    {
-        readSyncableDataFromNBT(pkt.getNbtCompound());
     }
 
 }
