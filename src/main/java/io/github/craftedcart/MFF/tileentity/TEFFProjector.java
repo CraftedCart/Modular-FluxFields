@@ -3,6 +3,7 @@ package io.github.craftedcart.MFF.tileentity;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -38,11 +39,14 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
     public int maxZ = 5;
 
     //Upgrades
+    public boolean hasCalcInnerBlocksUpgrade = true;
     public boolean hasSecurityUpgrade = true;
 
     //Not so config-y stuff
     private int updateTime = 1;
-    public ArrayList<BlockPos> blockList = new ArrayList<BlockPos>(); //The list of blockposes of the forcefield walls
+    private int downTime = 0; //The ff projector is allowed a short grace period without power before everything is reset
+    public ArrayList<BlockPos> wallBlockList = new ArrayList<BlockPos>(); //The list of blockposes of the forcefield walls
+    public ArrayList<BlockPos> innerBlockList = new ArrayList<BlockPos>(); //The list of blockposes of the inner blocks
     public int blockPlaceProgress = 0;
     private boolean doWorldLoadSetup = false; //Used to make sure a block of code only runs once on chunk load
     public boolean isPowered = false; //Does the FF Projector has enough power to keep running
@@ -242,29 +246,51 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
     }
 
-    public void getBlocks() {
+    public void getWallBlocks() {
+
+        for (BlockPos ffPos : wallBlockList) {
+            if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) {
+                worldObj.setBlockState(ffPos, Blocks.air.getDefaultState());
+            }
+        }
 
         BlockPos pos = this.getPos(); //Get this projector's position
-        blockList.clear(); //Clear the list of blockposes of the forcefield walls
+        wallBlockList.clear(); //Clear the list of blockposes of the forcefield walls
 
         for (int x = minX; x <= maxX; x++) { //Calculate the +/- Z walls
             for (int y = minY; y <= maxY; y++) {
-                blockList.add(pos.add(x, y, minZ));
-                blockList.add(pos.add(x, y, maxZ));
+                wallBlockList.add(pos.add(x, y, minZ));
+                wallBlockList.add(pos.add(x, y, maxZ));
             }
         }
 
         for (int z = minZ + 1; z <= maxZ - 1; z++) { //Calculate the +/- X walls
             for (int y = minY; y <= maxY; y++) {
-                blockList.add(pos.add(minX, y, z));
-                blockList.add(pos.add(maxX, y, z));
+                wallBlockList.add(pos.add(minX, y, z));
+                wallBlockList.add(pos.add(maxX, y, z));
             }
         }
 
         for (int x = minX + 1; x <= maxX - 1; x++) { //Calculate the +/- Y walls
             for (int z = minZ + 1; z <= maxZ - 1; z++) {
-                blockList.add(pos.add(x, maxY, z));
-                blockList.add(pos.add(x, minY, z));
+                wallBlockList.add(pos.add(x, maxY, z));
+                wallBlockList.add(pos.add(x, minY, z));
+            }
+        }
+
+    }
+    
+    public void getInnerBlocks() {
+
+        innerBlockList.clear(); //Clear the list of blockposes of the inner blocks
+
+        if (hasCalcInnerBlocksUpgrade) {
+            for (int x = minX + 1; x < maxX; x++) {
+                for (int y = minY + 1; y < maxY; y++) {
+                    for (int z = minZ + 1; z < maxZ; z++) {
+                        innerBlockList.add(new BlockPos(x, y, z));
+                    }
+                }
             }
         }
 
@@ -279,7 +305,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             al.add(this.getPos()); //Add this blockpos to the list
             PreventFFBlockBreak.ffProjectors.add(al); //Register itself with the event handler which prevents FF block breaking
             doWorldLoadSetup = true;
-            getBlocks(); //Calculate the blockposes of the walls
+            getWallBlocks(); //Calculate the blockposes of the walls
+            getInnerBlocks(); //Calculate the blockposes of the inner blocks
         }
 
         updateTime--;
@@ -292,13 +319,18 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
         }
 
         //Use some power/block/t
-        if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) {
-            power -= PowerConf.ffProjectorUsagePerBlock * blockList.size();
+        if (power >= PowerConf.ffProjectorUsagePerWallBlock * wallBlockList.size() + PowerConf.ffProjectorUsagePerInnerBlock * innerBlockList.size()) {
+            power -= PowerConf.ffProjectorUsagePerWallBlock * wallBlockList.size() + PowerConf.ffProjectorUsagePerInnerBlock * innerBlockList.size();
             isPowered = true;
             uptime++;
+            downTime = 0;
         } else {
-            isPowered = false;
-            uptime = 0;
+            if (downTime > PowerConf.ffProjectorMaxDownTime) {
+                uptime = 0; //Reset the uptime
+                isPowered = false;
+            } else {
+                downTime++;
+            }
         }
 
         //Executed every 5s (100t)
@@ -310,22 +342,24 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             markDirty();
 
             int index = 0;
-            for (BlockPos ffPos : blockList) { //Loop through every blockpos
+            for (BlockPos ffPos : wallBlockList) { //Loop through every blockpos
 
                 if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) { //If the block found is air
                     if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) { //If we have enough power to place an FF block
                         worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState()); //Place an FF block
                         power -= PowerConf.ffProjectorUsagePerBlockToGenerate; //Minus the power used
                     } else {
-                        uptime = 0; //Reset the uptime
+                        break;
                     }
                 } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) { //If the block found is an FF
-                    if (power >= PowerConf.ffProjectorUsagePerBlock * blockList.size()) { //If we have enough power to sustain the FF
+                    if (power >= PowerConf.ffProjectorUsagePerWallBlock * wallBlockList.size()) { //If we have enough power to sustain the FF
                         refreshFFTimer(ffPos); //Refresh the decay timer of the FF
+                    } else {
+                        break;
                     }
                 }
 
-                if (index > blockPlaceProgress) {
+                if (index >= blockPlaceProgress) {
                     break;
                 }
 
@@ -335,7 +369,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
         }
 
-        if (blockPlaceProgress < blockList.size() && isPowered) {
+        if (blockPlaceProgress < wallBlockList.size() + innerBlockList.size() && isPowered) {
             blockPlaceProgress++;
         } else if (!isPowered) {
             blockPlaceProgress = 0;
@@ -350,7 +384,7 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
         if (te != null) { //Prevent it from trying to update forcefields that are not loaded (in an unloaded chunk)
             if (te instanceof TEForcefield) {
-                ((TEForcefield) te).decayTimer = 200; //10s (200t)
+                ((TEForcefield) te).decayTimer = 300; //15s (300t)
             }
         }
 
@@ -370,19 +404,19 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
 
             if (pcPower > 0) { //If the power cube has more than 0 power
                 if (pcPower < powerDrawRate) { //If the power cube has less power than what the FF Projector draws in 1 tick
-                    if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
+                    if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is less than or equal to the projector's max power value
                         power += pcPower; //Draw all power from the power cube
                         powerCube.power = 0; //Set the power cube's power level to 0
                     } else {
-                        powerCube.power = powerMax - power; //Set the power cube's power level to the difference between the projector's power and max power
+                        powerCube.power -= powerMax - power; //Minus the power cube's power level from the difference between the projector's power and max power
                         power = powerMax; //Set the projector's power level to the max
                     }
                 } else {
                     if (power + powerDrawRate <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
                         power += powerDrawRate; //Draw some power from the power cube
-                        powerCube.power = pcPower - powerDrawRate; //Minus the power drawn from the power cube
+                        powerCube.power -= pcPower - powerDrawRate; //Minus the power drawn from the power cube
                     } else {
-                        powerCube.power = pcPower - (powerMax - power); //Draw the power difference between the projector's power and max power
+                        powerCube.power -= powerMax - power; //Draw the power difference between the projector's power and max power
                         power = powerMax; //Set the projector's power to the max
                     }
                 }
@@ -454,7 +488,8 @@ public class TEFFProjector extends TileEntity implements IUpdatePlayerListBox, I
             maxX = tagCompound.getInteger("x2");
             maxY = tagCompound.getInteger("y2");
             maxZ = tagCompound.getInteger("z2");
-            getBlocks();
+            getWallBlocks();
+            getInnerBlocks();
         }
 
         //Read players

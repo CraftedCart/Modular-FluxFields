@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.tileentity;
 
-import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -75,12 +74,13 @@ public class TEPowerCube extends TileEntity implements IUpdatePlayerListBox {
 
         double averagePower = (powerCubeLinksTotalPower + power) / (powerCubeLinksToTransferEnergyTo.size() + 1);
 
+        power = averagePower;
+
         for (Iterator<Object> obj = powerCubeLinksToTransferEnergyTo.listIterator(); obj.hasNext();) {
             BlockPos pos = (BlockPos) obj.next();
             if (worldObj.getTileEntity(pos) != null) {
                 if (worldObj.getTileEntity(pos) instanceof TEPowerCube) {
                     TEPowerCube pc = (TEPowerCube) worldObj.getTileEntity(pos);
-                    power = averagePower;
                     pc.power = averagePower;
                 }
             } else {

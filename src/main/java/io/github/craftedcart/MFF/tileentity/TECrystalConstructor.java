@@ -374,26 +374,28 @@ public class TECrystalConstructor extends TileEntity implements IInventory, ISid
         double powerDrawRate = PowerConf.crystalConstructorDrawRate;
         double powerMax = PowerConf.crystalConstructorMaxPower;
 
-        if (power < powerMax) {
+        if (power < powerMax) { //If we have space for more power
 
-            double pcPower = powerCube.power;
+            double pcPower; //Power Cube Power
 
-            if (pcPower > 0) {
-                if (pcPower < powerDrawRate) {
-                    if (power + pcPower <= powerMax) {
-                        power += pcPower;
-                        powerCube.power = 0;
+            pcPower = powerCube.power; //Get the power cube's power level
+
+            if (pcPower > 0) { //If the power cube has more than 0 power
+                if (pcPower < powerDrawRate) { //If the power cube has less power than what the FF Projector draws in 1 tick
+                    if (power + pcPower <= powerMax) { //If the projector's power + the power cube's power is less than or equal to the projector's max power value
+                        power += pcPower; //Draw all power from the power cube
+                        powerCube.power = 0; //Set the power cube's power level to 0
                     } else {
-                        powerCube.power = powerMax - power;
-                        power = powerMax;
+                        powerCube.power -= powerMax - power; //Minus the power cube's power level from the difference between the projector's power and max power
+                        power = powerMax; //Set the projector's power level to the max
                     }
                 } else {
-                    if (power + powerDrawRate <= powerMax) {
-                        power += powerDrawRate;
-                        powerCube.power = pcPower - powerDrawRate;
+                    if (power + powerDrawRate <= powerMax) { //If the projector's power + the power cube's power is mess than the projector's max power value
+                        power += powerDrawRate; //Draw some power from the power cube
+                        powerCube.power -= pcPower - powerDrawRate; //Minus the power drawn from the power cube
                     } else {
-                        powerCube.power = pcPower - (powerMax - power);
-                        power = powerMax;
+                        powerCube.power -= powerMax - power; //Draw the power difference between the projector's power and max power
+                        power = powerMax; //Set the projector's power to the max
                     }
                 }
             }

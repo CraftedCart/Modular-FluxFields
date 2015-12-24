@@ -94,7 +94,8 @@ public class MessageFFProjectorGuiSaveSizing implements IMessage {
                         te.minZ = message.z1;
                         te.maxZ = message.z2;
 
-                        te.getBlocks();
+                        te.getWallBlocks();
+                        te.getInnerBlocks();
                         te.blockPlaceProgress = 0;
                     }
 

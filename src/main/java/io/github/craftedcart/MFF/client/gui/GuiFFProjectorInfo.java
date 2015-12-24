@@ -59,7 +59,7 @@ public class GuiFFProjectorInfo extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
         double power = this.te.power;
-        double upkeep = this.te.blockList.size() * PowerConf.ffProjectorUsagePerBlock;
+        double upkeep = this.te.wallBlockList.size() * PowerConf.ffProjectorUsagePerWallBlock + this.te.innerBlockList.size() * PowerConf.ffProjectorUsagePerInnerBlock;
 
         int seconds = this.te.uptime / 20;
 
@@ -88,8 +88,12 @@ public class GuiFFProjectorInfo extends GuiContainer {
         this.fontRendererObj.drawString(String.format("%s: %s : %s : %s", StatCollector.translateToLocal("gui.mff:uptime"), hrStr, mnStr, secStr),
                 15, 63, 0x404040, false); //Draw uptime
 
+        final int blockPlaceProgress = this.te.blockPlaceProgress;
+        final int wallBlockList = this.te.wallBlockList.size();
+        final int innerBlockList = this.te.innerBlockList.size();
+        
         //Calculate calc time remaining
-        double calcSecsDiff = (double) (this.te.blockList.size() - this.te.blockPlaceProgress) / 20;
+        double calcSecsDiff = (double) ((wallBlockList + innerBlockList) - blockPlaceProgress) / 20;
         int chr = (int) (calcSecsDiff / 3600);
         int crem = (int) (calcSecsDiff % 3600);
         int cmn = crem / 60;
@@ -99,13 +103,20 @@ public class GuiFFProjectorInfo extends GuiContainer {
         String csecStr = (csec < 10 ? "0" : "") + csec;
 
         this.fontRendererObj.drawString(String.format("%s: %06.2f%% %s: %s : %s : %s",
-                StatCollector.translateToLocal("gui.mff:calculating"), (float) this.te.blockPlaceProgress / this.te.blockList.size() * 100,
+                StatCollector.translateToLocal("gui.mff:calculating"), (float) blockPlaceProgress / (wallBlockList + innerBlockList) * 100,
                 StatCollector.translateToLocal("gui.mff:remaining"), chrStr, cmnStr, csecStr),
                 15, 72, 0x404040, false);
 
-        drawRect(4, 81, xSize - 4, 83, 0xFF212121);
-        drawRect(4, 81, (int) ((double) (xSize - 8) * (float) this.te.blockPlaceProgress / this.te.blockList.size()) + 4, 83, 0xFF4CAF50);
+        drawRect(4, 81, (xSize - 8) * wallBlockList / (wallBlockList + innerBlockList) + 4, 83, 0xFF212121); //Draw bg for wall block list progress
+        drawRect((xSize - 8) * wallBlockList / (wallBlockList + innerBlockList) + 4, 81,
+                xSize - 4, 83, 0xFF616161); //Draw bg for inner block list progress
 
+        drawRect(4, 81, (xSize - 8) * Math.min(blockPlaceProgress, wallBlockList) / (wallBlockList + innerBlockList) + 4, 83, 0xFF4CAF50); //Draw wall block list progress
+        if (blockPlaceProgress > wallBlockList) {
+            drawRect((xSize - 8) * Math.min(blockPlaceProgress, wallBlockList) / (wallBlockList + innerBlockList) + 4, 81,
+                    (xSize - 8) * blockPlaceProgress / (wallBlockList + innerBlockList) + 4, 83, 0xFFFF9800); //Draw inner block list progress
+        }
+        
     }
 
     @Override

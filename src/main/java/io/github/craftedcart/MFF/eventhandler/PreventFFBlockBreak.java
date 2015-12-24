@@ -43,7 +43,7 @@ public class PreventFFBlockBreak {
             if (te instanceof TEFFProjector) {
 
                 if (((TEFFProjector) te).isPowered) {
-                    ArrayList<BlockPos> blockList = ((TEFFProjector) te).blockList;
+                    ArrayList<BlockPos> blockList = ((TEFFProjector) te).wallBlockList;
 
                     for (BlockPos p : blockList) {
 

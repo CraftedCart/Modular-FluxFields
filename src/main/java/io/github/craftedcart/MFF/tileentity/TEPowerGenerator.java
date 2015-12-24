@@ -3,7 +3,6 @@ package io.github.craftedcart.MFF.tileentity;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
 
 /**
  * Created by CraftedCart on 23/12/2015 (DD/MM/YYYY)
@@ -11,13 +10,11 @@ import net.minecraft.util.EnumParticleTypes;
 
 public class TEPowerGenerator extends TileEntity implements IUpdatePlayerListBox {
 
-    private double power = 0;
-    private double maxPower;
-    private double sendRate;
+    public double power = 0;
+    public double maxPower;
 
-    public void init(double maxPower, double sendRate) {
+    public void init(double maxPower) {
         this.maxPower = maxPower;
-        this.sendRate = sendRate;
     }
 
     @Override
@@ -40,29 +37,18 @@ public class TEPowerGenerator extends TileEntity implements IUpdatePlayerListBox
 
         double pcPower = powerCube.power;
 
-        if (pcPower < PowerConf.powerCubeMaxPower) {
-            if (power >= sendRate) {
+        if (pcPower != PowerConf.powerCubeMaxPower && power > 0) {
 
-                if (pcPower + sendRate <= PowerConf.powerCubeMaxPower) {
-                    power -= sendRate;
-                    powerCube.power += sendRate;
-                } else {
-                    power -= PowerConf.powerCubeMaxPower - powerCube.power;
-                    powerCube.power = PowerConf.powerCubeMaxPower;
-                }
-
+            if (pcPower + power <= PowerConf.powerCubeMaxPower) {
+                powerCube.power += power;
+                power = 0;
             } else {
-
-                if (pcPower + power <= PowerConf.powerCubeMaxPower) {
-                    power = 0;
-                    powerCube.power += power;
-                } else {
-                    power -= PowerConf.powerCubeMaxPower - powerCube.power;
-                    powerCube.power = PowerConf.powerCubeMaxPower;
-                }
-
+                power -= PowerConf.powerCubeMaxPower - pcPower;
+                powerCube.power = PowerConf.powerCubeMaxPower;
             }
+
         }
+
     }
 
     //TODO: Sync Data, Add GUI, Add Container, Add Upgrade Support

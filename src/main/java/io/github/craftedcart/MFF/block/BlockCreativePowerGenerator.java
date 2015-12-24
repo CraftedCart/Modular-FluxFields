@@ -1,7 +1,6 @@
 package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.reference.Names;
-import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +40,7 @@ public class BlockCreativePowerGenerator extends ModBlock implements ITileEntity
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         TEPowerGenerator tepg = new TEPowerGenerator(); //tepc, short for TileEntityPowerGenerator
-        tepg.init(-1, 100000000);
+        tepg.init(-1);
         return tepg;
     }
 

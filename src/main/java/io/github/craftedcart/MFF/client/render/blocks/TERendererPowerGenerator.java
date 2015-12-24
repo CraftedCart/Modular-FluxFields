@@ -1,5 +1,11 @@
 package io.github.craftedcart.MFF.client.render.blocks;
 
+import io.github.craftedcart.MFF.init.ModBlocks;
+import io.github.craftedcart.MFF.reference.PowerConf;
+import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
+import io.github.craftedcart.MFF.utility.LogHelper;
+import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,10 +26,48 @@ public class TERendererPowerGenerator extends TileEntitySpecialRenderer {
 
         GlStateManager.pushMatrix();
 
+        float redR = 244f; float redG = 67f; float redB = 54f; //Red RGB
+        float blueR = 33f; float blueG = 150f; float blueB = 243f; //Blue RGB
+
         GlStateManager.translate(x, y, z);
 
-        GL11.glColor4f(1, 1, 1, 0.5f);
         WorldRenderer wr = Tessellator.getInstance().getWorldRenderer();
+
+        //<editor-fold desc="Draw line between power cube above and the ff projector">
+        //Draw line between power cube above and the ff projector
+        if (te.getWorld().getBlockState(te.getPos().add(0, -1, 0)) == ModBlocks.powerCube.getDefaultState()) {
+            float powerPercent;
+            if (((TEPowerGenerator) te).maxPower == -1) { //If it's a creative power generator
+                powerPercent = 1;
+            } else {
+                powerPercent = (float) (((TEPowerGenerator) te).power / ((TEPowerGenerator) te).maxPower);
+            }
+            float r = MathUtils.lerp(blueR, redR, powerPercent);
+            float g = MathUtils.lerp(blueG, redG, powerPercent);
+            float b = MathUtils.lerp(blueB, redB, powerPercent);
+            GL11.glColor4f(r / 255f, g / 255f, b / 255f, 1);
+
+            GL11.glLineWidth(4);
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(0.5, 0.9, 0.5);
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(0.8, 0.7), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(0.6, 0.5), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(0.4, 0.3), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(0.2, 0.1), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(0.1, 0.0), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(0.0, -0.1), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(-0.1, -0.2), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(-0.2, -0.3), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(-0.3, -0.4), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(-0.4, -0.5), MathUtils.randDouble(0.45, 0.55));
+            GL11.glVertex3d(0.5, -0.5, 0.5);
+            GL11.glEnd();
+        }
+        //</editor-fold>
+
+        GL11.glColor4f(1, 1, 1, 0.5f);
+
+
         wr.startDrawingQuads();
 
         // Base

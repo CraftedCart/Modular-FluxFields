@@ -2,7 +2,6 @@ package io.github.craftedcart.MFF.client.render.blocks;
 
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -71,6 +70,7 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
         GlStateManager.rotate((te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, 0);
 
         //Draw the Power Cube frame
+        GL11.glColor4f(1, 1, 1, 1);
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("mff:textures/blocks/powerCubeFrame.png"));
         wr.startDrawingQuads();
         wr.setBrightness(240);

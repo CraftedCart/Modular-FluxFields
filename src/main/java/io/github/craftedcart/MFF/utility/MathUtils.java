@@ -1,6 +1,6 @@
 package io.github.craftedcart.MFF.utility;
 
-//import java.util.Random;
+import java.util.Random;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -12,6 +12,11 @@ public class MathUtils {
 //        Random rand = new Random();
 //        return rand.nextInt(max - min + 1) + min;
 //    }
+
+    public static double randDouble(double min, double max) {
+        Random rand = new Random();
+        return min + (max - min) * rand.nextDouble();
+    }
 
     public static float lerp(float a, float b, float f) {
         return a + f * (b - a);
