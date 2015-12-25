@@ -35,6 +35,9 @@ public class GuiFFProjectorSecurity extends GuiContainer {
     private EntityPlayer player;
     public List<List<String>> permittedPlayers; //List containing lists containing a player's UUID, the player's username, and the player's group ID (in that order)
     public List<List<Object>> permissionGroups; //List containing lists of groups containing the group ID and its permissions (in that order)
+    /*
+     * Perm 1: Boolean: Should players be killed
+     */
     private Integer selectedItem; //The selected player on the permitted player list
     private byte guiMode = 0;
     /*
@@ -42,12 +45,14 @@ public class GuiFFProjectorSecurity extends GuiContainer {
      * 0: Add and manage players
      * 1: Add and manage groups
      * 2: Add a player to a group
+     * 3: Set group permissions
      */
 
     //Gui Elements
     private GuiTextField addItemTextField; //The text box to add a player to the permitted players list or to create a new group
     private GuiButton removeButton; //The remove button
     private GuiButton addToGroupButton; //The add a player to a group button
+    private GuiButton setGroupPermsButton; //The set group permissions to a group button
     //Gui(ish) Elements
     private String statusMessage; //The status message text
 
@@ -73,6 +78,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         this.addItemTextField.setFocused(true); //Automatically focus the text box by default
         buttonList.add(this.removeButton = new GuiButton(0, this.guiLeft + 7, this.guiTop + 62, 64, 20, StatCollector.translateToLocal("gui.mff:remove"))); //Create remove button
         buttonList.add(this.addToGroupButton = new GuiButton(1, this.guiLeft + 73, this.guiTop + 62, 72, 20, StatCollector.translateToLocal("gui.mff:addToGroup"))); //Create add player to group button
+        buttonList.add(this.setGroupPermsButton = new GuiButton(1, this.guiLeft + 73, this.guiTop + 62, 72, 20, StatCollector.translateToLocal("gui.mff:setPerms"))); //Create add player to group button
     }
 
     @Override
@@ -81,6 +87,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         this.drawDefaultBackground(); //Draw semi-transparent background
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f); //Make sure the GUI isn't tinted
+
         if (this.te.hasSecurityUpgrade) { //If a security upgrade is installed in the FF Projector
             if (guiMode == 0) { //If it's on add/manage players mode
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityPlayers.png")); //Set the bg image to the players one
@@ -88,7 +95,10 @@ public class GuiFFProjectorSecurity extends GuiContainer {
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityGroups.png")); //Set the bg image to the groups one
             } else if (guiMode == 2) { //If it's on add player to group mode
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityAddToGroup.png")); //Set the bg image to the add player to group one
+            } else if (guiMode == 3) { //If it's on set perms mode
+                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecuritySetPerms.png")); //Set the bg image to the add player to group one
             }
+
         } else { //If no security upgrade is installed
             this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityNoUpgrade.png")); //Set the bg image to the upgrade warning one
         }
@@ -116,102 +126,147 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityNoUpgrade"), 15, 29, 0xFAFAFA); //Draw no upgrade warning
             this.removeButton.visible = false;
             this.addToGroupButton.visible = false;
+            this.setGroupPermsButton.visible = false;
         } else {
 
-            if (guiMode == 0) { //If it's on add/manage players mode
+            try { //I can't figure out why I get an IndexOutOfBoundsException occasionally, so here's a hacky way of preventing it
+                if (guiMode == 0) { //If it's on add/manage players mode
 
-                this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityPlayers"), 15, 18, 0x404040); //Draw tab name
+                    //<editor-fold desc="Add/Manage players mode">
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityPlayers"), 15, 18, 0x404040); //Draw tab name
 
-                this.addItemTextField.drawTextBox(); //Draw add item text box
-                this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
+                    this.addItemTextField.drawTextBox(); //Draw add item text box
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
 
-                // Draw the list of players //////////////////////////////////////////////////////////////////////////////////
-                GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size                                               //
-                Iterator<List<String>> iter = permittedPlayers.iterator();                                                  //
-                int index = 0;                                                                                              //
-                while (iter.hasNext()) { //Loop through the list of permitted players                                       //
-                    int col;                                                                                                //
-                    if (selectedItem != null && selectedItem == index) { //If the player it's about to draw is selected     //
-                        col = 0x2196F3; //Set the colour to blue                                                            //
-                    } else {                                                                                                //
-                        col = 0x404040; //Set the colour to grey                                                            //
-                    }                                                                                                       //
-                    this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, col); //Draw the player's name //
-                    index++;                                                                                                //
-                }                                                                                                           //
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                GL11.glScalef(2f, 2f, 2f); //Reset scaling
-
-                if (selectedItem == null) { //If there's no selected player on the permitted player's list
-                    removeButton.enabled = false; //Disable the remove button
-                    addToGroupButton.enabled = false; //Disable the add to group button
-                } else {
-                    removeButton.enabled = true; //Enable the remove button
-                    addToGroupButton.enabled = true; //Enable the add to group button
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:group") + ": " + StatCollector.translateToLocal(permittedPlayers.get(selectedItem).get(2)), 15, 51, 0x404040); //Draw selected player's group
-                }
-
-                this.removeButton.visible = true;
-                this.addToGroupButton.visible = true;
-
-            } else if (guiMode == 1) { //If it's on add/manage groups mode
-
-                this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityGroups"), 15, 18, 0x404040); //Draw tab name
-
-                this.addItemTextField.drawTextBox(); //Draw add item text box
-                this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
-
-                // Draw the list of groups ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size                                                                                       //
-                Iterator<List<Object>> iter = permissionGroups.iterator();                                                                                          //
-                int index = 0;                                                                                                                                      //
-                while (iter.hasNext()) { //Loop through the list of groups                                                                                          //
-                    int col;                                                                                                                                        //
-                    if (selectedItem != null && selectedItem == index) { //If the group it's about to draw is selected                                              //
-                        col = 0x2196F3; //Set the colour to blue                                                                                                    //
-                    } else {                                                                                                                                        //
-                        col = 0x404040; //Set the colour to grey                                                                                                    //
-                    }                                                                                                                                               //
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal((String) iter.next().get(0)), 344, 58 + 9 * index, col); //Draw the group's name //
-                    index++;                                                                                                                                        //
-                }                                                                                                                                                   //
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                GL11.glScalef(2f, 2f, 2f); //Reset scaling
-
-                if (selectedItem == null) { //If there's no selected group on the permitted player's list
-                    removeButton.enabled = false; //Disable the remove button
-                } else {
-                    if (!permissionGroups.get(selectedItem).get(0).equals("gui.mff:everyone")) { //If the selected group is not Everyone
-                        removeButton.enabled = true; //Enable the remove button
-                    } else {
-                        removeButton.enabled = false; //Disable the remove button
+                    //<editor-fold desc="Draw the list of players">
+                    GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size
+                    Iterator<List<String>> iter = permittedPlayers.iterator();
+                    int index = 0;
+                    while (iter.hasNext()) { //Loop through the list of permitted players
+                        int col;
+                        if (selectedItem != null && selectedItem == index) { //If the player it's about to draw is selected
+                            col = 0x2196F3; //Set the colour to blue
+                        } else {
+                            col = 0x404040; //Set the colour to grey
+                        }
+                        this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, col); //Draw the player's name
+                        index++;
                     }
+                    //</editor-fold>
+
+                    GL11.glScalef(2f, 2f, 2f); //Reset scaling
+
+                    if (selectedItem == null) { //If there's no selected player on the permitted player's list
+                        removeButton.enabled = false; //Disable the remove button
+                        addToGroupButton.enabled = false; //Disable the add to group button
+                    } else {
+                        removeButton.enabled = true; //Enable the remove button
+                        addToGroupButton.enabled = true; //Enable the add to group button
+                        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:group") + ": " + StatCollector.translateToLocal(permittedPlayers.get(selectedItem).get(2)), 15, 51, 0x404040); //Draw selected player's group
+                    }
+
+                    this.removeButton.visible = true;
+                    this.addToGroupButton.visible = true;
+                    this.setGroupPermsButton.visible = false;
+                    //</editor-fold>
+
+                } else if (guiMode == 1) { //If it's on add/manage groups mode
+
+                    //<editor-fold desc="Add/Manage groups mode">
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityGroups"), 15, 18, 0x404040); //Draw tab name
+
+                    this.addItemTextField.drawTextBox(); //Draw add item text box
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
+
+                    //<editor-fold desc="Draw the list of groups">
+                    GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size
+                    Iterator<List<Object>> iter = permissionGroups.iterator();
+                    int index = 0;
+                    while (iter.hasNext()) { //Loop through the list of groups
+                        int col;
+                        if (selectedItem != null && selectedItem == index) { //If the group it's about to draw is selected
+                            col = 0x2196F3; //Set the colour to blue
+                        } else {
+                            col = 0x404040; //Set the colour to grey
+                        }
+                        this.fontRendererObj.drawString(StatCollector.translateToLocal((String) iter.next().get(0)), 344, 58 + 9 * index, col); //Draw the group's name
+                        index++;
+                    }
+                    //</editor-fold>
+
+                    GL11.glScalef(2f, 2f, 2f); //Reset scaling
+
+                    if (selectedItem == null) { //If there's no selected group on the permitted player's list
+                        removeButton.enabled = false; //Disable the remove button
+                        setGroupPermsButton.enabled = false; //Disable the set group perms button
+
+                    } else {
+                        setGroupPermsButton.enabled = true; //Enable the set group perms button
+                        if (!permissionGroups.get(selectedItem).get(0).equals("gui.mff:everyone")) { //If the selected group is not Everyone
+                            removeButton.enabled = true; //Enable the remove button
+                        } else {
+                            removeButton.enabled = false; //Disable the remove button
+                        }
+                    }
+
+                    this.removeButton.visible = true;
+                    this.addToGroupButton.visible = false;
+                    this.setGroupPermsButton.visible = true;
+                    //</editor-fold>
+
+                } else if (guiMode == 2) { //If it's on add player to group mode
+
+                    //<editor-fold desc="Add player to group mode">
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityAddToGroup"), 15, 18, 0x404040); //Draw tab name
+
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 27, 0x404040); //Draw status message
+
+                    //<editor-fold desc="Draw the list of groups">
+                    GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size
+                    Iterator<List<Object>> iter = permissionGroups.iterator();
+                    int index = 0;
+                    while (iter.hasNext()) { //Loop through the list of groups
+                        this.fontRendererObj.drawString(StatCollector.translateToLocal((String) iter.next().get(0)), 344, 58 + 9 * index, 0x404040); //Draw the group's name
+                        index++;
+                    }
+                    //</editor-fold>
+
+                    GL11.glScalef(2f, 2f, 2f); //Reset scaling
+
+                    this.removeButton.visible = false;
+                    this.addToGroupButton.visible = false;
+                    this.setGroupPermsButton.visible = false;
+                    //</editor-fold>
+
+                } else if (guiMode == 3) { //If it's on set group permissions mode
+
+                    //<editor-fold desc="Set group permissions mode">
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securitySetPerms"), 15, 18, 0x404040); //Draw tab name
+
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 27, 0x404040); //Draw status message
+
+                    if ((Boolean) permissionGroups.get(selectedItem).get(1)) {
+                        drawRect(7, 57, 23, 65, 0xFF4CAF50);
+                    } else {
+                        drawRect(7, 57, 23, 65, 0xFFF44336);
+                    }
+
+                    int mX = mouseX - guiLeft;
+                    int mY = mouseY - guiTop;
+                    if (mX >= 7 && mX <= 23 && mY >= 37 && mY <= 53) {
+                        List<String> tooltip = new ArrayList<String>();
+                        tooltip.add(StatCollector.translateToLocal("gui.mff:securityDamagePlayers"));
+                        this.drawHoveringText(tooltip, mX, mY, this.fontRendererObj);
+                    }
+
+                    this.removeButton.visible = false;
+                    this.addToGroupButton.visible = false;
+                    this.setGroupPermsButton.visible = false;
+                    //</editor-fold>
+
                 }
-
-                this.removeButton.visible = true;
-                this.addToGroupButton.visible = false;
-
-            } else if (guiMode == 2) { //If it's on add player to group mode
-
-                this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityAddToGroup"), 15, 18, 0x404040); //Draw tab name
-
-                this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 27, 0x404040); //Draw status message
-
-                // Draw the list of groups ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size                                                                                            //
-                Iterator<List<Object>> iter = permissionGroups.iterator();                                                                                               //
-                int index = 0;                                                                                                                                           //
-                while (iter.hasNext()) { //Loop through the list of groups                                                                                               //
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal((String) iter.next().get(0)), 344, 58 + 9 * index, 0x404040); //Draw the group's name //
-                    index++;                                                                                                                                             //
-                }                                                                                                                                                        //
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                this.removeButton.visible = false;
-                this.addToGroupButton.visible = false;
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }
@@ -264,6 +319,12 @@ public class GuiFFProjectorSecurity extends GuiContainer {
                     }
                 }
             }
+        } else if (guiMode == 3) { //If it's on set group perms mode
+
+            if (x >= 7 && x <= 23 && y >= 57 && y <= 65) { //Toggle the player kill mode
+                permissionGroups.get(selectedItem).set(1, !((Boolean) permissionGroups.get(selectedItem).get(1)));
+            }
+
         }
 
         if (x >= 228 && x <= 242 && y >= 148 && y <= 178) {
@@ -333,8 +394,18 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             }
         } else if (button == addToGroupButton) { //Player clicked on add player to group
 
-            guiMode = 2;
+            guiMode = 2; //Set GuiMode to add to group mode
             statusMessage = permittedPlayers.get(selectedItem).get(1);
+
+        } else if (button == setGroupPermsButton) {
+
+            guiMode = 3; //Set GuiMode to edit perms mode
+            statusMessage = permissionGroups.get(selectedItem).get(0).toString();
+
+            //Do checks in case an update adds more permissions
+            if (permissionGroups.get(selectedItem).size() < 2) {
+                permissionGroups.get(selectedItem).add(false); //Perm 1: Should players be killed
+            }
 
         }
 
@@ -373,6 +444,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
                     if (!doesItemNameExistInList(addItemTextField.getText(), permissionGroups)) { //If the player's not already on the permitted players list
                         List groupInfo = new ArrayList<Object>();
                         groupInfo.add(addItemTextField.getText()); //Add the Group ID
+                        groupInfo.add(false); //Perm 1: Don't auto kill players
                         permissionGroups.add(groupInfo); //Add the Group info the player list
                         statusMessage = "gui.mff:addedNewGroup"; //Set the status message to the success message
                     } else {

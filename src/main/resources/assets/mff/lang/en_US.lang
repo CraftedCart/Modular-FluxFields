@@ -56,7 +56,9 @@ gui.mff:time=Time
 gui.mff:securityPlayers=Security: Manage Players
 gui.mff:securityGroups=Security: Manage Groups
 gui.mff:securityAddToGroup=Security: Add to Group
+gui.mff:securitySetPerms=Set Permissions
 gui.mff:securityNoUpgrade=No Security Upgrade Found
+gui.mff:securityDamagePlayers=Damage and kill players
 gui.mff:playerNotOnline=That player's not online
 gui.mff:addedPermittedPlayer=Added player to the whitelist
 gui.mff:permittedPlayerAlreadyExists=Player's already on the list
@@ -67,6 +69,7 @@ gui.mff:addedNewGroup=Added new group
 gui.mff:groupAlreadyExists=Group already exists
 gui.mff:chooseAName=Choose a name
 gui.mff:addToGroup=Add to group
+gui.mff:setPerms=Permissions
 gui.mff:group=Group
 gui.mff:everyone=Everyone
 gui.mff:calculating=Calculating
@@ -75,3 +78,6 @@ gui.mff:calculating=Calculating
 stat.mff:+100%Speed=§a+100% Speed
 stat.mff:+25%PowerUsageTick=§c+25% Power Usage / tick
 stat.mff:-50%PowerUsageTick=§a-50% Power Usage / tick
+
+#Deaths
+death.attack.forcefieldSecurityKill=%1$s was disintegrated by a forcefield

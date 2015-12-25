@@ -1,6 +1,7 @@
 package io.github.craftedcart.MFF.network;
 
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -71,6 +72,7 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
             List<Object> groupData = new ArrayList<Object>();
 
             groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getString("id"));
+            groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getBoolean("perm1")); //Set group perm 1: Should kill players?
 
             groupsList.add(groupData);
 
@@ -107,10 +109,12 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
         NBTTagCompound groups = new NBTTagCompound();
         index = 0;
         for (Object group : permissionGroups) {
+
             List groupList = (List) group;
 
             NBTTagCompound groupData = new NBTTagCompound();
             groupData.setString("id", (String) groupList.get(0)); //Set group ID
+            groupData.setBoolean("perm1", (Boolean) groupList.get(1)); //Set group perm 1: Should kill players?
 
             groups.setTag(String.valueOf(index), groupData);
             index++;

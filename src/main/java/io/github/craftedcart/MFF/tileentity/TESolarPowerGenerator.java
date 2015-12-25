@@ -17,7 +17,7 @@ public class TESolarPowerGenerator extends TEPowerGenerator {
     @Override
     public void update() {
 
-        if (worldObj.getWorldTime() >= 0 && worldObj.getWorldTime() <= 13000 && worldObj.getLightFor(EnumSkyBlock.SKY, this.pos) > 7) {
+        if (worldObj.isDaytime() && worldObj.getLightFor(EnumSkyBlock.SKY, this.pos) > 7) {
             power += genRate;
         }
 

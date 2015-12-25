@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.tileentity;
 
+import io.github.craftedcart.MFF.damagesource.DamageSourceFFSecurityKill;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.reference.PowerConf;
@@ -11,13 +12,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
+import net.minecraftforge.common.DimensionManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,7 +50,10 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     public String owner = ""; //The owner UUID
     public String ownerName = ""; //The owner username
     public List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //The list of permitted players defined by the security tab on the gui
-    public List<List<Object>> permissionGroups = new ArrayList<List<Object>>(Arrays.asList(Arrays.asList((Object) "gui.mff:everyone")));
+    public List<List<Object>> permissionGroups = new ArrayList<List<Object>>();
+    /*
+     * Perm 1: Boolean: Should player be killed
+     */
     //List containing lists of groups containing the group ID and its permissions (in that order) defined by the security tab on the gui
 
     //<editor-fold desc="Inventory stuff"> Used by IntelliJ to define a custom code folding section
@@ -303,6 +304,21 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             getWallBlocks(); //Calculate the blockposes of the walls
             getInnerBlocks(); //Calculate the blockposes of the inner blocks
             init(PowerConf.ffProjectorMaxPower, PowerConf.ffProjectorDrawRate);
+
+            if (permissionGroups.size() == 0) { //Setup the everyone permission group
+                List<Object> everyoneGroup = new ArrayList<Object>();
+                everyoneGroup.add("gui.mff:everyone");
+                everyoneGroup.add(false);
+                permissionGroups.add(everyoneGroup);
+            }
+
+            //Do checks in case an update adds more permissions
+            for (List<Object> permissionGroup : permissionGroups) {
+                if (permissionGroup.size() < 2) {
+                    permissionGroup.add(false); //Perm 1: Should players be killed
+                }
+            }
+
         }
 
         updateTime--;
@@ -340,20 +356,24 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             int index = 0;
             for (BlockPos ffPos : wallBlockList) { //Loop through every blockpos
 
-                if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) { //If the block found is air
-                    if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) { //If we have enough power to place an FF block
-                        worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState()); //Place an FF block
-                        power -= PowerConf.ffProjectorUsagePerBlockToGenerate; //Minus the power used
-                    } else {
-                        break;
+                if (worldObj.isBlockLoaded(ffPos)) {
+                    if (worldObj.getBlockState(ffPos) == Blocks.air.getDefaultState()) { //If the block found is air
+                        if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) { //If we have enough power to place an FF block
+                            worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState()); //Place an FF block
+                            power -= PowerConf.ffProjectorUsagePerBlockToGenerate; //Minus the power used
+                        } else {
+                            break;
+                        }
+                    } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) { //If the block found is an FF
+                        if (power >= PowerConf.ffProjectorUsagePerWallBlock * wallBlockList.size()) { //If we have enough power to sustain the FF
+                            refreshFFTimer(ffPos); //Refresh the decay timer of the FF
+                        } else {
+                            break;
+                        }
                     }
-                } else if (worldObj.getBlockState(ffPos) == ModBlocks.forcefield.getDefaultState()) { //If the block found is an FF
-                    if (power >= PowerConf.ffProjectorUsagePerWallBlock * wallBlockList.size()) { //If we have enough power to sustain the FF
-                        refreshFFTimer(ffPos); //Refresh the decay timer of the FF
-                    } else {
-                        break;
-                    }
+
                 }
+
 
                 if (index >= blockPlaceProgress) {
                     break;
@@ -365,10 +385,70 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
         }
 
+        if (hasSecurityUpgrade && permissionGroups.size() > 0 && isPowered) { //Security related stuff goes here
+
+            int dimID = worldObj.provider.getDimensionId();
+            List<String> targetedPlayers = new ArrayList<String>();
+
+            for (List<String> plr : permittedPlayers) {
+
+                for (List<Object> group : permissionGroups) {
+
+                    if (plr.get(2).equals(group.get(0))) { //If the player is in that group
+                        if ((Boolean) permissionGroups.get(0).get(1) && !(Boolean) group.get(1)) { //If people should be killed in the Everyone group, and the specified player is exempt
+                            targetedPlayers.add(plr.get(0));
+                        } else if (!(Boolean) permissionGroups.get(0).get(1) && (Boolean) group.get(1)) { //If people shouldn't be killed in the Everyone group, and the specified player should
+                            targetedPlayers.add(plr.get(0));
+                        }
+                    }
+                }
+
+            }
+
+            if ((Boolean) permissionGroups.get(0).get(1)) { //If everyone should be targeted
+                targetedPlayers.add(owner); //Exempt the owner
+            }
+
+            damagePlayersInArea(dimID, (Boolean) permissionGroups.get(0).get(1), new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ), targetedPlayers);
+
+        }
+
         if (blockPlaceProgress < wallBlockList.size() + innerBlockList.size() && isPowered) {
             blockPlaceProgress++;
         } else if (!isPowered) {
             blockPlaceProgress = 0;
+        }
+
+    }
+
+    private void damagePlayersInArea(int dimID, boolean shouldTargetEveryone, BlockPos p1, BlockPos p2, List<String> players) {
+
+        List<EntityPlayer> playersInWorld = DimensionManager.getWorld(dimID).playerEntities;
+
+        for (EntityPlayer plr : playersInWorld) {
+
+            if (shouldTargetEveryone) {
+                if (plr.posX >= this.getPos().getX() + p1.getX() && plr.posX <= this.getPos().getX() + p2.getX() &&
+                        plr.posY >= this.getPos().getY() + p1.getY() && plr.posY <= this.getPos().getY() + p2.getY() &&
+                        plr.posZ >= this.getPos().getZ() + p1.getZ() && plr.posZ <= this.getPos().getZ() + p2.getZ() &&
+                        !plr.capabilities.isCreativeMode && !players.contains(plr.getUniqueID().toString())) {
+
+                    plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
+                    plr.hurtResistantTime = 0;
+
+                }
+            } else {
+                if (plr.posX >= this.getPos().getX() + p1.getX() && plr.posX <= this.getPos().getX() + p2.getX() &&
+                        plr.posY >= this.getPos().getY() + p1.getY() && plr.posY <= this.getPos().getY() + p2.getY() &&
+                        plr.posZ >= this.getPos().getZ() + p1.getZ() && plr.posZ <= this.getPos().getZ() + p2.getZ() &&
+                        !plr.capabilities.isCreativeMode && players.contains(plr.getUniqueID().toString())) {
+
+                    plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
+                    plr.hurtResistantTime = 0;
+
+                }
+            }
+
         }
 
     }
@@ -425,6 +505,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
             NBTTagCompound groupData = new NBTTagCompound();
             groupData.setString("id", (String) groupList.get(0)); //Set group ID
+            groupData.setBoolean("perm1", (Boolean) groupList.get(1)); //Set perm 1: Should kill players?
 
             groups.setTag(String.valueOf(index), groupData);
             index++;
@@ -484,6 +565,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
                 List<Object> groupData = new ArrayList<Object>();
 
                 groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getString("id"));
+                groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getBoolean("perm1")); //Get perm 1: Should kill players?
 
                 groupsList.add(groupData);
 
