@@ -73,6 +73,15 @@ public class ModBlocks {
         //Ores
         registerRender(oreAmethyst);
         registerRender(oreRuby);
+        //Generators
+        registerBlockRenderAsItem(creativePowerGenerator, Names.BlockCreativePowerGeneratorgit );
+        registerBlockRenderAsItem(solarPowerGenerator1, Names.BlockSolarPowerGenerator1);
+        registerBlockRenderAsItem(solarPowerGenerator8, Names.BlockSolarPowerGenerator8);
+        registerBlockRenderAsItem(solarPowerGenerator64, Names.BlockSolarPowerGenerator64);
+        registerBlockRenderAsItem(solarPowerGenerator512, Names.BlockSolarPowerGenerator512);
+        registerBlockRenderAsItem(solarPowerGenerator4096, Names.BlockSolarPowerGenerator4096);
+        registerBlockRenderAsItem(solarPowerGenerator32768, Names.BlockSolarPowerGenerator32768);
+        registerBlockRenderAsItem(solarPowerGenerator262144, Names.BlockSolarPowerGenerator262144);
 
     }
 
