@@ -2,7 +2,6 @@ package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.reference.PowerConf;
-import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import io.github.craftedcart.MFF.tileentity.TESolarPowerGenerator;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;

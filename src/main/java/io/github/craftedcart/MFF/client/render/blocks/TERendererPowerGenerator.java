@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.client.render.blocks;
 
-import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import io.github.craftedcart.MFF.tileentity.TEPoweredBlock;
 import io.github.craftedcart.MFF.utility.MathUtils;

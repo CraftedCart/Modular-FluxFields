@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.client.gui;
 
-import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.StatCollector;

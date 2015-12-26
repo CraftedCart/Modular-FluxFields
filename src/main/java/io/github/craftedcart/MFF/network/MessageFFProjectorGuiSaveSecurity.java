@@ -1,7 +1,6 @@
 package io.github.craftedcart.MFF.network;
 
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -25,13 +24,15 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
 
     List<List<String>> permittedPlayers;
     List<List<Object>> permissionGroups;
+    List<Object> generalPermissions;
 
     public MessageFFProjectorGuiSaveSecurity() {}
 
-    public MessageFFProjectorGuiSaveSecurity(BlockPos pos, List permittedPlayers, List permissionGroups) {
+    public MessageFFProjectorGuiSaveSecurity(BlockPos pos, List<List<String>> permittedPlayers, List<List<Object>> permissionGroups, List<Object> generalPermissions) {
         this.pos = pos;
         this.permittedPlayers = permittedPlayers;
         this.permissionGroups = permissionGroups;
+        this.generalPermissions = generalPermissions;
     }
 
     @Override
@@ -72,13 +73,20 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
             List<Object> groupData = new ArrayList<Object>();
 
             groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getString("id"));
-            groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getBoolean("perm1")); //Set group perm 1: Should kill players?
+            groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getBoolean("perm1")); //Get group perm 1: Should kill players?
 
             groupsList.add(groupData);
 
             index++;
         }
         this.permissionGroups = groupsList;
+
+        //Read general permissions
+        NBTTagCompound perms = (NBTTagCompound) tag.getTag("generalPermissions");
+        List<Object> permsList = new ArrayList<Object>();
+        permsList.add(perms.getBoolean("perm1")); //Get general perm 1: Should kill hostile mobs?
+        permsList.add(perms.getBoolean("perm2")); //Get general perm 2: Should kill peaceful mobs?
+        this.generalPermissions = permsList;
 
     }
 
@@ -121,6 +129,12 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
         }
         tag.setTag("permissionGroups", groups);
 
+        //Set general permissions list
+        NBTTagCompound perms = new NBTTagCompound();
+        perms.setBoolean("perm1", (Boolean) generalPermissions.get(0)); //Set general perm 1: Should kill hostile mobs?
+        perms.setBoolean("perm2", (Boolean) generalPermissions.get(1)); //Set general perm 2: Should kill peaceful mobs?
+        tag.setTag("generalPermissions", perms);
+
         ByteBufUtils.writeTag(buf, tag);
     }
 
@@ -137,6 +151,7 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
 
                     te.permittedPlayers = message.permittedPlayers;
                     te.permissionGroups = message.permissionGroups;
+                    te.generalPermissions = message.generalPermissions;
 
                 }
             });

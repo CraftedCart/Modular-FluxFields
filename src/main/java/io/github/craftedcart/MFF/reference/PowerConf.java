@@ -19,6 +19,7 @@ public final class PowerConf {
     public static final double ffProjectorUsagePerWallBlock = 0.21;
     public static final double ffProjectorUsagePerInnerBlock = 0.02;
     public static final double ffProjectorUsagePerBlockToGenerate = 20;
+    public static final double ffProjectorUsageToDamageEntity = 8192; //How much power it takes to damage an entity by 1 HP
     public static final double crystalRefineryUsage = 99.12;
     public static final double crystalConstructorUsage = 5.87;
 

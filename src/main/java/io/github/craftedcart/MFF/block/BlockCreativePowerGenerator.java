@@ -2,7 +2,6 @@ package io.github.craftedcart.MFF.block;
 
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.tileentity.TECreativePowerGenerator;
-import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;

@@ -31,7 +31,7 @@ public class PreventFFBlockBreak {
         ffProjectors.clear();
         ffProjectors.addAll(hs);
 
-        for (Iterator<ArrayList<Object>> iterator = ffProjectors.iterator(); iterator.hasNext();) {
+        for (Iterator<ArrayList<Object>> iterator = ffProjectors.iterator(); iterator.hasNext();) { //Loop through each registered forcefield projector
 
             ArrayList al = iterator.next();
 
@@ -40,30 +40,37 @@ public class PreventFFBlockBreak {
             TileEntity te = world.getTileEntity(pos);
 
 
-            if (te instanceof TEFFProjector) {
+            if (te instanceof TEFFProjector) { //If the tile entity is a forcefield projector
 
-                if (((TEFFProjector) te).isPowered) {
-                    ArrayList<BlockPos> blockList = ((TEFFProjector) te).wallBlockList;
+                if (((TEFFProjector) te).isPowered) { //If the ff projector is powered
+                    ArrayList<BlockPos> blockList = ((TEFFProjector) te).wallBlockList; //Get the wall blocks
 
-                    for (BlockPos p : blockList) {
+                    int index = 0;
+                    for (BlockPos p : blockList) { //Loop through each wall block
 
-                        if (p.getX() == event.pos.getX() &&
-                                p.getY() == event.pos.getY() &&
-                                p.getZ() == event.pos.getZ()) {
+                        if (((TEFFProjector) te).blockPlaceProgress >= index) { //If the forcefield has calculated that block
+                            if (p.getX() == event.pos.getX() &&
+                                    p.getY() == event.pos.getY() &&
+                                    p.getZ() == event.pos.getZ()) { //If the block broken matches a protected block
 
-                            if (event.getPlayer().capabilities.isCreativeMode) {
-                                if (!event.getPlayer().worldObj.isRemote) {
-                                    event.getPlayer().addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.mff:bypassedFFProtection")));
+                                if (event.getPlayer().capabilities.isCreativeMode) { //If the player is in creative mode
+                                    if (!event.getPlayer().worldObj.isRemote) {
+                                        event.getPlayer().addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.mff:bypassedFFProtection")));
+                                    }
+                                } else {
+                                    event.setCanceled(true);
+                                    if (!event.getPlayer().worldObj.isRemote) {
+                                        event.getPlayer().addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.mff:warnFFProtection")));
+                                    }
                                 }
-                            } else {
-                                event.setCanceled(true);
-                                if (!event.getPlayer().worldObj.isRemote) {
-                                    event.getPlayer().addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.mff:warnFFProtection")));
-                                }
+                                break;
+
                             }
+                        } else {
                             break;
-
                         }
+
+                        index++;
 
                     }
                 }

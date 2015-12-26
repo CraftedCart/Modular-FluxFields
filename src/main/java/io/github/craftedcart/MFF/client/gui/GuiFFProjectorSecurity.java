@@ -7,6 +7,7 @@ import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSecurity;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.utility.PlayerUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -33,10 +34,15 @@ public class GuiFFProjectorSecurity extends GuiContainer {
     private IInventory playerInv;
     private TEFFProjector te;
     private EntityPlayer player;
-    public List<List<String>> permittedPlayers; //List containing lists containing a player's UUID, the player's username, and the player's group ID (in that order)
-    public List<List<Object>> permissionGroups; //List containing lists of groups containing the group ID and its permissions (in that order)
+    private List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //List containing lists containing a player's UUID, the player's username, and the player's group ID (in that order)
+    private List<List<Object>> permissionGroups = new ArrayList<List<Object>>(); //List containing lists of groups containing the group ID and its permissions (in that order)
     /*
      * Perm 1: Boolean: Should players be killed
+     */
+    private List<Object> generalPermissions = new ArrayList<Object>(); //List containing the general permissions
+    /*
+     * Perm 1: Boolean: Should hostile mobs be killed
+     * Perm 2: Boolean: Should peaceful mobs be killed
      */
     private Integer selectedItem; //The selected player on the permitted player list
     private byte guiMode = 0;
@@ -46,6 +52,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
      * 1: Add and manage groups
      * 2: Add a player to a group
      * 3: Set group permissions
+     * 4: Set general permissions
      */
 
     //Gui Elements
@@ -66,8 +73,9 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         this.xSize = 256;
         this.ySize = 178;
 
-        this.permittedPlayers = this.te.permittedPlayers;
-        this.permissionGroups = this.te.permissionGroups;
+        this.permittedPlayers.addAll(this.te.permittedPlayers);
+        this.permissionGroups.addAll(this.te.permissionGroups);
+        this.generalPermissions.addAll(this.te.generalPermissions);
     }
 
     @Override
@@ -95,8 +103,10 @@ public class GuiFFProjectorSecurity extends GuiContainer {
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityGroups.png")); //Set the bg image to the groups one
             } else if (guiMode == 2) { //If it's on add player to group mode
                 this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityAddToGroup.png")); //Set the bg image to the add player to group one
-            } else if (guiMode == 3) { //If it's on set perms mode
-                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecuritySetPerms.png")); //Set the bg image to the add player to group one
+            } else if (guiMode == 3) { //If it's on set group perms mode
+                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecuritySetGroupPerms.png")); //Set the bg image to the add player to group one
+            } else if (guiMode == 4) { //If it's on set general perms mode
+                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecuritySetGeneralPerms.png")); //Set the bg image to the add player to group one
             }
 
         } else { //If no security upgrade is installed
@@ -130,6 +140,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         } else {
 
             try { //I can't figure out why I get an IndexOutOfBoundsException occasionally, so here's a hacky way of preventing it
+
                 if (guiMode == 0) { //If it's on add/manage players mode
 
                     //<editor-fold desc="Add/Manage players mode">
@@ -241,30 +252,74 @@ public class GuiFFProjectorSecurity extends GuiContainer {
                 } else if (guiMode == 3) { //If it's on set group permissions mode
 
                     //<editor-fold desc="Set group permissions mode">
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securitySetPerms"), 15, 18, 0x404040); //Draw tab name
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securitySetGroupPerms"), 15, 18, 0x404040); //Draw tab name
 
                     this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 27, 0x404040); //Draw status message
 
-                    if ((Boolean) permissionGroups.get(selectedItem).get(1)) {
-                        drawRect(7, 57, 23, 65, 0xFF4CAF50);
-                    } else {
-                        drawRect(7, 57, 23, 65, 0xFFF44336);
-                    }
-
                     int mX = mouseX - guiLeft;
                     int mY = mouseY - guiTop;
-                    if (mX >= 7 && mX <= 23 && mY >= 37 && mY <= 53) {
+
+                    //<editor-fold desc="Damage players">
+                    if ((Boolean) permissionGroups.get(selectedItem).get(1)) {
+                        drawRect(6, 57, 22, 65, 0xFF4CAF50);
+                    } else {
+                        drawRect(6, 57, 22, 65, 0xFFF44336);
+                    }
+
+                    if (mX >= 6 && mX <= 22 && mY >= 37 && mY <= 53) { //Draw kill players mobs tooltip
                         List<String> tooltip = new ArrayList<String>();
                         tooltip.add(StatCollector.translateToLocal("gui.mff:securityDamagePlayers"));
                         this.drawHoveringText(tooltip, mX, mY, this.fontRendererObj);
                     }
+                    //</editor-fold>
 
                     this.removeButton.visible = false;
                     this.addToGroupButton.visible = false;
                     this.setGroupPermsButton.visible = false;
                     //</editor-fold>
 
+                } else if (guiMode == 4) { //If it's on set general perms mode
+
+                    //<editor-fold desc="Set general permissions mode">
+                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securitySetGeneralPerms"), 15, 18, 0x404040); //Draw tab name
+
+                    int mX = mouseX - guiLeft;
+                    int mY = mouseY - guiTop;
+
+                    //<editor-fold desc="Damage hostile mobs">
+                    if ((Boolean) generalPermissions.get(0)) {
+                        drawRect(6, 49, 22, 57, 0xFF4CAF50);
+                    } else {
+                        drawRect(6, 49, 22, 57, 0xFFF44336);
+                    }
+
+                    if (mX >= 6 && mX <= 22 && mY >= 29 && mY <= 45) { //Draw kill hostile mobs tooltip
+                        List<String> tooltip = new ArrayList<String>();
+                        tooltip.add(StatCollector.translateToLocal("gui.mff:securityDamageHostileMobs"));
+                        this.drawHoveringText(tooltip, mX, mY, this.fontRendererObj);
+                    }
+                    //</editor-fold>
+
+                    //<editor-fold desc="Damage peaceful mobs">
+                    if ((Boolean) generalPermissions.get(1)) {
+                        drawRect(26, 49, 42, 57, 0xFF4CAF50);
+                    } else {
+                        drawRect(26, 49, 42, 57, 0xFFF44336);
+                    }
+
+                    if (mX >= 26 && mX <= 42 && mY >= 29 && mY <= 45) { //Draw kill hostile mobs tooltip
+                        List<String> tooltip = new ArrayList<String>();
+                        tooltip.add(StatCollector.translateToLocal("gui.mff:securityDamagePeacefulMobs"));
+                        this.drawHoveringText(tooltip, mX, mY, this.fontRendererObj);
+                    }
+                    //</editor-fold>
+
+                    this.removeButton.visible = false;
+                    this.addToGroupButton.visible = false;
+                    this.setGroupPermsButton.visible = false;
+
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -321,13 +376,25 @@ public class GuiFFProjectorSecurity extends GuiContainer {
             }
         } else if (guiMode == 3) { //If it's on set group perms mode
 
-            if (x >= 7 && x <= 23 && y >= 57 && y <= 65) { //Toggle the player kill mode
+            if (x >= 6 && x <= 22 && y >= 57 && y <= 65) { //Toggle the player kill mode
                 permissionGroups.get(selectedItem).set(1, !((Boolean) permissionGroups.get(selectedItem).get(1)));
+            }
+
+        } else if (guiMode == 4) { //If it's on set general perms mode
+
+            if (x >= 6 && x <= 22 && y >= 49 && y <= 57) { //Toggle the hostile mobs kill mode
+                generalPermissions.set(0, !((Boolean) generalPermissions.get(0)));
+            } else if (x >= 26 && x <= 42 && y >= 49 && y <= 57) { //Toggle the peaceful mobs kill mode
+                generalPermissions.set(1, !((Boolean) generalPermissions.get(1)));
             }
 
         }
 
-        if (x >= 228 && x <= 242 && y >= 148 && y <= 178) {
+        if (x >= 214 && x <= 227 && y >= 148 && y <= 178) {
+            //General permissions management button clicked
+            selectedItem = null; //Deselect stuff
+            guiMode = 4; //Set the Gui mode to general perms management mode
+        } else if (x >= 228 && x <= 242 && y >= 148 && y <= 178) {
             //Security groups management button clicked
             selectedItem = null; //Deselect stuff
             guiMode = 1; //Set the Gui mode to groups management mode
@@ -473,7 +540,9 @@ public class GuiFFProjectorSecurity extends GuiContainer {
 
         super.onGuiClosed();
 
-        NetworkHandler.network.sendToServer(new MessageFFProjectorGuiSaveSecurity(this.te.getPos(), permittedPlayers, permissionGroups));
+        if (this.te.hasSecurityUpgrade) {
+            NetworkHandler.network.sendToServer(new MessageFFProjectorGuiSaveSecurity(this.te.getPos(), permittedPlayers, permissionGroups, generalPermissions));
+        }
 
     }
 

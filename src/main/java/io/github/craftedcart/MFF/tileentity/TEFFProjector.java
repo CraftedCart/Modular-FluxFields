@@ -3,7 +3,9 @@ package io.github.craftedcart.MFF.tileentity;
 import io.github.craftedcart.MFF.damagesource.DamageSourceFFSecurityKill;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.init.ModBlocks;
+import io.github.craftedcart.MFF.init.ModEntityTracker;
 import io.github.craftedcart.MFF.reference.PowerConf;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -13,7 +15,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraftforge.common.DimensionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +52,14 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     public String ownerName = ""; //The owner username
     public List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //The list of permitted players defined by the security tab on the gui
     public List<List<Object>> permissionGroups = new ArrayList<List<Object>>();
-    /*
+    /* List containing lists of groups containing the group ID and its permissions (in that order) defined by the security tab on the gui
      * Perm 1: Boolean: Should player be killed
      */
-    //List containing lists of groups containing the group ID and its permissions (in that order) defined by the security tab on the gui
+    public List<Object> generalPermissions = new ArrayList<Object>();
+    /* List containing general permissions defined by the security tab on the gui
+     * Perm 1: Boolean: Should hostile mobs be killed
+     * Perm 2: Boolean: Should peaceful mobs be killed
+     */
 
     //<editor-fold desc="Inventory stuff"> Used by IntelliJ to define a custom code folding section
     public TEFFProjector() {
@@ -292,6 +297,22 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     }
 
+    private void doPermissionChecks() {
+        //Do checks in case an update adds more permissions
+        for (List<Object> permissionGroup : permissionGroups) {
+            if (permissionGroup.size() < 2) {
+                permissionGroup.add(false); //Perm 1: Should players be killed
+            }
+        }
+
+        if (generalPermissions.size() < 1) {
+            generalPermissions.add(false); //Perm 1: Should hostile mobs be killed
+        }
+        if (generalPermissions.size() < 2) {
+            generalPermissions.add(false); //Perm 2: Should peaceful mobs be killed
+        }
+    }
+
     @Override
     public void update() { //Runs every game tick (20 times a second)
 
@@ -312,12 +333,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
                 permissionGroups.add(everyoneGroup);
             }
 
-            //Do checks in case an update adds more permissions
-            for (List<Object> permissionGroup : permissionGroups) {
-                if (permissionGroup.size() < 2) {
-                    permissionGroup.add(false); //Perm 1: Should players be killed
-                }
-            }
+            doPermissionChecks();
 
         }
 
@@ -385,9 +401,9 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
         }
 
-        if (hasSecurityUpgrade && permissionGroups.size() > 0 && isPowered) { //Security related stuff goes here
+        if (hasSecurityUpgrade && isPowered) { //Security related stuff goes here
 
-            int dimID = worldObj.provider.getDimensionId();
+            //<editor-fold desc="Damage targeted players">
             List<String> targetedPlayers = new ArrayList<String>();
 
             for (List<String> plr : permittedPlayers) {
@@ -409,46 +425,81 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
                 targetedPlayers.add(owner); //Exempt the owner
             }
 
-            damagePlayersInArea(dimID, (Boolean) permissionGroups.get(0).get(1), new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ), targetedPlayers);
+            damagePlayersInArea((Boolean) permissionGroups.get(0).get(1), new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ), targetedPlayers);
+            //</editor-fold>
+
+            //<editor-fold desc="Damage hostile mobs">
+            if ((Boolean) generalPermissions.get(0)) { //If hostile mobs should be damaged
+                for (Class entityClass : ModEntityTracker.hostileMobs) { //Loop through all registered hostile mobs
+                    damageEntitiesInArea(entityClass, new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Damage peaceful mobs">
+            if ((Boolean) generalPermissions.get(1)) { //If peaceful mobs should be damaged
+                for (Class entityClass : ModEntityTracker.peacefulMobs) { //Loop through all registered hostile mobs
+                    damageEntitiesInArea(entityClass, new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
+                }
+            }
+            //</editor-fold>
 
         }
 
         if (blockPlaceProgress < wallBlockList.size() + innerBlockList.size() && isPowered) {
             blockPlaceProgress++;
+        } else if (blockPlaceProgress > wallBlockList.size() + innerBlockList.size() && isPowered) {
+            blockPlaceProgress = wallBlockList.size() + innerBlockList.size();
         } else if (!isPowered) {
             blockPlaceProgress = 0;
         }
 
     }
 
-    private void damagePlayersInArea(int dimID, boolean shouldTargetEveryone, BlockPos p1, BlockPos p2, List<String> players) {
+    private void damagePlayersInArea(boolean shouldTargetEveryone, BlockPos p1, BlockPos p2, List<String> players) {
 
-        List<EntityPlayer> playersInWorld = DimensionManager.getWorld(dimID).playerEntities;
+        List<EntityPlayer> playersWithinAABB = worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(p1.add(this.getPos()), p2.add(this.getPos())));
 
-        for (EntityPlayer plr : playersInWorld) {
+        for (EntityPlayer plr : playersWithinAABB) {
 
             if (shouldTargetEveryone) {
-                if (plr.posX >= this.getPos().getX() + p1.getX() && plr.posX <= this.getPos().getX() + p2.getX() &&
-                        plr.posY >= this.getPos().getY() + p1.getY() && plr.posY <= this.getPos().getY() + p2.getY() &&
-                        plr.posZ >= this.getPos().getZ() + p1.getZ() && plr.posZ <= this.getPos().getZ() + p2.getZ() &&
-                        !plr.capabilities.isCreativeMode && !players.contains(plr.getUniqueID().toString())) {
+                if (!plr.capabilities.isCreativeMode && !players.contains(plr.getUniqueID().toString())) {
 
-                    plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
-                    plr.hurtResistantTime = 0;
+                    if (power > PowerConf.ffProjectorUsageToDamageEntity) {
+                        plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
+                        plr.hurtResistantTime = 0;
+                        power -= PowerConf.ffProjectorUsageToDamageEntity;
+                    } else {
+                        break;
+                    }
 
                 }
             } else {
-                if (plr.posX >= this.getPos().getX() + p1.getX() && plr.posX <= this.getPos().getX() + p2.getX() &&
-                        plr.posY >= this.getPos().getY() + p1.getY() && plr.posY <= this.getPos().getY() + p2.getY() &&
-                        plr.posZ >= this.getPos().getZ() + p1.getZ() && plr.posZ <= this.getPos().getZ() + p2.getZ() &&
-                        !plr.capabilities.isCreativeMode && players.contains(plr.getUniqueID().toString())) {
+                if (!plr.capabilities.isCreativeMode && players.contains(plr.getUniqueID().toString())) {
 
-                    plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
-                    plr.hurtResistantTime = 0;
+                    if (power > PowerConf.ffProjectorUsageToDamageEntity) {
+                        plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
+                        plr.hurtResistantTime = 0;
+                        power -= PowerConf.ffProjectorUsageToDamageEntity;
+                    } else {
+                        break;
+                    }
 
                 }
             }
 
+        }
+
+    }
+
+    private void damageEntitiesInArea(Class entityType, BlockPos p1, BlockPos p2) {
+
+        List<Entity> entitiesWithinAABB = worldObj.getEntitiesWithinAABB(entityType, new AxisAlignedBB(p1.add(this.getPos()), p2.add(this.getPos())));
+
+        for (Entity entity : entitiesWithinAABB) {
+            entity.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
+            entity.hurtResistantTime = 0;
+            power -= PowerConf.ffProjectorUsageToDamageEntity;
         }
 
     }
@@ -481,36 +532,46 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         tagCompound.setString("ownerName", ownerName);
         tagCompound.setInteger("blockPlaceProgress", blockPlaceProgress);
 
-        //Set players list
-        NBTTagCompound players = new NBTTagCompound();
-        int index = 0;
-        for (Object plr : permittedPlayers) {
-            List plrList = (List) plr;
+        doPermissionChecks();
 
-            NBTTagCompound playerData = new NBTTagCompound();
-            playerData.setString("uuid", (String) plrList.get(0)); //Set player UUID
-            playerData.setString("name", (String) plrList.get(1)); //Set player name
-            playerData.setString("groupID", (String) plrList.get(2)); //Set player group ID
+        if (hasSecurityUpgrade) {
+            //Set players list
+            NBTTagCompound players = new NBTTagCompound();
+            int index = 0;
+            for (Object plr : permittedPlayers) {
+                List plrList = (List) plr;
 
-            players.setTag(String.valueOf(index), playerData);
-            index++;
+                NBTTagCompound playerData = new NBTTagCompound();
+                playerData.setString("uuid", (String) plrList.get(0)); //Set player UUID
+                playerData.setString("name", (String) plrList.get(1)); //Set player name
+                playerData.setString("groupID", (String) plrList.get(2)); //Set player group ID
+
+                players.setTag(String.valueOf(index), playerData);
+                index++;
+            }
+            tagCompound.setTag("permittedPlayers", players);
+
+            //Set groups list
+            NBTTagCompound groups = new NBTTagCompound();
+            index = 0;
+            for (Object group : permissionGroups) {
+                List groupList = (List) group;
+
+                NBTTagCompound groupData = new NBTTagCompound();
+                groupData.setString("id", (String) groupList.get(0)); //Set group ID
+                groupData.setBoolean("perm1", (Boolean) groupList.get(1)); //Set perm 1: Should kill players?
+
+                groups.setTag(String.valueOf(index), groupData);
+                index++;
+            }
+            tagCompound.setTag("permissionGroups", groups);
+
+            //Set general permissions list
+            NBTTagCompound perms = new NBTTagCompound();
+            perms.setBoolean("perm1", (Boolean) generalPermissions.get(0)); //Set perm 1: Should kill hostile mobs?
+            perms.setBoolean("perm2", (Boolean) generalPermissions.get(1)); //Set perm 2: Should kill peaceful mobs?
+            tagCompound.setTag("generalPermissions", perms);
         }
-        tagCompound.setTag("permittedPlayers", players);
-
-        //Set groups list
-        NBTTagCompound groups = new NBTTagCompound();
-        index = 0;
-        for (Object group : permissionGroups) {
-            List groupList = (List) group;
-
-            NBTTagCompound groupData = new NBTTagCompound();
-            groupData.setString("id", (String) groupList.get(0)); //Set group ID
-            groupData.setBoolean("perm1", (Boolean) groupList.get(1)); //Set perm 1: Should kill players?
-
-            groups.setTag(String.valueOf(index), groupData);
-            index++;
-        }
-        tagCompound.setTag("permissionGroups", groups);
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
@@ -535,7 +596,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
         //Read players
         if (tagCompound.hasKey("permittedPlayers")) {
-            NBTTagCompound players = (NBTTagCompound) tagCompound.getTag("permittedPlayers");
+            NBTTagCompound players = tagCompound.getCompoundTag("permittedPlayers");
             List<List<String>> playersList = new ArrayList<List<String>>();
 
             int index = 0;
@@ -556,7 +617,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
         //Read groups
         if (tagCompound.hasKey("permissionGroups")) {
-            NBTTagCompound groups = (NBTTagCompound) tagCompound.getTag("permissionGroups");
+            NBTTagCompound groups = tagCompound.getCompoundTag("permissionGroups");
             List<List<Object>> groupsList = new ArrayList<List<Object>>();
 
             int index = 0;
@@ -572,6 +633,14 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
                 index++;
             }
             this.permissionGroups = groupsList;
+        }
+
+        //Read general permissions
+        if (tagCompound.hasKey("generalPermissions")) {
+            NBTTagCompound perms = tagCompound.getCompoundTag("generalPermissions");
+            this.generalPermissions.clear();
+            this.generalPermissions.add(perms.getBoolean("perm1")); //Get perm 1: Should kill hostile mobs?
+            this.generalPermissions.add(perms.getBoolean("perm2")); //Get perm 1: Should kill peaceful mobs?
         }
 
     }
