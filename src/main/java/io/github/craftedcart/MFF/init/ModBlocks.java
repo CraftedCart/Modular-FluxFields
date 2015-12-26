@@ -74,7 +74,7 @@ public class ModBlocks {
         registerRender(oreAmethyst);
         registerRender(oreRuby);
         //Generators
-        registerBlockRenderAsItem(creativePowerGenerator, Names.BlockCreativePowerGeneratorgit );
+        registerBlockRenderAsItem(creativePowerGenerator, Names.BlockCreativePowerGenerator);
         registerBlockRenderAsItem(solarPowerGenerator1, Names.BlockSolarPowerGenerator1);
         registerBlockRenderAsItem(solarPowerGenerator8, Names.BlockSolarPowerGenerator8);
         registerBlockRenderAsItem(solarPowerGenerator64, Names.BlockSolarPowerGenerator64);
