@@ -1,6 +1,6 @@
 package io.github.craftedcart.MFF.client.gui;
 
-import io.github.craftedcart.MFF.tileentity.TEPowerCube;
+import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.StatCollector;
 
@@ -8,11 +8,11 @@ import net.minecraft.util.StatCollector;
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
 
-public class GuiPowerCube extends GuiScreen {
+public class GuiSolarPowerGenerator extends GuiScreen {
 
-    TEPowerCube pc;
+    TEPowerGenerator pc;
 
-    public GuiPowerCube(TEPowerCube pc) {
+    public GuiSolarPowerGenerator(TEPowerGenerator pc) {
         this.pc = pc;
     }
 
@@ -29,9 +29,10 @@ public class GuiPowerCube extends GuiScreen {
         drawRect(this.width / 2 - 150, this.height / 2 - 1, (int) (this.width / 2 - 150 + (double) 300 * power / maxPower), this.height / 2 + 1, 0xFF2196F3);
 
         this.fontRendererObj.drawString(
-                String.format("%s: %012.2f / %09.0f %s",
-                        StatCollector.translateToLocal("gui.mff:power"), power, maxPower, StatCollector.translateToLocal("gui.mff:fe")),
+                String.format("%s: %08.2f / %05.0f %s (%.2f %s / t)",
+                        StatCollector.translateToLocal("gui.mff:power"), power, maxPower, StatCollector.translateToLocal("gui.mff:fe"), powerUsage, StatCollector.translateToLocal("gui.mff:fe")),
                 this.width / 2 - 150, this.height / 2 - 11, 0xFAFAFA, false);
+
 
     }
 

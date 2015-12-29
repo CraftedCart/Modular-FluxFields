@@ -1,9 +1,10 @@
 package io.github.craftedcart.MFF.init;
 
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.entity.passive.EntityVillager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,11 @@ public class ModEntityTracker {
         hostileMobs.add(EntitySlime.class);
 
         peacefulMobs.add(EntityAnimal.class);
+        peacefulMobs.add(EntitySquid.class);
+        peacefulMobs.add(EntityBat.class);
+        peacefulMobs.add(EntitySnowman.class);
+        peacefulMobs.add(EntityVillager.class);
+        peacefulMobs.add(EntityIronGolem.class);
 
     }
 

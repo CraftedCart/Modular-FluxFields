@@ -316,6 +316,8 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     @Override
     public void update() { //Runs every game tick (20 times a second)
 
+        super.update();
+
         if (!doWorldLoadSetup) { //This only runs when the chunk loads
             ArrayList<Object> al = new ArrayList<Object>();
             al.add(this.getWorld()); //Add this world to the list
@@ -365,10 +367,6 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         if (updateTime <= 0) {
             updateTime = 100; //5s (100t)
 
-            //Send info to client
-            worldObj.markBlockForUpdate(this.getPos());
-            markDirty();
-
             int index = 0;
             for (BlockPos ffPos : wallBlockList) { //Loop through every blockpos
 
@@ -401,7 +399,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
         }
 
-        if (hasSecurityUpgrade && isPowered) { //Security related stuff goes here
+        if (hasSecurityUpgrade && isPowered && blockPlaceProgress >= wallBlockList.size()) { //Security related stuff goes here
 
             //<editor-fold desc="Damage targeted players">
             List<String> targetedPlayers = new ArrayList<String>();

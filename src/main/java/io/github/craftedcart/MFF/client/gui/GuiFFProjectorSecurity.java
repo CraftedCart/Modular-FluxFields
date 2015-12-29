@@ -5,9 +5,7 @@ import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSecurity;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
-import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import io.github.craftedcart.MFF.utility.PlayerUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -115,13 +113,17 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize); //Draw the bg image
 
         //Draw power value
-        double power = this.te.power; //Get the FF Projector power value
+        double power = this.te.power;
+        double maxPower = this.te.maxPower;
+        double powerUsage = this.te.powerUsage;
 
         drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
-        drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
+        drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / maxPower), this.guiTop - 6, 0xFF2196F3);
 
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
-                this.guiLeft, this.guiTop - 18, 0xFAFAFA, false);
+        this.fontRendererObj.drawString(
+                String.format("%s: %012.2f / %09.0f %s (%.2f %s / t)",
+                        StatCollector.translateToLocal("gui.mff:power"), power, maxPower, StatCollector.translateToLocal("gui.mff:fe"), powerUsage, StatCollector.translateToLocal("gui.mff:fe")),
+                guiLeft, guiTop - 18, 0xFAFAFA, false);
 
     }
 

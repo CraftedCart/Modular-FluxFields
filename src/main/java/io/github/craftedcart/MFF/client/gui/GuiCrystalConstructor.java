@@ -39,12 +39,16 @@ public class GuiCrystalConstructor extends GuiContainer {
 
         //Draw power value
         double power = te.power;
+        double maxPower = this.te.maxPower;
+        double powerUsage = this.te.powerUsage;
 
         drawRect(this.guiLeft, this.guiTop - 24, this.guiLeft + xSize, this.guiTop - 22, 0xFF212121);
-        drawRect(this.guiLeft, this.guiTop - 24, (int) (this.guiLeft + (double) xSize * power / PowerConf.crystalConstructorMaxPower), this.guiTop - 22, 0xFF2196F3);
+        drawRect(this.guiLeft, this.guiTop - 24, (int) (this.guiLeft + (double) xSize * power / maxPower), this.guiTop - 22, 0xFF2196F3);
 
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%07.2f", power) + " / " + String.format("%07.2f", PowerConf.crystalConstructorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
-                this.guiLeft, this.guiTop - 34, 0xFAFAFA, false);
+        this.fontRendererObj.drawString(
+                String.format("%s: %07.2f / %04.0f %s",
+                        StatCollector.translateToLocal("gui.mff:power"), power, maxPower, StatCollector.translateToLocal("gui.mff:fe")),
+                guiLeft, guiTop - 34, 0xFAFAFA, false);
 
         //Draw progress value
         int progress = te.progress;

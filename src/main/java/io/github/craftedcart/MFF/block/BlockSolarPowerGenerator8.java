@@ -1,9 +1,13 @@
 package io.github.craftedcart.MFF.block;
 
+import io.github.craftedcart.MFF.ModMFF;
+import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.reference.PowerConf;
 import io.github.craftedcart.MFF.tileentity.TESolarPowerGenerator;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -44,6 +48,14 @@ public class BlockSolarPowerGenerator8 extends ModBlock implements ITileEntityPr
         tepg.init(PowerConf.solarPowerGeneratorMaxPower);
         tepg.initSolar(PowerConf.solarPowerGeneratorBaseGenRate * 8);
         return tepg;
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (world.isRemote) {
+            player.openGui(ModMFF.instance, GuiHandler.SolarPowerGenerator_TILE_ENTITY_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+        }
+        return true;
     }
 
 }

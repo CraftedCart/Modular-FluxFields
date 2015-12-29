@@ -21,6 +21,8 @@ public class TEPowerCube extends TEPoweredBlock implements IUpdatePlayerListBox 
     @Override
     public void update() {
 
+        super.update();
+
         if (!doneWorldSetup) {
             init(PowerConf.powerCubeMaxPower);
             doneWorldSetup = true;
@@ -30,10 +32,6 @@ public class TEPowerCube extends TEPoweredBlock implements IUpdatePlayerListBox 
 
         if (updateTime <= 0) {
             updateTime = 100; //5s
-
-            //Send info to client
-            worldObj.markBlockForUpdate(this.getPos());
-            markDirty();
 
             //Fetch nearby Power Spheres
             powerCubeLinks.clear();

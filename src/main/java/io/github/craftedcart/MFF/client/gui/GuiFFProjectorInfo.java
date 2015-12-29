@@ -46,20 +46,23 @@ public class GuiFFProjectorInfo extends GuiContainer {
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         //Draw power value
         double power = this.te.power;
+        double maxPower = this.te.maxPower;
+        double powerUsage = this.te.powerUsage;
 
         drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
         drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / PowerConf.ffProjectorMaxPower), this.guiTop - 6, 0xFF2196F3);
 
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:power") + ": " + String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " " + StatCollector.translateToLocal("gui.mff:fe"),
-                this.guiLeft, this.guiTop - 18, 0xFAFAFA, false);
-
+        this.fontRendererObj.drawString(
+                String.format("%s: %012.2f / %09.0f %s (%.2f %s / t)",
+                        StatCollector.translateToLocal("gui.mff:power"), power, maxPower, StatCollector.translateToLocal("gui.mff:fe"), powerUsage, StatCollector.translateToLocal("gui.mff:fe")),
+                guiLeft, guiTop - 18, 0xFAFAFA, false);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
         double power = this.te.power;
-        double upkeep = this.te.wallBlockList.size() * PowerConf.ffProjectorUsagePerWallBlock + this.te.innerBlockList.size() * PowerConf.ffProjectorUsagePerInnerBlock;
+        double powerUsage = this.te.powerUsage;
 
         int seconds = this.te.uptime / 20;
 
@@ -79,7 +82,7 @@ public class GuiFFProjectorInfo extends GuiContainer {
         //Info stats
         this.fontRendererObj.drawString(String.format("%012.2f", power) + " / " + String.format("%09.2f", PowerConf.ffProjectorMaxPower) + " FE",
                 15, 27, 0x404040, false); //Draw power level
-        this.fontRendererObj.drawString(String.format("%.2f FE / t - %.2f FE / s", upkeep, upkeep * 20),
+        this.fontRendererObj.drawString(String.format("%.2f %s / t (%.2f %s / s)", powerUsage, StatCollector.translateToLocal("gui.mff:fe"), powerUsage * 20, StatCollector.translateToLocal("gui.mff:fe")),
                 15, 36, 0x404040, false); //Draw power upkeep
         this.fontRendererObj.drawString(String.format("XYZ Size: %d, %d, %d", this.te.maxX - this.te.minX + 1, this.te.maxY - this.te.minY + 1, this.te.maxZ - this.te.minZ + 1),
                 15, 45, 0x404040, false); //Draw size

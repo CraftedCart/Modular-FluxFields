@@ -15,6 +15,8 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
 
     public double power = 0;
     public double maxPower;
+    public double powerLastTick = 0; //Used to calculate the power usage / change
+    public double powerUsage = 0;
     public boolean isSendingPower = false;
     private double powerDrawRate;
     private int updateTime = 1;
@@ -42,6 +44,9 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
     public void update() {
 
         updateTime--;
+
+        powerUsage = power - powerLastTick;
+        powerLastTick = power;
 
         if (updateTime <= 0) { //Code here gets executed every 5 seconds
             updateTime = 100; //5s (100t)
@@ -71,17 +76,25 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
                 if (pcPower <= powerDrawRate) { //If the power cube has less power than, or is equal to what the FF Projector draws in 1 tick
                     if (power + pcPower <= maxPower) { //If the projector's power + the power cube's power is less than or equal to the projector's max power value
                         power += pcPower; //Draw all power from the power cube
+                        powerLastTick += pcPower; //Helps calculate power gain / loss
+                        poweredBlock.powerLastTick -= pcPower; //Helps calculate power gain / loss
                         poweredBlock.power = 0; //Set the power cube's power level to 0
                     } else {
+                        powerLastTick += maxPower - power; //Helps calculate power gain / loss
+                        poweredBlock.powerLastTick -= maxPower - power; //Helps calculate power gain / loss
                         poweredBlock.power -= maxPower - power; //Minus the power cube's power level from the difference between the projector's power and max power
                         power = maxPower; //Set the projector's power level to the max
                     }
                 } else {
                     if (power + powerDrawRate <= maxPower) { //If the projector's power + the power cube's power is mess than the projector's max power value
                         power += powerDrawRate; //Draw some power from the power cube
+                        powerLastTick -= powerDrawRate; //Helps calculate power gain / loss
+                        poweredBlock.powerLastTick += powerDrawRate; //Helps calculate power gain / loss
                         poweredBlock.power -= pcPower - powerDrawRate; //Minus the power drawn from the power cube
                     } else {
                         poweredBlock.power -= maxPower - power; //Draw the power difference between the projector's power and max power
+                        powerLastTick += maxPower - power; //Minus the power cube's power level from the difference between the projector's power and max power
+                        poweredBlock.powerLastTick -= maxPower - power; //Minus the power cube's power level from the difference between the projector's power and max power
                         power = maxPower; //Set the projector's power to the max
                     }
                 }
@@ -104,9 +117,13 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
             isSendingPower = true;
 
             if (pcPower + power <= poweredBlock.maxPower) {
+                powerLastTick -= power;
+                poweredBlock.powerLastTick += power;
                 poweredBlock.power += power;
                 power = 0;
             } else {
+                powerLastTick -= poweredBlock.maxPower - pcPower;
+                poweredBlock.powerLastTick += poweredBlock.maxPower - pcPower;
                 power -= poweredBlock.maxPower - pcPower;
                 poweredBlock.power = poweredBlock.maxPower;
             }
