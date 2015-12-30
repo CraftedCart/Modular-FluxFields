@@ -11,13 +11,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -60,6 +61,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
      * Perm 1: Boolean: Should hostile mobs be killed
      * Perm 2: Boolean: Should peaceful mobs be killed
      */
+    public List<Double> powerUsagePerTickForPastMinute = new ArrayList<Double>();
 
     //<editor-fold desc="Inventory stuff"> Used by IntelliJ to define a custom code folding section
     public TEFFProjector() {
@@ -207,6 +209,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         super.writeToNBT(nbt);
 
         writeSyncableDataToNBT(nbt);
+        writePowerStatsToNBT(nbt);
 
         //Inventory stuff
         NBTTagList list = new NBTTagList();
@@ -232,6 +235,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         super.readFromNBT(nbt);
 
         readSyncableDataFromNBT(nbt);
+        readPowerStatsFromNBT(nbt);
 
         //Inventory Stuff
         NBTTagList list = nbt.getTagList("Items", 10);
@@ -452,6 +456,12 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             blockPlaceProgress = 0;
         }
 
+        //Track power usage
+        powerUsagePerTickForPastMinute.add(0, Math.abs(powerUsage));
+        if (powerUsagePerTickForPastMinute.size() > 1200) {
+            powerUsagePerTickForPastMinute.remove(1200);
+        }
+
     }
 
     private void damagePlayersInArea(boolean shouldTargetEveryone, BlockPos p1, BlockPos p2, List<String> players) {
@@ -570,6 +580,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             perms.setBoolean("perm2", (Boolean) generalPermissions.get(1)); //Set perm 2: Should kill peaceful mobs?
             tagCompound.setTag("generalPermissions", perms);
         }
+
     }
 
     void readSyncableDataFromNBT(NBTTagCompound tagCompound) {
@@ -640,6 +651,48 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             this.generalPermissions.add(perms.getBoolean("perm1")); //Get perm 1: Should kill hostile mobs?
             this.generalPermissions.add(perms.getBoolean("perm2")); //Get perm 1: Should kill peaceful mobs?
         }
+
+    }
+
+    private void writePowerStatsToNBT(NBTTagCompound tagCompound) {
+
+        List<Integer> powerUsagePerTickForPastMinuteForNBT = new ArrayList<Integer>();
+
+        for (Double item : powerUsagePerTickForPastMinute) {
+            powerUsagePerTickForPastMinuteForNBT.add((int) (item * 100));
+        }
+
+
+        tagCompound.setIntArray("powerUsagePerTickForPastMinute", ArrayUtils.toPrimitive(
+                Arrays.copyOf(powerUsagePerTickForPastMinuteForNBT.toArray(), powerUsagePerTickForPastMinuteForNBT.toArray().length, Integer[].class)));
+
+    }
+
+    public void readPowerStatsFromNBT(NBTTagCompound tagCompound) {
+
+        int[] powerUsagePerTickForPastMinuteFromNBT = tagCompound.getIntArray("powerUsagePerTickForPastMinute");
+        List<Double> powerUsagePerTickForPastMinuteFromNBTAsDoubleList = new ArrayList<Double>();
+
+        for (int item : powerUsagePerTickForPastMinuteFromNBT) {
+            powerUsagePerTickForPastMinuteFromNBTAsDoubleList.add(item / 100d);
+        }
+
+        powerUsagePerTickForPastMinute.clear();
+        powerUsagePerTickForPastMinute.addAll(powerUsagePerTickForPastMinuteFromNBTAsDoubleList);
+
+    }
+
+    public NBTTagIntArray getPowerUsagePerTickForPastMinuteFromNBT() {
+
+        List<Integer> powerUsagePerTickForPastMinuteForNBT = new ArrayList<Integer>();
+
+        for (Double item : powerUsagePerTickForPastMinute) {
+            powerUsagePerTickForPastMinuteForNBT.add((int) (item * 100));
+        }
+
+
+        return new NBTTagIntArray(ArrayUtils.toPrimitive(
+                Arrays.copyOf(powerUsagePerTickForPastMinuteForNBT.toArray(), powerUsagePerTickForPastMinuteForNBT.toArray().length, Integer[].class)));
 
     }
 

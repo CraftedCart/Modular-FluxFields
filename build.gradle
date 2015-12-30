@@ -48,6 +48,7 @@ repositories {
         name = "forge"
         url = "http://files.minecraftforge.net/maven"
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -75,6 +76,7 @@ dependencies {
     provided "codechicken:CodeChickenLib:1.8-1.1.2.139:dev"
     provided "codechicken:CodeChickenCore:1.8-1.0.5.36:dev"
     provided "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
+    compile "org.slick2d:slick2d-core:1.0.1"
 
 }
 

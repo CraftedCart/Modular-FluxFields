@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.client.gui;
 
+import io.github.craftedcart.MFF.ModMFF;
 import io.github.craftedcart.MFF.container.ContainerFFProjectorInfo;
 import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
@@ -89,8 +90,6 @@ public class GuiFFProjectorSecurity extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-
-        this.drawDefaultBackground(); //Draw semi-transparent background
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f); //Make sure the GUI isn't tinted
 
@@ -410,13 +409,14 @@ public class GuiFFProjectorSecurity extends GuiContainer {
         } else if (x >= 16 && x <= 29 && y >= 1 && y <= 13) {
             //Sizing button clicked
             NetworkHandler.network.sendToServer(new MessageRequestOpenGui(this.te.getPos(), player, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI));
-        } else if (x >= 30 && x <= 43 && y >= 1 && y <= 13) {
-            //Security button clicked
-            //NO-OP, We're already on the security tab
+//        } else if (x >= 30 && x <= 43 && y >= 1 && y <= 13) {
+//            //Security button clicked
+//            //NO-OP, We're already on the security tab
         } else if (x >= 44 && x <= 57 && y >= 1 && y <= 13) {
             //Upgrades button clicked
         } else if (x >= 58 && x <= 71 && y >= 1 && y <= 13) {
             //Power Usage button clicked
+            player.openGui(ModMFF.instance, GuiHandler.FFProjector_PowerStats_TILE_ENTITY_GUI, te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
         }
 
     }

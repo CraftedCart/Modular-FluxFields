@@ -1,8 +1,6 @@
 package io.github.craftedcart.MFF.handler;
 
-import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSecurity;
-import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSizing;
-import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
+import io.github.craftedcart.MFF.network.*;
 import io.github.craftedcart.MFF.reference.Reference;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -21,6 +19,9 @@ public class NetworkHandler {
         network.registerMessage(MessageFFProjectorGuiSaveSizing.Handler.class, MessageFFProjectorGuiSaveSizing.class, 0, Side.SERVER);
         network.registerMessage(MessageRequestOpenGui.Handler.class, MessageRequestOpenGui.class, 1, Side.SERVER);
         network.registerMessage(MessageFFProjectorGuiSaveSecurity.Handler.class, MessageFFProjectorGuiSaveSecurity.class, 2, Side.SERVER);
+
+        network.registerMessage(MessageFFProjectorSendPowerStatsToClient.Handler.class, MessageFFProjectorSendPowerStatsToClient.class, 3, Side.CLIENT);
+        network.registerMessage(MessageRequestPowerStats.Handler.class, MessageRequestPowerStats.class, 4, Side.SERVER);
     }
 
 }

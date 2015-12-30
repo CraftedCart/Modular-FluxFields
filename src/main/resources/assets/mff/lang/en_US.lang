@@ -46,6 +46,9 @@ container.mff:ffProjector=Forcefield Projector
 
 gui.mff:info=Info
 gui.mff:sizing=Sizing
+gui.mff:security=Security
+gui.mff:upgrades=Upgrades
+gui.mff:powerStats=Power Statistics
 
 gui.mff:power=Power
 #FE - Short for Force Energy
@@ -76,6 +79,10 @@ gui.mff:setPerms=Permissions
 gui.mff:group=Group
 gui.mff:everyone=Everyone
 gui.mff:calculating=Calculating
+
+gui.mff:secs=s
+gui.mff:now=Now
+gui.mff:1MinAgo=1 minute ago
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed

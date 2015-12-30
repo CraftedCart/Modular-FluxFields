@@ -18,10 +18,12 @@ public class GuiHandler implements IGuiHandler {
     public static final int FFProjector_Info_TILE_ENTITY_GUI = 0;
     public static final int FFProjector_Sizing_TILE_ENTITY_GUI = 1;
     public static final int FFProjector_Security_TILE_ENTITY_GUI = 2;
-    public static final int CrystalRefinery_TILE_ENTITY_GUI = 3;
-    public static final int CrystalConstructor_TILE_ENTITY_GUI = 4;
-    public static final int PowerCube_TILE_ENTITY_GUI = 5;
-    public static final int SolarPowerGenerator_TILE_ENTITY_GUI = 6;
+    public static final int FFProjector_Upgrades_TILE_ENTITY_GUI = 3; //TODO Implement this Gui
+    public static final int FFProjector_PowerStats_TILE_ENTITY_GUI = 4;
+    public static final int CrystalRefinery_TILE_ENTITY_GUI = 5;
+    public static final int CrystalConstructor_TILE_ENTITY_GUI = 6;
+    public static final int PowerCube_TILE_ENTITY_GUI = 7;
+    public static final int SolarPowerGenerator_TILE_ENTITY_GUI = 8;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -50,6 +52,8 @@ public class GuiHandler implements IGuiHandler {
             return new GuiCrystalRefinery(player.inventory, (TECrystalRefinery) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == FFProjector_Security_TILE_ENTITY_GUI) {
             return new GuiFFProjectorSecurity(player, player.inventory, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
+        } else if (ID == FFProjector_PowerStats_TILE_ENTITY_GUI) {
+            return new GuiFFProjectorPowerStats(player, player.inventory, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == CrystalConstructor_TILE_ENTITY_GUI) {
             return new GuiCrystalConstructor(player.inventory, (TECrystalConstructor) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == PowerCube_TILE_ENTITY_GUI) {

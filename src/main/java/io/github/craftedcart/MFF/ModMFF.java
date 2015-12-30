@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF;
 
+import io.github.craftedcart.MFF.client.gui.GuiUtils;
 import io.github.craftedcart.MFF.client.neiplugin.MFFNEIPlugin;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
@@ -17,6 +18,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
@@ -77,8 +81,9 @@ public class ModMFF
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
+    public void postInit(FMLPostInitializationEvent event) throws FontFormatException, IOException {
 
+        GuiUtils.init();
         LogHelper.info("Post-Init Complete");
 
     }

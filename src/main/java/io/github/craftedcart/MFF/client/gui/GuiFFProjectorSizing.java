@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.client.gui;
 
+import io.github.craftedcart.MFF.ModMFF;
 import io.github.craftedcart.MFF.container.ContainerFFProjectorInfo;
 import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
@@ -7,6 +8,7 @@ import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSizing;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.reference.FFProjectorConf;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,8 +70,6 @@ public class GuiFFProjectorSizing extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-
-        this.drawDefaultBackground();
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSizing.png"));
@@ -286,7 +286,7 @@ public class GuiFFProjectorSizing extends GuiContainer {
         if (x >= 1 && x <= 15 && y >= 1 && y <= 13) {
             //Info button clicked
             NetworkHandler.network.sendToServer(new MessageRequestOpenGui(this.te.getPos(), player, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI));
-        } else if (x >= 16 && x <= 29 && y >= 1 && y <= 13) {
+        //} else if (x >= 16 && x <= 29 && y >= 1 && y <= 13) {
             //Sizing button clicked
             //NO-OP, We're already on the sizing tab
         } else if (x >= 30 && x <= 43 && y >= 1 && y <= 13) {
@@ -296,6 +296,7 @@ public class GuiFFProjectorSizing extends GuiContainer {
             //Upgrades button clicked
         } else if (x >= 58 && x <= 71 && y >= 1 && y <= 13) {
             //Power Usage button clicked
+            player.openGui(ModMFF.instance, GuiHandler.FFProjector_PowerStats_TILE_ENTITY_GUI, te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
         }
 
     }

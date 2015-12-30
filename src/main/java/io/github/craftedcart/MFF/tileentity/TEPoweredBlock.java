@@ -15,7 +15,7 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
 
     public double power = 0;
     public double maxPower;
-    public double powerLastTick = 0; //Used to calculate the power usage / change
+    public double powerLastTick = -1; //Used to calculate the power usage / change
     public double powerUsage = 0;
     public boolean isSendingPower = false;
     private double powerDrawRate;
@@ -45,7 +45,9 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
 
         updateTime--;
 
-        powerUsage = power - powerLastTick;
+        if (powerLastTick != -1) {
+            powerUsage = power - powerLastTick;
+        }
         powerLastTick = power;
 
         if (updateTime <= 0) { //Code here gets executed every 5 seconds

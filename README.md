@@ -10,3 +10,4 @@ Submit an issue report! Please make sure that you're using the latest version th
 
 ## Legal stuff
 See LICENSE.txt for more info
+The Font Roboto (Roboto-Regular.ttf) is exempt from the GNU General Public License. That Google Font is under the Apache License, version 2.0
