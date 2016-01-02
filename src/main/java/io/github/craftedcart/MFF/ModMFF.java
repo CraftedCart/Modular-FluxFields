@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF;
 
-import io.github.craftedcart.MFF.client.gui.GuiUtils;
 import io.github.craftedcart.MFF.client.neiplugin.MFFNEIPlugin;
 import io.github.craftedcart.MFF.eventhandler.PreventFFBlockBreak;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
@@ -63,7 +62,7 @@ public class ModMFF
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
+    public void init(FMLInitializationEvent event) throws IOException, FontFormatException {
 
         proxy.registerRenders();
         proxy.init();
@@ -81,9 +80,8 @@ public class ModMFF
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) throws FontFormatException, IOException {
+    public void postInit(FMLPostInitializationEvent event) {
 
-        GuiUtils.init();
         LogHelper.info("Post-Init Complete");
 
     }

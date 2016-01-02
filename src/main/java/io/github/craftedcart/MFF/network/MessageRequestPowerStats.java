@@ -70,7 +70,9 @@ public class MessageRequestPowerStats implements IMessage {
 
                     NetworkHandler.network.sendTo(
                             new MessageFFProjectorSendPowerStatsToClient(
-                                    message.pos, te.getPowerUsagePerTickForPastMinuteFromNBT()
+                                    message.pos,
+                                    te.getPowerUsagePerTickForPastMinuteFromNBT(),
+                                    te.getPowerUsagePerSecondForPastHalfHourFromNBT()
                             ),
                             (EntityPlayerMP) message.player
                     );

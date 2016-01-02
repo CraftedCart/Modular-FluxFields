@@ -1,5 +1,8 @@
 package io.github.craftedcart.MFF.proxy;
 
+import java.awt.*;
+import java.io.IOException;
+
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
  */
@@ -7,6 +10,6 @@ package io.github.craftedcart.MFF.proxy;
 public interface IProxy {
 
     void registerRenders();
-    void init();
+    void init() throws IOException, FontFormatException;
 
 }

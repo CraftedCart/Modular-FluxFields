@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.proxy;
 
+import io.github.craftedcart.MFF.client.gui.GuiUtils;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererFFProjector;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerCube;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerGenerator;
@@ -9,6 +10,9 @@ import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
@@ -29,4 +33,9 @@ public class ClientProxy extends CommonProxy {
 
     }
 
+    @Override
+    public void init() throws IOException, FontFormatException {
+        super.init();
+        GuiUtils.init();
+    }
 }

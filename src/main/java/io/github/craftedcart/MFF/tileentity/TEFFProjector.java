@@ -62,6 +62,9 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
      * Perm 2: Boolean: Should peaceful mobs be killed
      */
     public List<Double> powerUsagePerTickForPastMinute = new ArrayList<Double>();
+    public List<Double> powerUsagePerSecondForPastHalfHour = new ArrayList<Double>();
+    private int tickTimeSinceLastSecond = 0;
+    private double powerUsageSinceLastSecond = 0;
 
     //<editor-fold desc="Inventory stuff"> Used by IntelliJ to define a custom code folding section
     public TEFFProjector() {
@@ -462,6 +465,18 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             powerUsagePerTickForPastMinute.remove(1200);
         }
 
+        if (tickTimeSinceLastSecond >= 20) {
+            powerUsagePerSecondForPastHalfHour.add(0, powerUsageSinceLastSecond / 20);
+            tickTimeSinceLastSecond = 0;
+            powerUsageSinceLastSecond = 0;
+            if (powerUsagePerSecondForPastHalfHour.size() > 1800) {
+                powerUsagePerSecondForPastHalfHour.remove(1800);
+            }
+        }
+
+        tickTimeSinceLastSecond++;
+        powerUsageSinceLastSecond += Math.abs(powerUsage);
+
     }
 
     private void damagePlayersInArea(boolean shouldTargetEveryone, BlockPos p1, BlockPos p2, List<String> players) {
@@ -657,14 +672,21 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     private void writePowerStatsToNBT(NBTTagCompound tagCompound) {
 
         List<Integer> powerUsagePerTickForPastMinuteForNBT = new ArrayList<Integer>();
-
         for (Double item : powerUsagePerTickForPastMinute) {
             powerUsagePerTickForPastMinuteForNBT.add((int) (item * 100));
         }
-
-
         tagCompound.setIntArray("powerUsagePerTickForPastMinute", ArrayUtils.toPrimitive(
                 Arrays.copyOf(powerUsagePerTickForPastMinuteForNBT.toArray(), powerUsagePerTickForPastMinuteForNBT.toArray().length, Integer[].class)));
+
+        List<Integer> powerUsagePerSecondForPastHalfHourForNBT = new ArrayList<Integer>();
+        for (Double item : powerUsagePerSecondForPastHalfHour) {
+            powerUsagePerSecondForPastHalfHourForNBT.add((int) (item * 100));
+        }
+        tagCompound.setIntArray("powerUsagePerSecondForPastHalfHour", ArrayUtils.toPrimitive(
+                Arrays.copyOf(powerUsagePerSecondForPastHalfHourForNBT.toArray(), powerUsagePerSecondForPastHalfHourForNBT.toArray().length, Integer[].class)));
+
+        tagCompound.setInteger("tickTimeSinceLastSecond", tickTimeSinceLastSecond);
+        tagCompound.setDouble("powerUsageSinceLastSecond", powerUsageSinceLastSecond);
 
     }
 
@@ -672,13 +694,22 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
         int[] powerUsagePerTickForPastMinuteFromNBT = tagCompound.getIntArray("powerUsagePerTickForPastMinute");
         List<Double> powerUsagePerTickForPastMinuteFromNBTAsDoubleList = new ArrayList<Double>();
-
         for (int item : powerUsagePerTickForPastMinuteFromNBT) {
             powerUsagePerTickForPastMinuteFromNBTAsDoubleList.add(item / 100d);
         }
-
         powerUsagePerTickForPastMinute.clear();
         powerUsagePerTickForPastMinute.addAll(powerUsagePerTickForPastMinuteFromNBTAsDoubleList);
+
+        int[] powerUsagePerSecondForPastHalfHourFromNBT = tagCompound.getIntArray("powerUsagePerSecondForPastHalfHour");
+        List<Double> powerUsagePerSecondForPastHalfHourFromNBTAsDoubleList = new ArrayList<Double>();
+        for (int item : powerUsagePerSecondForPastHalfHourFromNBT) {
+            powerUsagePerSecondForPastHalfHourFromNBTAsDoubleList.add(item / 100d);
+        }
+        powerUsagePerSecondForPastHalfHour.clear();
+        powerUsagePerSecondForPastHalfHour.addAll(powerUsagePerSecondForPastHalfHourFromNBTAsDoubleList);
+
+        tickTimeSinceLastSecond = tagCompound.getInteger("tickTimeSinceLastSecond");
+        powerUsageSinceLastSecond = tagCompound.getDouble("powerUsageSinceLastSecond");
 
     }
 
@@ -690,9 +721,21 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             powerUsagePerTickForPastMinuteForNBT.add((int) (item * 100));
         }
 
-
         return new NBTTagIntArray(ArrayUtils.toPrimitive(
                 Arrays.copyOf(powerUsagePerTickForPastMinuteForNBT.toArray(), powerUsagePerTickForPastMinuteForNBT.toArray().length, Integer[].class)));
+
+    }
+
+    public NBTTagIntArray getPowerUsagePerSecondForPastHalfHourFromNBT() {
+
+        List<Integer> powerUsagePerSecondForPastHalfHourForNBT = new ArrayList<Integer>();
+
+        for (Double item : powerUsagePerSecondForPastHalfHour) {
+            powerUsagePerSecondForPastHalfHourForNBT.add((int) (item * 100));
+        }
+
+        return new NBTTagIntArray(ArrayUtils.toPrimitive(
+                Arrays.copyOf(powerUsagePerSecondForPastHalfHourForNBT.toArray(), powerUsagePerSecondForPastHalfHourForNBT.toArray().length, Integer[].class)));
 
     }
 

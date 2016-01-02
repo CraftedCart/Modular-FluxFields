@@ -21,12 +21,14 @@ public class MessageFFProjectorSendPowerStatsToClient implements IMessage {
     BlockPos pos;
 
     NBTTagIntArray powerUsagePerTickForPastMinute;
+    NBTTagIntArray powerUsagePerSecondForPastHalfHour;
 
     public MessageFFProjectorSendPowerStatsToClient() {}
 
-    public MessageFFProjectorSendPowerStatsToClient(BlockPos pos, NBTTagIntArray powerUsagePerTickForPastMinute) {
+    public MessageFFProjectorSendPowerStatsToClient(BlockPos pos, NBTTagIntArray powerUsagePerTickForPastMinute, NBTTagIntArray powerUsagePerSecondForPastHalfHour) {
         this.pos = pos;
         this.powerUsagePerTickForPastMinute = powerUsagePerTickForPastMinute;
+        this.powerUsagePerSecondForPastHalfHour = powerUsagePerSecondForPastHalfHour;
     }
 
     @Override
@@ -38,6 +40,7 @@ public class MessageFFProjectorSendPowerStatsToClient implements IMessage {
         int posZ = tag.getInteger("posZ");
         pos = new BlockPos(posX, posY, posZ);
         powerUsagePerTickForPastMinute = (NBTTagIntArray) tag.getTag("powerUsagePerTickForPastMinute");
+        powerUsagePerSecondForPastHalfHour = (NBTTagIntArray) tag.getTag("powerUsagePerSecondForPastHalfHour");
     }
 
     @Override
@@ -47,6 +50,7 @@ public class MessageFFProjectorSendPowerStatsToClient implements IMessage {
         tag.setInteger("posY", pos.getY());
         tag.setInteger("posZ", pos.getZ());
         tag.setTag("powerUsagePerTickForPastMinute", powerUsagePerTickForPastMinute);
+        tag.setTag("powerUsagePerSecondForPastHalfHour", powerUsagePerSecondForPastHalfHour);
         ByteBufUtils.writeTag(buf, tag);
     }
 
@@ -63,6 +67,7 @@ public class MessageFFProjectorSendPowerStatsToClient implements IMessage {
 
                     NBTTagCompound tagCompound = new NBTTagCompound();
                     tagCompound.setTag("powerUsagePerTickForPastMinute", message.powerUsagePerTickForPastMinute);
+                    tagCompound.setTag("powerUsagePerSecondForPastHalfHour", message.powerUsagePerSecondForPastHalfHour);
 
                     te.readPowerStatsFromNBT(tagCompound);
 

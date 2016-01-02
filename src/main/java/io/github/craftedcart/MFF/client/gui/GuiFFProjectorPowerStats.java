@@ -5,6 +5,7 @@ import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.network.MessageRequestPowerStats;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.TextureImpl;
 
@@ -242,6 +244,95 @@ public class GuiFFProjectorPowerStats extends GuiScreen {
         guiText.add(new Object[]{8, 76, StatCollector.translateToLocal("gui.mff:security"), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
         guiText.add(new Object[]{8, 100, StatCollector.translateToLocal("gui.mff:upgrades"), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
         guiText.add(new Object[]{8, 124, StatCollector.translateToLocal("gui.mff:powerStats"), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
+
+        //Draw power meter at the bottom of the sidebar
+        if (mx < sidebarWidth && my > h - 36) {
+            //Mouseover background
+            GL11.glColor4f(lightBlueGreyR / 255, lightBlueGreyG / 255, lightBlueGreyB / 255, 1);
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2d(0, h - 36);
+                GL11.glVertex2d(0, h);
+                GL11.glVertex2d(sidebarWidth, h);
+                GL11.glVertex2d(sidebarWidth, h - 36);
+            }
+            GL11.glEnd();
+
+            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0); //Selected button top shadow
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2d(0, h - 38);
+                GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1);
+                GL11.glVertex2d(0, h - 36);
+                GL11.glVertex2d(sidebarWidth, h - 36);
+                GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0);
+                GL11.glVertex2d(sidebarWidth, h - 38);
+            }
+            GL11.glEnd();
+
+            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1); //Popover BG
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2d(sidebarWidth + 8, h - 60);
+                GL11.glVertex2d(sidebarWidth + 8, h - 8);
+                GL11.glVertex2d(w - 8, h - 8);
+                GL11.glVertex2d(w - 8, h - 60);
+            }
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2d(sidebarWidth + 8, h - 8);
+                GL11.glVertex2d(sidebarWidth + 8, h - 60);
+                GL11.glVertex2d(sidebarWidth, h - 36);
+                GL11.glVertex2d(sidebarWidth, h);
+            }
+            GL11.glEnd();
+
+            GL11.glColor4f(darkBlueGreyR / 255, darkBlueGreyG / 255, darkBlueGreyB / 255, 1); //Popover Power Bar BG
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2d(sidebarWidth + 12, h - 16);
+                GL11.glVertex2d(sidebarWidth + 12, h - 12);
+                GL11.glVertex2d(w - 12, h - 12);
+                GL11.glVertex2d(w - 12, h - 16);
+            }
+            GL11.glEnd();
+
+            GL11.glColor4f(blueR / 255, blueG / 255, blueB / 255, 1); //Popover Power Bar FG
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2d(sidebarWidth + 12, h - 16);
+                GL11.glVertex2d(sidebarWidth + 12, h - 12);
+                GL11.glVertex2d(((w - sidebarWidth - 24) * te.power / te.maxPower) + sidebarWidth + 12, h - 12);
+                GL11.glVertex2d(((w - sidebarWidth - 24) * te.power / te.maxPower) + sidebarWidth + 12, h - 16);
+            }
+            GL11.glEnd();
+
+            guiText.add(new Object[]{sidebarWidth + 14, h - 58, String.format("%012.2f / %012.2f %s", te.power, te.maxPower, StatCollector.translateToLocal("gui.mff:fe")), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
+            guiText.add(new Object[]{sidebarWidth + 14, h - 38, String.format("%.2f %s / t", te.powerUsage, StatCollector.translateToLocal("gui.mff:fe")), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
+
+        }
+
+        GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1); //Power bar BG
+        GL11.glBegin(GL11.GL_QUADS);
+        {
+            GL11.glVertex2d(4, h - 12);
+            GL11.glVertex2d(4, h - 8);
+            GL11.glVertex2d(sidebarWidth - 4, h - 8);
+            GL11.glVertex2d(sidebarWidth - 4, h - 12);
+        }
+        GL11.glEnd();
+        GL11.glColor4f(darkBlueGreyR / 255, darkBlueGreyG / 255, darkBlueGreyB / 255, 1); //Power bar FG
+        GL11.glBegin(GL11.GL_QUADS);
+        {
+            GL11.glVertex2d(4, h - 12);
+            GL11.glVertex2d(4, h - 8);
+            GL11.glVertex2d((sidebarWidth * te.power / te.maxPower) - 4, h - 8);
+            GL11.glVertex2d((sidebarWidth * te.power / te.maxPower) - 4, h - 12);
+        }
+        GL11.glEnd();
+
+        guiText.add(new Object[]{8, h - 34, String.format("%s: %06.2f%%", StatCollector.translateToLocal("gui.mff:power"), te.power / te.maxPower * 100), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
         //</editor-fold>
 
         //<editor-fold desc="Draw top bar">
@@ -347,6 +438,80 @@ public class GuiFFProjectorPowerStats extends GuiScreen {
         guiText.add(new Object[]{sidebarWidth + 202, graphHeight + 50, StatCollector.translateToLocal("gui.mff:1MinAgo"),
                 new Color(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255)});
         guiText.add(new Object[]{w - 22 - GuiUtils.font.getWidth(StatCollector.translateToLocal("gui.mff:now")), graphHeight + 50, StatCollector.translateToLocal("gui.mff:now"),
+                new Color(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255)});
+        //</editor-fold>
+
+        //<editor-fold desc="Graph 2">
+        //Draw FE value & time at the mouse pos
+        if (mx >= sidebarWidth + 200 && mx <= w - 20) {
+            if (my >= 48 + graphHeight + 48 && my <= graphHeight + 48 + graphHeight + 48) {
+                //Draw FE value
+                GL11.glColor4f(blueR / 255, blueG / 255, blueB / 255, 1); //Draw horizontal line
+                GL11.glBegin(GL11.GL_LINE_STRIP);
+                {
+                    GL11.glVertex2d(sidebarWidth + 200, my);
+                    GL11.glVertex2d(w - 20, my);
+                }
+                GL11.glEnd();
+
+                double mousePercentageHeight = (my - 48f - graphHeight - 48) / graphHeight;
+                guiText.add(new Object[]{sidebarWidth + 24, my - 10, String.format("%.2f %s / t",
+                        Collections.max(te.powerUsagePerSecondForPastHalfHour) * (1 - mousePercentageHeight), StatCollector.translateToLocal("gui.mff:fe")),
+                        new Color(blueR / 255, blueG / 255, blueB / 255)});
+
+                //Draw time
+                //Draw vertical line
+                GL11.glBegin(GL11.GL_LINE_STRIP);
+                {
+                    GL11.glVertex2d(mx, 48 + graphHeight + 48);
+                    GL11.glVertex2d(mx, graphHeight + 48 + graphHeight + 48);
+                }
+                GL11.glEnd();
+
+                double mousePercentageWidth = (mx - sidebarWidth - 220f) / graphWidth;
+                guiText.add(new Object[]{mx, graphHeight + 50 + graphHeight + 48, String.format("-%.2f%s",
+                        1800 * (1 - mousePercentageWidth) / 60, StatCollector.translateToLocal("gui.mff:mins")),
+                        new Color(blueR / 255, blueG / 255, blueB / 255)});
+            }
+        }
+
+        //Draw graph outline
+        GL11.glColor4f(lightGreyR / 255, lightGreyG / 255, lightGreyB / 255, 1);
+        GL11.glBegin(GL11.GL_LINE_STRIP);
+        {
+            GL11.glVertex2d(sidebarWidth + 200, 48 + graphHeight + 48);
+            GL11.glVertex2d(sidebarWidth + 200, graphHeight + 48 + graphHeight + 48);
+            GL11.glVertex2d(w - 20, (h - 64) / 4 + graphHeight + 48);
+        }
+        GL11.glEnd();
+
+        //Draw the graph
+        GL11.glBegin(GL11.GL_LINE_STRIP);
+        {
+            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1);
+            for (int i = 0; i < 1800; i++) {
+                if (te.powerUsagePerSecondForPastHalfHour.size() - 1 < i) {
+                    break;
+                }
+
+                double percentageHeightOnGraph = te.powerUsagePerSecondForPastHalfHour.get(i) / Collections.max(te.powerUsagePerSecondForPastHalfHour);
+
+                GL11.glVertex2d((1 - (i / 1800f)) * graphWidth + sidebarWidth + 200, 48 + graphHeight * (1 - percentageHeightOnGraph) + graphHeight + 48);
+
+            }
+        }
+        GL11.glEnd();
+
+        //Draw min and max FE values on the left of the graph
+        guiText.add(new Object[]{sidebarWidth + 24, 44 + graphHeight + 48, String.format("%.2f %s / t",
+                Collections.max(te.powerUsagePerSecondForPastHalfHour), StatCollector.translateToLocal("gui.mff:fe")), new Color(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255)});
+        guiText.add(new Object[]{sidebarWidth + 24, (h - 64) / 4 - 22 + graphHeight + 48, String.format("0 %s / t",
+                StatCollector.translateToLocal("gui.mff:fe")), new Color(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255)});
+
+        //Draw timing on the bottom of the graph
+        guiText.add(new Object[]{sidebarWidth + 202, graphHeight + 50 + graphHeight + 48, StatCollector.translateToLocal("gui.mff:30MinsAgo"),
+                new Color(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255)});
+        guiText.add(new Object[]{w - 22 - GuiUtils.font.getWidth(StatCollector.translateToLocal("gui.mff:now")), graphHeight + 50 + graphHeight + 48, StatCollector.translateToLocal("gui.mff:now"),
                 new Color(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255)});
         //</editor-fold>
 

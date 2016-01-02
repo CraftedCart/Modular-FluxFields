@@ -81,8 +81,10 @@ gui.mff:everyone=Everyone
 gui.mff:calculating=Calculating
 
 gui.mff:secs=s
+gui.mff:mins=m
 gui.mff:now=Now
 gui.mff:1MinAgo=1 minute ago
+gui.mff:30MinsAgo=30 minutes ago
 
 #Stats
 stat.mff:+100%Speed=§a+100% Speed
