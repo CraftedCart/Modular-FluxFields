@@ -86,6 +86,13 @@ gui.mff:now=Now
 gui.mff:1MinAgo=1 minute ago
 gui.mff:30MinsAgo=30 minutes ago
 
+gui.mff:downloadingDeps=Downloading Dependencies
+gui.mff:mffDownloadingDeps=Modular FluxFields is now downloading dependencies
+gui.mff:downloadFailed=Download failed
+gui.mff:loadCannotContinue=Loading Minecraft cannot continue without the required dependencies for Modular FluxFields
+gui.mff:quit=Quit
+gui.mff:manualInstall=Manual Installation Guide
+
 #Stats
 stat.mff:+100%Speed=§a+100% Speed
 stat.mff:+25%PowerUsageTick=§c+25% Power Usage / tick

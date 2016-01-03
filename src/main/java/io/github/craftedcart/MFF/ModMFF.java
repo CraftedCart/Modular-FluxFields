@@ -38,7 +38,9 @@ public class ModMFF
     public static IProxy proxy;
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLPreInitializationEvent event) throws IOException {
+
+        proxy.getDeps();
 
         MinecraftForge.EVENT_BUS.register(new PreventFFBlockBreak());
 

@@ -9,9 +9,13 @@ import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
+import io.github.craftedcart.MFF.utility.DependencyUtils;
+import io.github.craftedcart.MFF.utility.LogHelper;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -37,5 +41,25 @@ public class ClientProxy extends CommonProxy {
     public void init() throws IOException, FontFormatException {
         super.init();
         GuiUtils.init();
+    }
+
+    @Override
+    public void getDeps() throws IOException {
+        super.getDeps();
+
+        //Download Deps
+        if (new File(depsPath, "slick-util.jar").exists()) {
+            LogHelper.info("Found mods/CraftedCart/slick-util.jar - MFF won't download it");
+        } else {
+            LogHelper.info("Couldn't find mods/CraftedCart/slick-util.jar - MFF will now download the dependency from http://slick.ninjacave.com/slick-util.jar");
+            DependencyUtils.downloadFileWithWindow("http://slick.ninjacave.com/slick-util.jar", new File(depsPath, "slick-util.jar"));
+        }
+
+        //Load Deps
+        LaunchClassLoader loader = (LaunchClassLoader) DependencyUtils.class.getClassLoader();
+
+        LogHelper.info("Loading slick-util.jar");
+        loader.addURL(new File(depsPath, "slick-util.jar").toURI().toURL());
+
     }
 }

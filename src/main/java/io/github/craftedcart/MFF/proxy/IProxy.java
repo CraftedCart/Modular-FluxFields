@@ -11,5 +11,6 @@ public interface IProxy {
 
     void registerRenders();
     void init() throws IOException, FontFormatException;
+    void getDeps() throws IOException;
 
 }
