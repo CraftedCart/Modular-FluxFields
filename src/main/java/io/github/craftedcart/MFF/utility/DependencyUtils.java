@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
 
 /**
  * Created by CraftedCart on 03/01/2016 (DD/MM/YYYY)
@@ -62,7 +63,7 @@ public class DependencyUtils {
             fileToDownloadTo.getParentFile().mkdirs();
             File tempFile = new File(fileToDownloadTo.getParentFile(), "downloadInProgress");
 
-            if (tempFile.exists()) {
+            if (Files.exists(tempFile.toPath())) {
                 tempFile.delete();
             }
 
@@ -87,7 +88,8 @@ public class DependencyUtils {
                 dlProgBar.setValue((int) totalBytesRead);
             }
 
-            tempFile.renameTo(fileToDownloadTo);
+            fos.close();
+            Files.move(tempFile.toPath(), fileToDownloadTo.toPath());
 
         } catch (IOException e) {
 
