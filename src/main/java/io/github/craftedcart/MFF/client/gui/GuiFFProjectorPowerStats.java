@@ -5,7 +5,6 @@ import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.network.MessageRequestPowerStats;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,9 +13,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.TextureImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,59 +80,25 @@ public class GuiFFProjectorPowerStats extends GuiScreen {
         }
         lmbDown = Mouse.isButtonDown(0);
 
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, w, h, 0, 10000, -10000);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(1, 1, 1, 1);
-        TextureImpl.bindNone();
+        GuiUtils.setup(true);
 
         //Custom Gui Rendering Code
-
-        //<editor-fold desc="Draw white background">
-        GL11.glColor3f(whiteR / 255, whiteG / 255, whiteB / 255);
-        GL11.glBegin(GL11.GL_QUADS);
-        { //Curly braces used to help readability, and so that IntelliJ will auto indent the vertex points
-            GL11.glVertex2d(0, 0);
-            GL11.glVertex2d(0, h);
-            GL11.glVertex2d(w, h);
-            GL11.glVertex2d(w, 0);
-        }
-        GL11.glEnd();
-        //</editor-fold>
+        GuiUtils.drawBackground(UIColor.matWhite());
 
         //<editor-fold desc="Draw sidebar">
         final int sidebarWidth = 150;
-        
-        GL11.glColor3f(blueGreyR / 255, blueGreyG / 255, blueGreyB / 255); //Blue Grey sidebar
-        GL11.glLineWidth(8f);
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            GL11.glVertex2d(0, 24);
-            GL11.glVertex2d(0, h);
-            GL11.glVertex2d(sidebarWidth, h);
-            GL11.glVertex2d(sidebarWidth, 24);
-        }
-        GL11.glEnd();
 
-        GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1); //Sidebar shadow
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            GL11.glVertex2d(sidebarWidth, 24);
-            GL11.glVertex2d(sidebarWidth, h);
-            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0);
-            GL11.glVertex2d(154, h);
-            GL11.glVertex2d(154, 24);
-        }
-        GL11.glEnd();
+        GuiUtils.drawQuad( //Blue Grey Sidebar
+                new PosXY(0, 24),
+                new PosXY(sidebarWidth, h),
+                UIColor.matBlueGrey()
+        );
+
+        GuiUtils.drawQuadGradientHorizontal( //Sidebar shadow
+                new PosXY(sidebarWidth, 24),
+                new PosXY(sidebarWidth + 4, h),
+                UIColor.matGrey900(), UIColor.matGrey900(0)
+        );
 
         //Draw sidebar items
         if (mx <= sidebarWidth) {
@@ -191,44 +154,29 @@ public class GuiFFProjectorPowerStats extends GuiScreen {
         //<editor-fold desc="Highlighted sidebar button background">
         if (highlightedSidebarButtonYOffset != -1) {
             if (lmbDown) {
-                GL11.glColor4d(darkBlueGreyR / 255, darkBlueGreyG / 255, darkBlueGreyB / 255, highlightedSidebarButtonTiming); //Dark Blue Grey highlighted button background
+                GL11.glColor4d(UIColor.matBlueGrey700().r, UIColor.matBlueGrey700().g, UIColor.matBlueGrey700().b, highlightedSidebarButtonTiming); //Dark Blue Grey highlighted button background
             } else {
-                GL11.glColor4d(lightBlueGreyR / 255, lightBlueGreyG / 255, lightBlueGreyB / 255, highlightedSidebarButtonTiming); //Light Blue Grey highlighted button background
+                GL11.glColor4d(UIColor.matBlueGrey300().r, UIColor.matBlueGrey300().g, UIColor.matBlueGrey300().b, highlightedSidebarButtonTiming); //Light Blue Grey highlighted button background
             }
+
+            GuiUtils.drawQuad( //Highlighted button
+                    new PosXY(0, highlightedSidebarButtonYOffset),
+                    new PosXY(sidebarWidth, highlightedSidebarButtonYOffset + 24)
+            );
 
             GL11.glLineWidth(8f);
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(0, highlightedSidebarButtonYOffset);
-                GL11.glVertex2d(0, highlightedSidebarButtonYOffset + 24);
-                GL11.glVertex2d(sidebarWidth, highlightedSidebarButtonYOffset + 24);
-                GL11.glVertex2d(sidebarWidth, highlightedSidebarButtonYOffset);
-            }
-            GL11.glEnd();
 
-            GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, highlightedSidebarButtonTiming); //Selected button bottom shadow
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(0, highlightedSidebarButtonYOffset + 24);
-                GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0);
-                GL11.glVertex2d(0, highlightedSidebarButtonYOffset + 26);
-                GL11.glVertex2d(sidebarWidth, highlightedSidebarButtonYOffset + 26);
-                GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, highlightedSidebarButtonTiming);
-                GL11.glVertex2d(sidebarWidth, highlightedSidebarButtonYOffset + 24);
-            }
-            GL11.glEnd();
+            GuiUtils.drawQuadGradientVertical( //Bottom shadow
+                    new PosXY(0, highlightedSidebarButtonYOffset + 24),
+                    new PosXY(sidebarWidth, highlightedSidebarButtonYOffset + 26),
+                    UIColor.matGrey900(highlightedSidebarButtonTiming), UIColor.matGrey900(0)
+            );
 
-            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0); //Selected button top shadow
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(0, highlightedSidebarButtonYOffset - 2);
-                GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, highlightedSidebarButtonTiming);
-                GL11.glVertex2d(0, highlightedSidebarButtonYOffset);
-                GL11.glVertex2d(sidebarWidth, highlightedSidebarButtonYOffset);
-                GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0);
-                GL11.glVertex2d(sidebarWidth, highlightedSidebarButtonYOffset - 2);
-            }
-            GL11.glEnd();
+            GuiUtils.drawQuadGradientVertical( //Top shadow
+                    new PosXY(0, highlightedSidebarButtonYOffset - 2),
+                    new PosXY(sidebarWidth, highlightedSidebarButtonYOffset),
+                    UIColor.matGrey900(0), UIColor.matGrey900(highlightedSidebarButtonTiming)
+            );
 
             if (highlightedSidebarButtonTiming + deltaTime * 8 <= 1) {
                 highlightedSidebarButtonTiming += deltaTime * 8;
@@ -247,117 +195,117 @@ public class GuiFFProjectorPowerStats extends GuiScreen {
 
         //Draw power meter at the bottom of the sidebar
         if (mx < sidebarWidth && my > h - 36) {
-            //Mouseover background
-            GL11.glColor4f(lightBlueGreyR / 255, lightBlueGreyG / 255, lightBlueGreyB / 255, 1);
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(0, h - 36);
-                GL11.glVertex2d(0, h);
-                GL11.glVertex2d(sidebarWidth, h);
-                GL11.glVertex2d(sidebarWidth, h - 36);
-            }
-            GL11.glEnd();
 
-            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0); //Selected button top shadow
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(0, h - 38);
-                GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1);
-                GL11.glVertex2d(0, h - 36);
-                GL11.glVertex2d(sidebarWidth, h - 36);
-                GL11.glColor4d(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0);
-                GL11.glVertex2d(sidebarWidth, h - 38);
-            }
-            GL11.glEnd();
+            GuiUtils.drawQuad( //Mouseover background
+                    new PosXY(0, h - 36),
+                    new PosXY(sidebarWidth, h),
+                    UIColor.matGrey900()
+            );
 
-            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1); //Popover BG
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(sidebarWidth + 8, h - 60);
-                GL11.glVertex2d(sidebarWidth + 8, h - 8);
-                GL11.glVertex2d(w - 8, h - 8);
-                GL11.glVertex2d(w - 8, h - 60);
-            }
-            GL11.glEnd();
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(sidebarWidth + 8, h - 8);
-                GL11.glVertex2d(sidebarWidth + 8, h - 60);
-                GL11.glVertex2d(sidebarWidth, h - 36);
-                GL11.glVertex2d(sidebarWidth, h);
-            }
-            GL11.glEnd();
+            GuiUtils.drawQuadGradientVertical( //Selected button top shadow
+                    new PosXY(0, h - 38),
+                    new PosXY(sidebarWidth, h - 36),
+                    UIColor.matGrey900(0), UIColor.matGrey900()
+            );
 
-            GL11.glColor4f(darkBlueGreyR / 255, darkBlueGreyG / 255, darkBlueGreyB / 255, 1); //Popover Power Bar BG
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(sidebarWidth + 12, h - 16);
-                GL11.glVertex2d(sidebarWidth + 12, h - 12);
-                GL11.glVertex2d(w - 12, h - 12);
-                GL11.glVertex2d(w - 12, h - 16);
-            }
-            GL11.glEnd();
+            GuiUtils.drawQuad( //Popover BG
+                    new PosXY(sidebarWidth + 8, h - 60),
+                    new PosXY(w - 8, h - 8),
+                    UIColor.matGrey900()
+            );
 
-            GL11.glColor4f(blueR / 255, blueG / 255, blueB / 255, 1); //Popover Power Bar FG
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(sidebarWidth + 12, h - 16);
-                GL11.glVertex2d(sidebarWidth + 12, h - 12);
-                GL11.glVertex2d(((w - sidebarWidth - 24) * te.power / te.maxPower) + sidebarWidth + 12, h - 12);
-                GL11.glVertex2d(((w - sidebarWidth - 24) * te.power / te.maxPower) + sidebarWidth + 12, h - 16);
-            }
-            GL11.glEnd();
+            GuiUtils.drawQuadGradient( //Popover BG top shadow
+                    new PosXY(sidebarWidth + 8, h - 60),
+                    new PosXY(w - 8, h - 60),
+                    new PosXY(w - 4, h - 64),
+                    new PosXY(sidebarWidth + 4, h - 64),
+                    UIColor.matGrey900(), UIColor.matGrey900(0)
+            );
+
+            GuiUtils.drawQuadGradient( //Popover BG right shadow
+                    new PosXY(w - 4, h - 4),
+                    new PosXY(w - 4, h - 64),
+                    new PosXY(w - 8, h - 60),
+                    new PosXY(w - 8, h - 8),
+                    UIColor.matGrey900(0), UIColor.matGrey900()
+            );
+
+            GuiUtils.drawQuadGradient( //Popover BG bottom shadow
+                    new PosXY(sidebarWidth + 12, h - 4),
+                    new PosXY(w - 4, h - 4),
+                    new PosXY(w - 8, h - 8),
+                    new PosXY(sidebarWidth + 8, h - 8),
+                    UIColor.matGrey900(0), UIColor.matGrey900()
+            );
+
+            GuiUtils.drawQuad( //Popover BG joiner bit
+                    new PosXY(sidebarWidth + 8, h - 8),
+                    new PosXY(sidebarWidth + 8, h - 60),
+                    new PosXY(sidebarWidth, h - 36),
+                    new PosXY(sidebarWidth, h),
+                    UIColor.matGrey900()
+            );
+
+            GuiUtils.drawQuadGradient( //Joiner bit top shadow
+                    new PosXY(sidebarWidth, h - 36),
+                    new PosXY(sidebarWidth + 8, h - 60),
+                    new PosXY(sidebarWidth + 4, h - 64),
+                    new PosXY(sidebarWidth, h - 40),
+                    UIColor.matGrey900(), UIColor.matGrey900(0)
+            );
+
+            GuiUtils.drawQuadGradient( //Joiner bit bottom shadow
+                    new PosXY(sidebarWidth, h + 4),
+                    new PosXY(sidebarWidth + 12, h - 4),
+                    new PosXY(sidebarWidth + 8, h - 8),
+                    new PosXY(sidebarWidth, h),
+                    UIColor.matGrey900(0), UIColor.matGrey900()
+            );
+
+            GuiUtils.drawQuad( //Popover Power Bar BG
+                    new PosXY(sidebarWidth + 12, h - 16),
+                    new PosXY(w - 12, h - 12),
+                    UIColor.matBlueGrey700()
+            );
+
+            GuiUtils.drawQuad( //Popover Power Bar FG
+                    new PosXY(sidebarWidth + 12, h - 16),
+                    new PosXY(((w - sidebarWidth - 24) * te.power / te.maxPower) + sidebarWidth + 12, h - 12),
+                    UIColor.matBlue()
+            );
 
             guiText.add(new Object[]{sidebarWidth + 14, h - 58, String.format("%012.2f / %012.2f %s", te.power, te.maxPower, StatCollector.translateToLocal("gui.mff:fe")), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
             guiText.add(new Object[]{sidebarWidth + 14, h - 38, String.format("%.2f %s / t", te.powerUsage, StatCollector.translateToLocal("gui.mff:fe")), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
 
         }
 
-        GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1); //Power bar BG
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            GL11.glVertex2d(4, h - 12);
-            GL11.glVertex2d(4, h - 8);
-            GL11.glVertex2d(sidebarWidth - 4, h - 8);
-            GL11.glVertex2d(sidebarWidth - 4, h - 12);
-        }
-        GL11.glEnd();
-        GL11.glColor4f(darkBlueGreyR / 255, darkBlueGreyG / 255, darkBlueGreyB / 255, 1); //Power bar FG
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            GL11.glVertex2d(4, h - 12);
-            GL11.glVertex2d(4, h - 8);
-            GL11.glVertex2d((sidebarWidth * te.power / te.maxPower) - 4, h - 8);
-            GL11.glVertex2d((sidebarWidth * te.power / te.maxPower) - 4, h - 12);
-        }
-        GL11.glEnd();
+        GuiUtils.drawQuad( //Power Bar BG
+                new PosXY(4, h - 12),
+                new PosXY(sidebarWidth - 4, h - 8),
+                UIColor.matGrey900()
+        );
+
+        GuiUtils.drawQuad( //Power Bar FG
+                new PosXY(4, h - 12),
+                new PosXY((sidebarWidth * te.power / te.maxPower) - 4, h - 8),
+                UIColor.matBlueGrey700()
+        );
 
         guiText.add(new Object[]{8, h - 34, String.format("%s: %06.2f%%", StatCollector.translateToLocal("gui.mff:power"), te.power / te.maxPower * 100), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
         //</editor-fold>
 
         //<editor-fold desc="Draw top bar">
-        GL11.glColor3f(blueR / 255, blueG / 255, blueB / 255); //Blue top bar
-        GL11.glLineWidth(8f);
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            GL11.glVertex2d(0, 0);
-            GL11.glVertex2d(0, 24);
-            GL11.glVertex2d(w, 24);
-            GL11.glVertex2d(w, 0);
-        }
-        GL11.glEnd();
+        GuiUtils.drawQuad(
+                new PosXY(0, 0),
+                new PosXY(w, 24),
+                UIColor.matBlue()
+        );
 
-        GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1); //Top bar shadow
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            GL11.glVertex2d(0, 24);
-            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 0);
-            GL11.glVertex2d(0, 28);
-            GL11.glVertex2d(w, 28);
-            GL11.glColor4f(darkGreyR / 255, darkGreyG / 255, darkGreyB / 255, 1);
-            GL11.glVertex2d(w, 24);
-        }
-        GL11.glEnd();
+        GuiUtils.drawQuadGradientVertical(
+                new PosXY(0, 24),
+                new PosXY(w, 28),
+                UIColor.matGrey900(), UIColor.matGrey900(0)
+        );
 
         guiText.add(new Object[]{8, 1, StatCollector.translateToLocal("gui.mff:powerStats"), new Color(whiteR / 255, whiteG / 255, whiteB / 255)});
         //</editor-fold>
