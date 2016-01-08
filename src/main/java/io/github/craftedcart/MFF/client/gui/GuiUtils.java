@@ -4,12 +4,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.*;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.TextureImpl;
 
 import java.awt.*;
+import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,6 +24,7 @@ public class GuiUtils {
 
     public static TrueTypeFont font;
     private static long lastFrame = 0;
+    public static boolean debugEnabled = false;
 
     public static void init() throws FontFormatException, IOException {
         InputStream inputStream	= Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("mff:Roboto-Regular.ttf")).getInputStream();
@@ -82,6 +86,30 @@ public class GuiUtils {
                 new PosXY(p2.x, p1.y),
                 col
         );
+
+        if (debugEnabled) {
+
+            if (Mouse.getX() >= p1.x && Mouse.getX() <= p2.x && Mouse.getY() >= Display.getHeight() - p2.y && Mouse.getY() <= Display.getHeight() - p1.y) {
+                GL11.glColor4d(UIColor.matBlue().r, UIColor.matBlue().g, UIColor.matBlue().b, 0.5);
+            } else {
+                GL11.glColor4d(UIColor.matGrey900().r, UIColor.matGrey900().g, UIColor.matGrey900().b, 0.5);
+            }
+
+
+            GL11.glLineWidth(2f);
+            GL11.glBegin(GL11.GL_LINES);
+            {
+                GL11.glVertex2d(p1.x, 0);
+                GL11.glVertex2d(p1.x, Display.getHeight());
+                GL11.glVertex2d(0, p1.y);
+                GL11.glVertex2d(Display.getWidth(), p1.y);
+                GL11.glVertex2d(p2.x, 0);
+                GL11.glVertex2d(p2.x, Display.getHeight());
+                GL11.glVertex2d(0, p2.y);
+                GL11.glVertex2d(Display.getWidth(), p2.y);
+            }
+            GL11.glEnd();
+        }
     }
 
     public static void drawQuad(PosXY p1, PosXY p2) {
@@ -91,6 +119,29 @@ public class GuiUtils {
                 new PosXY(p2.x, p2.y),
                 new PosXY(p2.x, p1.y)
         );
+
+        if (debugEnabled) {
+
+            if (Mouse.getX() >= p1.x && Mouse.getX() <= p2.x && Mouse.getY() >= Display.getHeight() - p2.y && Mouse.getY() <= Display.getHeight() - p1.y) {
+                GL11.glColor4d(UIColor.matBlue().r, UIColor.matBlue().g, UIColor.matBlue().b, 0.5);
+            } else {
+                GL11.glColor4d(UIColor.matGrey900().r, UIColor.matGrey900().g, UIColor.matGrey900().b, 0.5);
+            }
+
+            GL11.glLineWidth(2f);
+            GL11.glBegin(GL11.GL_LINES);
+            {
+                GL11.glVertex2d(p1.x, 0);
+                GL11.glVertex2d(p1.x, Display.getHeight());
+                GL11.glVertex2d(0, p1.y);
+                GL11.glVertex2d(Display.getWidth(), p1.y);
+                GL11.glVertex2d(p2.x, 0);
+                GL11.glVertex2d(p2.x, Display.getHeight());
+                GL11.glVertex2d(0, p2.y);
+                GL11.glVertex2d(Display.getWidth(), p2.y);
+            }
+            GL11.glEnd();
+        }
     }
 
     public static void drawQuadGradientHorizontal(PosXY p1, PosXY p2, UIColor colFrom, UIColor colTo) {
@@ -139,6 +190,12 @@ public class GuiUtils {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(1, 1, 1, 1);
         TextureImpl.bindNone();
+    }
+
+    public static void drawString(org.newdawn.slick.Font font, int x, int y, String string, UIColor col) {
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        font.drawString(x, y, string, new Color((float) col.r, (float) col.g, (float) col.b, (float) col.a));
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
     }
 
 }

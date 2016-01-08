@@ -53,7 +53,7 @@ public class GuiHandler implements IGuiHandler {
         } else if (ID == FFProjector_Security_TILE_ENTITY_GUI) {
             return new GuiFFProjectorSecurity(player, player.inventory, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == FFProjector_PowerStats_TILE_ENTITY_GUI) {
-            return new GuiFFProjectorPowerStats(player, player.inventory, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
+            return new GuiFFProjectorPowerStats(player, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == CrystalConstructor_TILE_ENTITY_GUI) {
             return new GuiCrystalConstructor(player.inventory, (TECrystalConstructor) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == PowerCube_TILE_ENTITY_GUI) {
