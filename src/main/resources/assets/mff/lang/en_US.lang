@@ -51,6 +51,7 @@ gui.mff:upgrades=Upgrades
 gui.mff:powerStats=Power Statistics
 
 gui.mff:power=Power
+gui.mff:powerUsage=Power Usage
 #FE - Short for Force Energy
 gui.mff:fe=FE
 #t - Short for tick

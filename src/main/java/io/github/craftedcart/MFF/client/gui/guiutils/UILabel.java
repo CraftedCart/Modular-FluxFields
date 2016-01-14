@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.client.gui.guiutils;
 
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.TrueTypeFont;
 
 /**

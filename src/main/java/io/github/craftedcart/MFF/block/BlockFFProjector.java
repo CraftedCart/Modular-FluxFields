@@ -35,7 +35,7 @@ public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
 
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (!world.isRemote) {
+        if (world.isRemote) {
             player.openGui(ModMFF.instance, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;

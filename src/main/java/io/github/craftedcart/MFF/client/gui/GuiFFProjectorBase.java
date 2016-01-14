@@ -1,5 +1,6 @@
 package io.github.craftedcart.MFF.client.gui;
 
+import io.github.craftedcart.MFF.ModMFF;
 import io.github.craftedcart.MFF.client.gui.guiutils.*;
 import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
@@ -15,7 +16,6 @@ import net.minecraft.util.StatCollector;
 public class GuiFFProjectorBase extends UIDisplay {
 
     protected int sidebarWidth = 150; //The width of the sidebar
-    protected int tabID;
     protected final UIComponent workspace = new UIComponent(getRootComponent(),
             "workspace",
             new PosXY(sidebarWidth, 24),
@@ -25,6 +25,14 @@ public class GuiFFProjectorBase extends UIDisplay {
 
     protected TEFFProjector te;
     protected EntityPlayer player;
+    protected String title;
+
+    protected UILabel topBarTitle;
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
 
     @Override
     public void onInit() {
@@ -65,7 +73,7 @@ public class GuiFFProjectorBase extends UIDisplay {
         sidebarInfoButton.setOnClickAction(new UIAction() {
             @Override
             public void execute() {
-                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI));
+                player.openGui(ModMFF.instance, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI,te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
             }
         });
 
@@ -261,7 +269,7 @@ public class GuiFFProjectorBase extends UIDisplay {
         sidebarPowerStatsButton.setOnClickAction(new UIAction() {
             @Override
             public void execute() {
-                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_PowerStats_TILE_ENTITY_GUI));
+                player.openGui(ModMFF.instance, GuiHandler.FFProjector_PowerStats_TILE_ENTITY_GUI,te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
             }
         });
 
@@ -334,7 +342,7 @@ public class GuiFFProjectorBase extends UIDisplay {
                 new AnchorPoint(0, 0),
                 new AnchorPoint(1, 0));
         sidebarPowerHoverOverBar.setPanelBackgroundColor(UIColor.matBlueGrey700());
-        sidebarPowerHoverOverBar.setForegroundColor(UIColor.matBlueGrey300());
+        sidebarPowerHoverOverBar.setPanelForegroundColor(UIColor.matBlueGrey300());
         sidebarPowerHoverOverBar.setOnUpdateAction(new UIAction() {
             @Override
             public void execute() {
@@ -381,7 +389,7 @@ public class GuiFFProjectorBase extends UIDisplay {
                 new AnchorPoint(0, 1),
                 new AnchorPoint(1, 1));
         sidebarPowerHoverOverPopUpBar.setPanelBackgroundColor(UIColor.matBlueGrey700());
-        sidebarPowerHoverOverPopUpBar.setForegroundColor(UIColor.matBlue());
+        sidebarPowerHoverOverPopUpBar.setPanelForegroundColor(UIColor.matBlue());
         sidebarPowerHoverOverPopUpBar.setOnUpdateAction(new UIAction() {
             @Override
             public void execute() {
@@ -448,12 +456,11 @@ public class GuiFFProjectorBase extends UIDisplay {
                 new AnchorPoint(1, 0));
         topBarShadow.setVerticalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
 
-        final UILabel topBarTitle = new UILabel(topBar,
+        topBarTitle = new UILabel(topBar,
                 "title",
                 new PosXY(12, 2),
                 new AnchorPoint(0, 0),
                 GuiUtils.font);
-        topBarTitle.setText(StatCollector.translateToLocal("gui.mff:powerStats"));
         topBarTitle.setTextColor(UIColor.matWhite());
         //</editor-fold>
 
@@ -462,4 +469,10 @@ public class GuiFFProjectorBase extends UIDisplay {
     public UIComponent getWorkspace() {
         return workspace;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+        topBarTitle.setText(title);
+    }
+
 }

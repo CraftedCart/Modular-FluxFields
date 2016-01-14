@@ -30,7 +30,7 @@ public class UIProgressBar extends UIComponent {
         return progress;
     }
 
-    public void setForegroundColor(UIColor col) {
+    public void setPanelForegroundColor(UIColor col) {
         uiFGBar.setPanelBackgroundColor(col);
     }
 }

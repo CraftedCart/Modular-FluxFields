@@ -1,7 +1,7 @@
 package io.github.craftedcart.MFF.client.gui;
 
 import io.github.craftedcart.MFF.ModMFF;
-import io.github.craftedcart.MFF.container.ContainerFFProjectorInfo;
+import io.github.craftedcart.MFF.container.ContainerFFProjectorSizing;
 import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSizing;
@@ -48,7 +48,7 @@ public class GuiFFProjectorSizing extends GuiContainer {
     int zDiff = FFProjectorConf.zSizeMax - FFProjectorConf.zSizeMin;
 
     public GuiFFProjectorSizing(EntityPlayer player, IInventory playerInv, TEFFProjector te) {
-        super(new ContainerFFProjectorInfo(playerInv, te));
+        super(new ContainerFFProjectorSizing(playerInv, te));
 
         this.playerInv = playerInv;
         this.te = te;

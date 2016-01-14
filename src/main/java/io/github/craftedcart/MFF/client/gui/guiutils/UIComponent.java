@@ -97,37 +97,7 @@ public class UIComponent {
 
             //<editor-fold desc="Check mouse state">
             if (mx >= topLeftPx.x && mx < bottomRightPx.x && my >= topLeftPx.y && my < bottomRightPx.y) { //If the mouse is over this component
-
-                boolean checkMouseOverChildComponent = false;
-
-                for (UIComponent component : childUiComponents) { //Loop through every component
-                    if (component.mouseOver || component.mouseOverChildComponent) {
-                        mouseOverChildComponent = true;
-                        checkMouseOverChildComponent = true;
-                        break;
-                    }
-                }
-
-                if (!checkMouseOverChildComponent) {
-                    mouseOverChildComponent = false;
-                }
-
-                if (!mouseOverChildComponent) {
-                    mouseOver = true;
-
-                    if (Mouse.isButtonDown(0)) { //IF LMB is down
-                        if (!lmbDown) {
-                            lmbDown = true;
-                            onClick(); //Mouse was clicked on this component
-                        }
-                    } else {
-                        lmbDown = false;
-                    }
-                } else {
-                    mouseOver = false;
-                    lmbDown = false;
-                }
-
+                checkMouseStateFromChildren();
             } else {
                 mouseOver = false;
                 mouseOverChildComponent = false;
@@ -151,6 +121,38 @@ public class UIComponent {
             selected = false;
         }
 
+    }
+
+    protected void checkMouseStateFromChildren() {
+        boolean checkMouseOverChildComponent = false;
+
+        for (UIComponent component : childUiComponents) { //Loop through every component
+            if (component.mouseOver || component.mouseOverChildComponent) {
+                mouseOverChildComponent = true;
+                checkMouseOverChildComponent = true;
+                break;
+            }
+        }
+
+        if (!checkMouseOverChildComponent) {
+            mouseOverChildComponent = false;
+        }
+
+        if (!mouseOverChildComponent) {
+            mouseOver = true;
+
+            if (Mouse.isButtonDown(0)) { //IF LMB is down
+                if (!lmbDown) {
+                    lmbDown = true;
+                    onClick(); //Mouse was clicked on this component
+                }
+            } else {
+                lmbDown = false;
+            }
+        } else {
+            mouseOver = false;
+            lmbDown = false;
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
 package io.github.craftedcart.MFF.client.gui;
 
 import io.github.craftedcart.MFF.ModMFF;
-import io.github.craftedcart.MFF.container.ContainerFFProjectorInfo;
+import io.github.craftedcart.MFF.container.ContainerFFProjectorSecurity;
 import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSecurity;
@@ -63,7 +63,7 @@ public class GuiFFProjectorSecurity extends GuiContainer {
     private String statusMessage; //The status message text
 
     public GuiFFProjectorSecurity(EntityPlayer player, IInventory playerInv, TEFFProjector te) {
-        super(new ContainerFFProjectorInfo(playerInv, te));
+        super(new ContainerFFProjectorSecurity(playerInv, te));
 
         this.playerInv = playerInv;
         this.te = te;
