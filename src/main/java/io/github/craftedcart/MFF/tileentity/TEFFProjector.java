@@ -18,7 +18,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
@@ -61,6 +63,8 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
      * Perm 1: Boolean: Should hostile mobs be killed
      * Perm 2: Boolean: Should peaceful mobs be killed
      */
+    public List<Entity> entityHitList = new ArrayList<Entity>(); //This is used by the TESR class to draw lines towards entities being attacked
+    public List<BlockPos> wallBlocksPlaced = new ArrayList<BlockPos>(); //This is used by the TESR class to draw lines towards blocks being placed
     public List<Double> powerUsagePerTickForPastMinute = new ArrayList<Double>();
     public List<Double> powerUsagePerSecondForPastHalfHour = new ArrayList<Double>();
     private int tickTimeSinceLastSecond = 0;
@@ -374,6 +378,8 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         if (updateTime <= 0) {
             updateTime = 100; //5s (100t)
 
+            wallBlocksPlaced.clear();
+
             int index = 0;
             for (BlockPos ffPos : wallBlockList) { //Loop through every blockpos
 
@@ -382,6 +388,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
                         if (power >= PowerConf.ffProjectorUsagePerBlockToGenerate) { //If we have enough power to place an FF block
                             worldObj.setBlockState(ffPos, ModBlocks.forcefield.getDefaultState()); //Place an FF block
                             power -= PowerConf.ffProjectorUsagePerBlockToGenerate; //Minus the power used
+                            wallBlocksPlaced.add(ffPos); //Add the block just placed to the wallBlocksPlaced list
                         } else {
                             break;
                         }
@@ -406,6 +413,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
         }
 
+        entityHitList.clear();
         if (hasSecurityUpgrade && isPowered && blockPlaceProgress >= wallBlockList.size()) { //Security related stuff goes here
 
             //<editor-fold desc="Damage targeted players">
@@ -491,6 +499,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
                     if (power > PowerConf.ffProjectorUsageToDamageEntity) {
                         plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
                         plr.hurtResistantTime = 0;
+                        entityHitList.add(plr);
                         power -= PowerConf.ffProjectorUsageToDamageEntity;
                     } else {
                         break;
@@ -503,6 +512,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
                     if (power > PowerConf.ffProjectorUsageToDamageEntity) {
                         plr.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
                         plr.hurtResistantTime = 0;
+                        entityHitList.add(plr);
                         power -= PowerConf.ffProjectorUsageToDamageEntity;
                     } else {
                         break;
@@ -520,9 +530,14 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         List<Entity> entitiesWithinAABB = worldObj.getEntitiesWithinAABB(entityType, new AxisAlignedBB(p1.add(this.getPos()), p2.add(this.getPos())));
 
         for (Entity entity : entitiesWithinAABB) {
-            entity.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
-            entity.hurtResistantTime = 0;
-            power -= PowerConf.ffProjectorUsageToDamageEntity;
+
+            if (power > PowerConf.ffProjectorUsageToDamageEntity) {
+                entity.attackEntityFrom(DamageSourceFFSecurityKill.causeElectricDamage(), 1);
+                entity.hurtResistantTime = 0;
+                entityHitList.add(entity);
+                power -= PowerConf.ffProjectorUsageToDamageEntity;
+            }
+
         }
 
     }
@@ -739,4 +754,13 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     }
 
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return new AxisAlignedBB(this.getPos().add(-1000, -1000, -1000), this.getPos().add(1001, 1001, 1001));
+    }
+
+    @Override
+    public double getMaxRenderDistanceSquared() {
+        return 16384;
+    }
 }

@@ -1,4 +1,4 @@
-package io.github.craftedcart.MFF.client.gui;
+package io.github.craftedcart.MFF.client.gui.guiutils;
 
 /**
  * Created by CraftedCart on 29/12/2015 (DD/MM/YYYY)
@@ -6,10 +6,10 @@ package io.github.craftedcart.MFF.client.gui;
 
 public class UIColor {
 
-    protected double r;
-    protected double g;
-    protected double b;
-    protected double a = 1;
+    public double r;
+    public double g;
+    public double b;
+    public double a = 1;
 
     public UIColor(double r, double g, double b) {
         this.r = r / 255;
@@ -24,12 +24,24 @@ public class UIColor {
         this.a = a;
     }
 
+    public static UIColor transparent() {
+        return new UIColor(0, 0, 0, 0);
+    }
+
     public static UIColor matBlue(double a) { //Short for Material Blue
         return new UIColor(33, 150, 243, a);
     }
 
     public static UIColor matBlue() {
         return matBlue(1);
+    }
+
+    public static UIColor matBlue700(double a) { //Short for Material Blue
+        return new UIColor(25, 118, 210, a);
+    }
+
+    public static UIColor matBlue700() {
+        return matBlue700(1);
     }
 
     public static UIColor matWhite(double a) {
@@ -78,6 +90,22 @@ public class UIColor {
 
     public static UIColor matBlueGrey700() {
         return matBlueGrey700(1);
+    }
+
+    public static UIColor matRed(double a) {
+        return new UIColor(244, 67, 54, a);
+    }
+
+    public static UIColor matRed() {
+        return matRed(1);
+    }
+
+    public static UIColor matOrange(double a) { //Short for Material Blue
+        return new UIColor(255, 152, 0, a);
+    }
+
+    public static UIColor matOrange() {
+        return matOrange(1);
     }
 
 }

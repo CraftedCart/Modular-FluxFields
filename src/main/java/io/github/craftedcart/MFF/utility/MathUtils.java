@@ -1,5 +1,7 @@
 package io.github.craftedcart.MFF.utility;
 
+import io.github.craftedcart.MFF.client.gui.guiutils.UIColor;
+
 import java.util.Random;
 
 /**
@@ -20,6 +22,10 @@ public class MathUtils {
 
     public static float lerp(float a, float b, float f) {
         return a + f * (b - a);
+    }
+
+    public static UIColor lerpUIColor(UIColor a, UIColor b, float f) {
+        return new UIColor(a.r * 255 + f * (b.r * 255 - a.r * 255), a.g * 255 + f * (b.g * 255 - a.g * 255), a.b * 255 + f * (b.b * 255 - a.b * 255), a.a * 255 + f * (b.a * 255 - a.a * 255));
     }
 
 }

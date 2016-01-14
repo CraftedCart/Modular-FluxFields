@@ -35,6 +35,8 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
 
         //Draw lines between connected power cubes
         List<BlockPos> powerCubeLinks =  ((TEPowerCube) te).powerCubeLinks;
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
 
         for (BlockPos pos : powerCubeLinks) {
             BlockPos posDiff = pos.subtract(te.getPos());
@@ -65,6 +67,8 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
             GL11.glEnd();
             GL11.glDisable(GL11.GL_BLEND);
         }
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_LIGHTING);
 
 
         GlStateManager.rotate((te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, (te.getWorld().getTotalWorldTime() + partialTick) * 3, 0);

@@ -8,7 +8,6 @@ import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSizing;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.reference.FFProjectorConf;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;

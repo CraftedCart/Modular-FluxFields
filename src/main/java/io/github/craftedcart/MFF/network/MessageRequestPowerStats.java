@@ -2,12 +2,10 @@ package io.github.craftedcart.MFF.network;
 
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.utility.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IThreadListener;

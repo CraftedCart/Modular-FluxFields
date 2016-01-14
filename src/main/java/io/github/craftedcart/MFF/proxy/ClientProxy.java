@@ -1,6 +1,6 @@
 package io.github.craftedcart.MFF.proxy;
 
-import io.github.craftedcart.MFF.client.gui.GuiUtils;
+import io.github.craftedcart.MFF.client.gui.guiutils.GuiUtils;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererFFProjector;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerCube;
 import io.github.craftedcart.MFF.client.render.blocks.TERendererPowerGenerator;

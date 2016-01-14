@@ -1,5 +1,7 @@
 package io.github.craftedcart.MFF.client.render.blocks;
 
+import io.github.craftedcart.MFF.client.gui.guiutils.UIColor;
+import io.github.craftedcart.MFF.tileentity.TEFFProjector;
 import io.github.craftedcart.MFF.tileentity.TEPoweredBlock;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.client.Minecraft;
@@ -7,7 +9,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -24,6 +28,37 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
 
         GlStateManager.translate(x, y, z);
 
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
+
+        //<editor-fold desc="Draw lines to the entities being killed">
+        GL11.glColor4d(UIColor.matRed().r, UIColor.matRed().g, UIColor.matRed().b, 1);
+        GL11.glLineWidth(4);
+        GL11.glBegin(GL11.GL_LINES);
+
+        for (Entity entity : ((TEFFProjector) (te)).entityHitList) {
+            GL11.glVertex3d(0.5, 0.5, 0.5);
+            GL11.glVertex3d(entity.posX - te.getPos().getX(), entity.posY - te.getPos().getY() + 0.5, entity.posZ - te.getPos().getZ());
+        }
+
+        GL11.glEnd();
+        //</editor-fold>
+
+        //<editor-fold desc="Draw lines to wall blocks placed">
+        GL11.glColor4d(UIColor.matBlue().r, UIColor.matBlue().g, UIColor.matBlue().b, 1);
+        GL11.glBegin(GL11.GL_LINES);
+
+        for (BlockPos pos : ((TEFFProjector) (te)).wallBlocksPlaced) {
+            GL11.glVertex3d(0.5, 0.5, 0.5);
+            GL11.glVertex3d(pos.getX() - te.getPos().getX() + 0.5, pos.getY() - te.getPos().getY() + 0.5, pos.getZ() - te.getPos().getZ() + 0.5);
+        }
+
+        GL11.glEnd();
+        //</editor-fold>
+
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
         float redR = 244f; float redG = 67f; float redB = 54f; //Red RGB
         float blueR = 33f; float blueG = 150f; float blueB = 243f; //Blue RGB
 
@@ -32,13 +67,14 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
         //<editor-fold desc="Draw line between power cube above and the ff projector">
         //Draw line between power cube above and the ff projector
         if (te.getWorld().getTileEntity(te.getPos().add(0, 1, 0)) instanceof TEPoweredBlock) {
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glDisable(GL11.GL_LIGHTING);
             float powerPercent = (float) (((TEPoweredBlock) te).power / ((TEPoweredBlock) te).maxPower);
             float r = MathUtils.lerp(blueR, redR, powerPercent);
             float g = MathUtils.lerp(blueG, redG, powerPercent);
             float b = MathUtils.lerp(blueB, redB, powerPercent);
             GL11.glColor4f(r / 255f, g / 255f, b / 255f, 1);
 
-            GL11.glLineWidth(4);
             GL11.glBegin(GL11.GL_LINE_STRIP);
             GL11.glVertex3d(0.5, 0.5, 0.5);
             GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(0.6, 0.7), MathUtils.randDouble(0.45, 0.55));
@@ -51,6 +87,8 @@ public class TERendererFFProjector extends TileEntitySpecialRenderer {
             GL11.glVertex3d(0.5, 1.5, 0.5);
             GL11.glEnd();
         }
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_LIGHTING);
         //</editor-fold>
 
         //<editor-fold desc="Draw Base">

@@ -53,6 +53,8 @@ gui.mff:powerStats=Power Statistics
 gui.mff:power=Power
 #FE - Short for Force Energy
 gui.mff:fe=FE
+#t - Short for tick
+gui.mff:t=t
 gui.mff:remaining=Remaining
 gui.mff:time=Time
 
@@ -83,8 +85,8 @@ gui.mff:calculating=Calculating
 gui.mff:secs=s
 gui.mff:mins=m
 gui.mff:now=Now
-gui.mff:1MinAgo=1 minute ago
-gui.mff:30MinsAgo=30 minutes ago
+gui.mff:minsAgo=minutes ago
+gui.mff:secsAgo=seconds ago
 
 gui.mff:downloadingDeps=Downloading Dependencies
 gui.mff:mffDownloadingDeps=Modular FluxFields is now downloading dependencies

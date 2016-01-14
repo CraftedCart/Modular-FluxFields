@@ -1,331 +1,465 @@
 package io.github.craftedcart.MFF.client.gui;
 
+import io.github.craftedcart.MFF.client.gui.guiutils.*;
 import io.github.craftedcart.MFF.handler.GuiHandler;
 import io.github.craftedcart.MFF.handler.NetworkHandler;
 import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-
-import java.text.DecimalFormat;
 
 /**
  * Created by CraftedCart on 08/01/2016 (DD/MM/YYYY)
  */
 
-public class GuiFFProjectorBase extends GuiScreen {
+public class GuiFFProjectorBase extends UIDisplay {
 
-    protected int w; //Window width
-    protected int h; //Window height
-    protected int mx; //Get mouse X
-    protected int my; //Get mouse y
-    protected double deltaTime; //Get the time between this frame and the last frame
-    protected boolean lmbClicked; //Was the left mouse button was clicked on this frame?
     protected int sidebarWidth = 150; //The width of the sidebar
-    protected boolean lmbDown = false; //Left mouse button pressed down?
-    protected int highlightedSidebarButtonYOffset = -1; //-1: Nothing selected -2: Power selected
-    protected double highlightedSidebarButtonTiming = 0;
     protected int tabID;
-    protected DecimalFormat formatter = new DecimalFormat("#,###.00");
-    protected boolean debugKeyHit = false;
-    protected int debugKeycode = 61; //Debug toggle key (F3)
+    protected final UIComponent workspace = new UIComponent(getRootComponent(),
+            "workspace",
+            new PosXY(sidebarWidth, 24),
+            new PosXY(0, 0),
+            new AnchorPoint(0, 0),
+            new AnchorPoint(1, 1));;
 
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    protected TEFFProjector te;
+    protected EntityPlayer player;
 
-        w = Display.getWidth(); //Window width
-        h = Display.getHeight(); //Window height
-        mx = Mouse.getX(); //Get mouse X
-        my = h - Mouse.getY(); //Get mouse y
-        deltaTime = GuiUtils.getDelta(); //Get the time between this frame and the last frame
-        sidebarWidth = 150; //The width of the sidebar
+    @Override
+    public void onInit() {
 
-        lmbClicked = !lmbDown && Mouse.isButtonDown(0);
-        lmbDown = Mouse.isButtonDown(0);
+        getRootComponent().setPanelDefaultBackgroundColor(UIColor.matWhite());
+        
+        workspace.setPanelBackgroundColor(UIColor.transparent());
 
-        GuiUtils.setup(true);
-        GuiUtils.drawBackground(UIColor.matWhite());
-
-    }
-
-    protected void drawSidebarAndTopBar(TEFFProjector te, EntityPlayer player) {
-        //<editor-fold desc="Draw sidebar">
-        GuiUtils.drawQuad( //Blue Grey Sidebar
+        //<editor-fold desc="Sidebar">
+        final UIComponent sidebarPanel = new UIComponent(getRootComponent(),
+                "sidebarPanel",
                 new PosXY(0, 24),
-                new PosXY(sidebarWidth, h),
-                UIColor.matBlueGrey()
-        );
+                new PosXY(sidebarWidth, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(0, 1));
+        sidebarPanel.setPanelBackgroundColor(UIColor.matBlueGrey());
 
-        GuiUtils.drawQuadGradientHorizontal( //Sidebar shadow
-                new PosXY(sidebarWidth, 24),
-                new PosXY(sidebarWidth + 4, h),
-                UIColor.matGrey900(), UIColor.matGrey900(0)
-        );
-
-        //Draw sidebar items
-        if (mx <= sidebarWidth) {
-            if (my >= 28 && my < 52) {
-                //Mouse is over the info button
-                if (highlightedSidebarButtonYOffset != 28) {
-                    highlightedSidebarButtonYOffset = 28;
-                    highlightedSidebarButtonTiming = 0;
-                }
-                if (lmbClicked && tabID != 1) {
-                    NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI));
-                }
-            } else if (my >= 52 && my < 76) {
-                //Mouse is over the sizing button
-                if (highlightedSidebarButtonYOffset != 52) {
-                    highlightedSidebarButtonYOffset = 52;
-                    highlightedSidebarButtonTiming = 0;
-                }
-                if (lmbClicked && tabID != 2) {
-                    NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI));
-                }
-            } else if (my >= 76 && my < 100) {
-                //Mouse is over the security button
-                if (highlightedSidebarButtonYOffset != 76) {
-                    highlightedSidebarButtonYOffset = 76;
-                    highlightedSidebarButtonTiming = 0;
-                }
-                if (lmbClicked && tabID != 3) {
-                    NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Security_TILE_ENTITY_GUI));
-                }
-            } else if (my >= 100 && my < 124) {
-                //Mouse is over the upgrades button
-                if (highlightedSidebarButtonYOffset != 100) {
-                    highlightedSidebarButtonYOffset = 100;
-                    highlightedSidebarButtonTiming = 0;
-                }
-                if (lmbClicked && tabID != 4) {
-                    //TODO Implement upgrades gui and link to it here
-                }
-            } else if (my >= 124 && my < 148) {
-                //Mouse is over the power statistics button
-                if (highlightedSidebarButtonYOffset != 124) {
-                    highlightedSidebarButtonYOffset = 124;
-                    highlightedSidebarButtonTiming = 0;
-                }
-                if (lmbClicked && tabID != 5) {
-                    NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_PowerStats_TILE_ENTITY_GUI));
-                }
-            } else if (my > h - 36) {
-                //Mouse is over the power bar at the bottom
-                if (highlightedSidebarButtonYOffset != -2) {
-                    highlightedSidebarButtonYOffset = -2;
-                    highlightedSidebarButtonTiming = 0;
-                }
-            } else {
-                highlightedSidebarButtonYOffset = -1;
-            }
-        } else {
-            highlightedSidebarButtonTiming = -1;
-        }
-
-        //<editor-fold desc="Highlighted sidebar button background">
-        if (highlightedSidebarButtonYOffset > 0) {
-            if (lmbDown) {
-                GL11.glColor4d(UIColor.matBlueGrey700().r, UIColor.matBlueGrey700().g, UIColor.matBlueGrey700().b, highlightedSidebarButtonTiming); //Dark Blue Grey highlighted button background
-            } else {
-                GL11.glColor4d(UIColor.matBlueGrey300().r, UIColor.matBlueGrey300().g, UIColor.matBlueGrey300().b, highlightedSidebarButtonTiming); //Light Blue Grey highlighted button background
-            }
-
-            GuiUtils.drawQuad( //Highlighted button
-                    new PosXY(0, highlightedSidebarButtonYOffset),
-                    new PosXY(sidebarWidth, highlightedSidebarButtonYOffset + 24)
-            );
-
-            GL11.glLineWidth(8f);
-
-            GuiUtils.drawQuadGradientVertical( //Bottom shadow
-                    new PosXY(0, highlightedSidebarButtonYOffset + 24),
-                    new PosXY(sidebarWidth, highlightedSidebarButtonYOffset + 26),
-                    UIColor.matGrey900(highlightedSidebarButtonTiming), UIColor.matGrey900(0)
-            );
-
-            GuiUtils.drawQuadGradientVertical( //Top shadow
-                    new PosXY(0, highlightedSidebarButtonYOffset - 2),
-                    new PosXY(sidebarWidth, highlightedSidebarButtonYOffset),
-                    UIColor.matGrey900(0), UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-        } else if (highlightedSidebarButtonYOffset == -2) { //Highlight the power meter at the bottom of the sidebar
-            GuiUtils.drawQuad( //Mouseover background
-                    new PosXY(0, h - 36),
-                    new PosXY(sidebarWidth, h),
-                    UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuadGradientVertical( //Selected button top shadow
-                    new PosXY(0, h - 38),
-                    new PosXY(sidebarWidth, h - 36),
-                    UIColor.matGrey900(0), UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuad( //Popover BG
-                    new PosXY(sidebarWidth + 8, h - 60),
-                    new PosXY(w - 8, h - 8),
-                    UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuadGradient( //Popover BG top shadow
-                    new PosXY(sidebarWidth + 8, h - 60),
-                    new PosXY(w - 8, h - 60),
-                    new PosXY(w - 4, h - 64),
-                    new PosXY(sidebarWidth + 4, h - 64),
-                    UIColor.matGrey900(highlightedSidebarButtonTiming), UIColor.matGrey900(0)
-            );
-
-            GuiUtils.drawQuadGradient( //Popover BG right shadow
-                    new PosXY(w - 4, h - 4),
-                    new PosXY(w - 4, h - 64),
-                    new PosXY(w - 8, h - 60),
-                    new PosXY(w - 8, h - 8),
-                    UIColor.matGrey900(0), UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuadGradient( //Popover BG bottom shadow
-                    new PosXY(sidebarWidth + 12, h - 4),
-                    new PosXY(w - 4, h - 4),
-                    new PosXY(w - 8, h - 8),
-                    new PosXY(sidebarWidth + 8, h - 8),
-                    UIColor.matGrey900(0), UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuad( //Popover BG joiner bit
-                    new PosXY(sidebarWidth + 8, h - 8),
-                    new PosXY(sidebarWidth + 8, h - 60),
-                    new PosXY(sidebarWidth, h - 36),
-                    new PosXY(sidebarWidth, h),
-                    UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuadGradient( //Joiner bit top shadow
-                    new PosXY(sidebarWidth, h - 36),
-                    new PosXY(sidebarWidth + 8, h - 60),
-                    new PosXY(sidebarWidth + 4, h - 64),
-                    new PosXY(sidebarWidth, h - 40),
-                    UIColor.matGrey900(highlightedSidebarButtonTiming), UIColor.matGrey900(0)
-            );
-
-            GuiUtils.drawQuadGradient( //Joiner bit bottom shadow
-                    new PosXY(sidebarWidth, h + 4),
-                    new PosXY(sidebarWidth + 12, h - 4),
-                    new PosXY(sidebarWidth + 8, h - 8),
-                    new PosXY(sidebarWidth, h),
-                    UIColor.matGrey900(0), UIColor.matGrey900(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuad( //Popover Power Bar BG
-                    new PosXY(sidebarWidth + 12, h - 16),
-                    new PosXY(w - 12, h - 12),
-                    UIColor.matBlueGrey700(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawQuad( //Popover Power Bar FG
-                    new PosXY(sidebarWidth + 12, h - 16),
-                    new PosXY(((w - sidebarWidth - 24) * te.power / te.maxPower) + sidebarWidth + 12, h - 12),
-                    UIColor.matBlue(highlightedSidebarButtonTiming)
-            );
-
-            GuiUtils.drawString(GuiUtils.font, sidebarWidth + 14, h - 58, String.format("%012.2f / %012.2f %s", te.power, te.maxPower, StatCollector.translateToLocal("gui.mff:fe")), UIColor.matWhite(highlightedSidebarButtonTiming));
-            GuiUtils.drawString(GuiUtils.font, sidebarWidth + 14, h - 38, String.format("%s %s / t", formatter.format(te.powerUsage), StatCollector.translateToLocal("gui.mff:fe")), UIColor.matWhite(highlightedSidebarButtonTiming));
-        }
-
-        if (highlightedSidebarButtonTiming + deltaTime * 8 <= 1) {
-            highlightedSidebarButtonTiming += deltaTime * 8;
-        } else {
-            highlightedSidebarButtonTiming = 1;
-        }
-        //</editor-fold>
-
-        //24 px gap between items
-        GuiUtils.drawString(GuiUtils.font, 8, 28, StatCollector.translateToLocal("gui.mff:info"), UIColor.matWhite());
-        GuiUtils.drawString(GuiUtils.font, 8, 52, StatCollector.translateToLocal("gui.mff:sizing"), UIColor.matWhite());
-        GuiUtils.drawString(GuiUtils.font, 8, 76, StatCollector.translateToLocal("gui.mff:security"), UIColor.matWhite());
-        GuiUtils.drawString(GuiUtils.font, 8, 100, StatCollector.translateToLocal("gui.mff:upgrades"), UIColor.matWhite());
-        GuiUtils.drawString(GuiUtils.font, 8, 124, StatCollector.translateToLocal("gui.mff:powerStats"), UIColor.matWhite());
-
-        //Draw power meter at the bottom of the sidebar
-        GuiUtils.drawQuad( //Power Bar BG
-                new PosXY(4, h - 12),
-                new PosXY(sidebarWidth - 4, h - 8),
-                UIColor.matGrey900()
-        );
-
-        GuiUtils.drawQuad( //Power Bar FG
-                new PosXY(4, h - 12),
-                new PosXY((sidebarWidth * te.power / te.maxPower) - 4, h - 8),
-                UIColor.matBlueGrey700()
-        );
-
-        GuiUtils.drawString(GuiUtils.font, 8, h - 34, String.format("%s: %06.2f%%", StatCollector.translateToLocal("gui.mff:power"), te.power / te.maxPower * 100), UIColor.matWhite());
-        //</editor-fold>
-
-        //<editor-fold desc="Draw top bar">
-        GuiUtils.drawQuad(
+        final UIGradientPanel sidebarShadow = new UIGradientPanel(sidebarPanel,
+                "shadow",
                 new PosXY(0, 0),
-                new PosXY(w, 24),
-                UIColor.matBlue()
-        );
+                new PosXY(4, 0),
+                new AnchorPoint(1, 0),
+                new AnchorPoint(1, 1));
+        sidebarShadow.setHorizontalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
 
-        GuiUtils.drawQuadGradientVertical(
+        //<editor-fold desc="Sidebar Info Button">
+        final UITextButton sidebarInfoButton = new UITextButton(sidebarPanel,
+                "infoButton",
                 new PosXY(0, 24),
-                new PosXY(w, 28),
-                UIColor.matGrey900(), UIColor.matGrey900(0)
-        );
+                new PosXY(0, 48),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarInfoButton.setPanelDefaultBackgroundColor(UIColor.matBlueGrey300(0));
+        sidebarInfoButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+        sidebarInfoButton.setPanelHitBackgroundColor(UIColor.matBlue());
+        sidebarInfoButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:info"));
+        sidebarInfoButton.uiLabel.setTextColor(UIColor.matWhite());
+        sidebarInfoButton.setOnClickAction(new UIAction() {
+            @Override
+            public void execute() {
+                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI));
+            }
+        });
 
-        GuiUtils.drawString(GuiUtils.font, 8, 1, StatCollector.translateToLocal("gui.mff:powerStats"), UIColor.matWhite());
-        //</editor-fold>
-    }
+        final UIGradientPanel sidebarInfoButtonTopShadow = new UIGradientPanel(sidebarInfoButton,
+                "topShadow",
+                new PosXY(0, -2),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarInfoButtonTopShadow.setVerticalGradient(UIColor.matGrey900(0), UIColor.matGrey900());
 
-    protected void checkAndDrawDebug() {
+        final UIGradientPanel sidebarInfoButtonBottomShadow = new UIGradientPanel(sidebarInfoButton,
+                "bottomShadow",
+                new PosXY(0, 0),
+                new PosXY(0, 2),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarInfoButtonBottomShadow.setVerticalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
 
-        if (Keyboard.getEventKey() == debugKeycode) {
-            if (Keyboard.getEventKeyState()) {
-                if (!debugKeyHit) {
-                    debugKeyHit = true;
-                    GuiUtils.debugEnabled = !GuiUtils.debugEnabled;
+        sidebarInfoButton.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                if (sidebarInfoButton.isMouseOver() || sidebarInfoButton.isMouseOverChildComponent()) {
+                    sidebarInfoButtonTopShadow.setVisible(true);
+                    sidebarInfoButtonBottomShadow.setVisible(true);
+                } else {
+                    sidebarInfoButtonTopShadow.setVisible(false);
+                    sidebarInfoButtonBottomShadow.setVisible(false);
                 }
-            } else {
-                debugKeyHit = false;
             }
-        }
+        });
+        //</editor-fold>
 
-        if (GuiUtils.debugEnabled) {
-
-            GuiUtils.drawQuad(
-                    new PosXY(24, h - 96),
-                    new PosXY(w - 24, h - 24),
-                    UIColor.matGrey900(0.5)
-            );
-
-            GuiUtils.drawString(GuiUtils.font, 26, h - 48, String.format("%d FPS (%.3fs Delta Time)", Minecraft.getDebugFPS(), deltaTime), UIColor.matWhite()); //Draw FPS and Delta Time
-            GuiUtils.drawString(GuiUtils.font, 26, h - 72, String.format("Mouse Pos: %d, %d | LMB Down: %b", mx, my, lmbDown), UIColor.matWhite()); //Draw Mouse Pos
-            GuiUtils.drawString(GuiUtils.font, 26, h - 96, String.format("Tab ID: %d", tabID), UIColor.matWhite()); //Draw Tab ID
-
-            GL11.glColor4d(UIColor.matGrey900().r, UIColor.matGrey900().g, UIColor.matGrey900().b, 0.25); //Draw crosshair at mouse pos
-            GL11.glLineWidth(2f);
-            GL11.glBegin(GL11.GL_LINES);
-            {
-                GL11.glVertex2d(0, my);
-                GL11.glVertex2d(w, my);
+        //<editor-fold desc="Sidebar Sizing Button">
+        final UITextButton sidebarSizingButton = new UITextButton(sidebarPanel,
+                "sizingButton",
+                new PosXY(0, 48),
+                new PosXY(0, 72),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarSizingButton.setPanelDefaultBackgroundColor(UIColor.matBlueGrey300(0));
+        sidebarSizingButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+        sidebarSizingButton.setPanelHitBackgroundColor(UIColor.matBlue());
+        sidebarSizingButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:sizing"));
+        sidebarSizingButton.uiLabel.setTextColor(UIColor.matWhite());
+        sidebarSizingButton.setOnClickAction(new UIAction() {
+            @Override
+            public void execute() {
+                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI));
             }
-            GL11.glEnd();
-            GL11.glBegin(GL11.GL_LINES);
-            {
-                GL11.glVertex2d(mx, 0);
-                GL11.glVertex2d(mx, h);
-            }
-            GL11.glEnd();
+        });
 
-        }
+        final UIGradientPanel sidebarSizingButtonTopShadow = new UIGradientPanel(sidebarSizingButton,
+                "topShadow",
+                new PosXY(0, -2),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarSizingButtonTopShadow.setVerticalGradient(UIColor.matGrey900(0), UIColor.matGrey900());
+
+        final UIGradientPanel sidebarSizingButtonBottomShadow = new UIGradientPanel(sidebarSizingButton,
+                "bottomShadow",
+                new PosXY(0, 0),
+                new PosXY(0, 2),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarSizingButtonBottomShadow.setVerticalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
+
+        sidebarSizingButton.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                if (sidebarSizingButton.isMouseOver() || sidebarSizingButton.isMouseOverChildComponent()) {
+                    sidebarSizingButtonTopShadow.setVisible(true);
+                    sidebarSizingButtonBottomShadow.setVisible(true);
+                } else {
+                    sidebarSizingButtonTopShadow.setVisible(false);
+                    sidebarSizingButtonBottomShadow.setVisible(false);
+                }
+            }
+        });
+        //</editor-fold>
+
+        //<editor-fold desc="Sidebar Security Button">
+        final UITextButton sidebarSecurityButton = new UITextButton(sidebarPanel,
+                "securityButton",
+                new PosXY(0, 72),
+                new PosXY(0, 96),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarSecurityButton.setPanelDefaultBackgroundColor(UIColor.matBlueGrey300(0));
+        sidebarSecurityButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+        sidebarSecurityButton.setPanelHitBackgroundColor(UIColor.matBlue());
+        sidebarSecurityButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:security"));
+        sidebarSecurityButton.uiLabel.setTextColor(UIColor.matWhite());
+        sidebarSecurityButton.setOnClickAction(new UIAction() {
+            @Override
+            public void execute() {
+                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Security_TILE_ENTITY_GUI));
+            }
+        });
+
+        final UIGradientPanel sidebarSecurityButtonTopShadow = new UIGradientPanel(sidebarSecurityButton,
+                "topShadow",
+                new PosXY(0, -2),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarSecurityButtonTopShadow.setVerticalGradient(UIColor.matGrey900(0), UIColor.matGrey900());
+
+        final UIGradientPanel sidebarSecurityButtonBottomShadow = new UIGradientPanel(sidebarSecurityButton,
+                "bottomShadow",
+                new PosXY(0, 0),
+                new PosXY(0, 2),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarSecurityButtonBottomShadow.setVerticalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
+
+        sidebarSecurityButton.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                if (sidebarSecurityButton.isMouseOver() || sidebarSecurityButton.isMouseOverChildComponent()) {
+                    sidebarSecurityButtonTopShadow.setVisible(true);
+                    sidebarSecurityButtonBottomShadow.setVisible(true);
+                } else {
+                    sidebarSecurityButtonTopShadow.setVisible(false);
+                    sidebarSecurityButtonBottomShadow.setVisible(false);
+                }
+            }
+        });
+        //</editor-fold>
+
+        //<editor-fold desc="Sidebar Upgrades Button">
+        final UITextButton sidebarUpgradesButton = new UITextButton(sidebarPanel,
+                "upgradesButton",
+                new PosXY(0, 96),
+                new PosXY(0, 120),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarUpgradesButton.setPanelDefaultBackgroundColor(UIColor.matBlueGrey300(0));
+        sidebarUpgradesButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+        sidebarUpgradesButton.setPanelHitBackgroundColor(UIColor.matBlue());
+        sidebarUpgradesButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:upgrades"));
+        sidebarUpgradesButton.uiLabel.setTextColor(UIColor.matWhite());
+        sidebarUpgradesButton.setOnClickAction(new UIAction() {
+            @Override
+            public void execute() {
+                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Upgrades_TILE_ENTITY_GUI));
+            }
+        });
+
+        final UIGradientPanel sidebarUpgradesButtonTopShadow = new UIGradientPanel(sidebarUpgradesButton,
+                "topShadow",
+                new PosXY(0, -2),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarUpgradesButtonTopShadow.setVerticalGradient(UIColor.matGrey900(0), UIColor.matGrey900());
+
+        final UIGradientPanel sidebarUpgradesButtonBottomShadow = new UIGradientPanel(sidebarUpgradesButton,
+                "bottomShadow",
+                new PosXY(0, 0),
+                new PosXY(0, 2),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarUpgradesButtonBottomShadow.setVerticalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
+
+        sidebarUpgradesButton.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                if (sidebarUpgradesButton.isMouseOver() || sidebarUpgradesButton.isMouseOverChildComponent()) {
+                    sidebarUpgradesButtonTopShadow.setVisible(true);
+                    sidebarUpgradesButtonBottomShadow.setVisible(true);
+                } else {
+                    sidebarUpgradesButtonTopShadow.setVisible(false);
+                    sidebarUpgradesButtonBottomShadow.setVisible(false);
+                }
+            }
+        });
+        //</editor-fold>
+
+        //<editor-fold desc="Sidebar Power Statistics Button">
+        final UITextButton sidebarPowerStatsButton = new UITextButton(sidebarPanel,
+                "powerStatsButton",
+                new PosXY(0, 120),
+                new PosXY(0, 144),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarPowerStatsButton.setPanelDefaultBackgroundColor(UIColor.matBlueGrey300(0));
+        sidebarPowerStatsButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+        sidebarPowerStatsButton.setPanelHitBackgroundColor(UIColor.matBlue());
+        sidebarPowerStatsButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:powerStats"));
+        sidebarPowerStatsButton.uiLabel.setTextColor(UIColor.matWhite());
+        sidebarPowerStatsButton.setOnClickAction(new UIAction() {
+            @Override
+            public void execute() {
+                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_PowerStats_TILE_ENTITY_GUI));
+            }
+        });
+
+        final UIGradientPanel sidebarPowerStatsButtonTopShadow = new UIGradientPanel(sidebarPowerStatsButton,
+                "topShadow",
+                new PosXY(0, -2),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarPowerStatsButtonTopShadow.setVerticalGradient(UIColor.matGrey900(0), UIColor.matGrey900());
+
+        final UIGradientPanel sidebarPowerStatsButtonBottomShadow = new UIGradientPanel(sidebarPowerStatsButton,
+                "bottomShadow",
+                new PosXY(0, 0),
+                new PosXY(0, 2),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarPowerStatsButtonBottomShadow.setVerticalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
+
+        sidebarPowerStatsButton.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                if (sidebarPowerStatsButton.isMouseOver() || sidebarPowerStatsButton.isMouseOverChildComponent()) {
+                    sidebarPowerStatsButtonTopShadow.setVisible(true);
+                    sidebarPowerStatsButtonBottomShadow.setVisible(true);
+                } else {
+                    sidebarPowerStatsButtonTopShadow.setVisible(false);
+                    sidebarPowerStatsButtonBottomShadow.setVisible(false);
+                }
+            }
+        });
+        //</editor-fold>
+
+        //<editor-fold desc="Sidebar Power HoverOver">
+        final UIComponent sidebarPowerHoverOver = new UIComponent(sidebarPanel,
+                "powerHoverOver",
+                new PosXY(0, -32),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarPowerHoverOver.setPanelDefaultBackgroundColor(UIColor.matGrey900(0));
+        sidebarPowerHoverOver.setPanelActiveBackgroundColor(UIColor.matGrey900());
+        sidebarPowerHoverOver.setPanelHitBackgroundColor(UIColor.matGrey900());
+
+        final UIGradientPanel sidebarPowerHoverOverTopShadow = new UIGradientPanel(sidebarPowerHoverOver,
+                "topShadow",
+                new PosXY(0, -2),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarPowerHoverOverTopShadow.setVerticalGradient(UIColor.matGrey900(0), UIColor.matGrey900());
+
+        final UILabel sidebarPowerHoverOverLabel = new UILabel(sidebarPowerHoverOver,
+                "powerLabel",
+                new PosXY(12, 1),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        sidebarPowerHoverOverLabel.setTextColor(UIColor.matWhite());
+        sidebarPowerHoverOverLabel.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                sidebarPowerHoverOverLabel.setText(String.format("%06.2f%% %s", te.power / te.maxPower * 100, StatCollector.translateToLocal("gui.mff:fe")));
+            }
+        });
+
+        final UIProgressBar sidebarPowerHoverOverBar = new UIProgressBar(sidebarPowerHoverOver,
+                "powerBar",
+                new PosXY(4, 22),
+                new PosXY(-4, 26),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        sidebarPowerHoverOverBar.setPanelBackgroundColor(UIColor.matBlueGrey700());
+        sidebarPowerHoverOverBar.setForegroundColor(UIColor.matBlueGrey300());
+        sidebarPowerHoverOverBar.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                sidebarPowerHoverOverBar.setProgress(te.power / te.maxPower);
+            }
+        });
+
+        final UICustomQuad sidebarPowerHoverOverJoiner = new UICustomQuad(sidebarPowerHoverOver,
+                "hoverOverJoiner",
+                new PosXY(0, 0),
+                new PosXY(8, -60),
+                new PosXY(8, -8),
+                new PosXY(0, 0),
+                new AnchorPoint(1, 0),
+                new AnchorPoint(1, 1));
+
+        final UIComponent sidebarPowerHoverOverPopUp = new UIComponent(rootComponent,
+                "sidebarPowerHoverOverPopUp",
+                new PosXY(sidebarWidth + 8, -88),
+                new PosXY(-8, -8),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarPowerHoverOverPopUp.setVisible(false);
+
+        sidebarPowerHoverOver.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                if (sidebarPowerHoverOver.isMouseOver() || sidebarPowerHoverOver.isMouseOverChildComponent()) {
+                    sidebarPowerHoverOverTopShadow.setVisible(true);
+                    sidebarPowerHoverOverPopUp.setVisible(true);
+                    sidebarPowerHoverOverJoiner.setVisible(true);
+                } else {
+                    sidebarPowerHoverOverTopShadow.setVisible(false);
+                    sidebarPowerHoverOverPopUp.setVisible(false);
+                    sidebarPowerHoverOverJoiner.setVisible(false);
+                }
+            }
+        });
+
+        final UIProgressBar sidebarPowerHoverOverPopUpBar = new UIProgressBar(sidebarPowerHoverOverPopUp,
+                "powerBar",
+                new PosXY(4, -8),
+                new PosXY(-4, -4),
+                new AnchorPoint(0, 1),
+                new AnchorPoint(1, 1));
+        sidebarPowerHoverOverPopUpBar.setPanelBackgroundColor(UIColor.matBlueGrey700());
+        sidebarPowerHoverOverPopUpBar.setForegroundColor(UIColor.matBlue());
+        sidebarPowerHoverOverPopUpBar.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                sidebarPowerHoverOverPopUpBar.setProgress(te.power / te.maxPower);
+            }
+        });
+
+        final UILabel sidebarPowerHoverOverPopUpPowerTitle = new UILabel(sidebarPowerHoverOverPopUp,
+                "powerTitle",
+                new PosXY(8, -78),
+                new AnchorPoint(0, 1),
+                GuiUtils.font);
+        sidebarPowerHoverOverPopUpPowerTitle.setTextColor(UIColor.matWhite());
+        sidebarPowerHoverOverPopUpPowerTitle.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                sidebarPowerHoverOverPopUpPowerTitle.setText(StatCollector.translateToLocal("gui.mff:power"));
+            }
+        });
+
+        final UILabel sidebarPowerHoverOverPopUpPowerLabel = new UILabel(sidebarPowerHoverOverPopUp,
+                "powerLabel",
+                new PosXY(8, -54),
+                new AnchorPoint(0, 1),
+                GuiUtils.font);
+        sidebarPowerHoverOverPopUpPowerLabel.setTextColor(UIColor.matWhite());
+        sidebarPowerHoverOverPopUpPowerLabel.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                sidebarPowerHoverOverPopUpPowerLabel.setText(String.format("%012.2f / %012.2f %s", te.power, te.maxPower, StatCollector.translateToLocal("FE")));
+            }
+        });
+
+        final UILabel sidebarPowerHoverOverPopUpPowerUsageLabel = new UILabel(sidebarPowerHoverOverPopUp,
+                "powerUsageLabel",
+                new PosXY(8, -30),
+                new AnchorPoint(0, 1),
+                GuiUtils.font);
+        sidebarPowerHoverOverPopUpPowerUsageLabel.setTextColor(UIColor.matWhite());
+        sidebarPowerHoverOverPopUpPowerUsageLabel.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                sidebarPowerHoverOverPopUpPowerUsageLabel.setText(String.format("%.2f %s / %s", te.powerUsage, StatCollector.translateToLocal("gui.mff:fe"), StatCollector.translateToLocal("gui.mff:t")));
+            }
+        });
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Top Bar">
+        final UIComponent topBar = new UIComponent(getRootComponent(),
+                "topBar",
+                new PosXY(0, 0),
+                new PosXY(0, 24),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        topBar.setPanelBackgroundColor(UIColor.matBlue());
+
+        final UIGradientPanel topBarShadow = new UIGradientPanel(topBar,
+                "shadow",
+                new PosXY(0, 24),
+                new PosXY(0, 28),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        topBarShadow.setVerticalGradient(UIColor.matGrey900(), UIColor.matGrey900(0));
+
+        final UILabel topBarTitle = new UILabel(topBar,
+                "title",
+                new PosXY(12, 2),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        topBarTitle.setText(StatCollector.translateToLocal("gui.mff:powerStats"));
+        topBarTitle.setTextColor(UIColor.matWhite());
+        //</editor-fold>
 
     }
 
+    public UIComponent getWorkspace() {
+        return workspace;
+    }
 }

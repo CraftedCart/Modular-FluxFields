@@ -1,18 +1,16 @@
-package io.github.craftedcart.MFF.client.gui;
+package io.github.craftedcart.MFF.client.gui.guiutils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.Sys;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.TextureImpl;
 
 import java.awt.*;
-import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -23,23 +21,33 @@ import java.io.InputStream;
 public class GuiUtils {
 
     public static TrueTypeFont font;
+    public static TrueTypeFont debugFont;
     private static long lastFrame = 0;
+    private static long delta = 0;
     public static boolean debugEnabled = false;
+    public static int debugSidebarWidth = 256;
 
     public static void init() throws FontFormatException, IOException {
         InputStream inputStream	= Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("mff:Roboto-Regular.ttf")).getInputStream();
 
-        Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-        awtFont2 = awtFont2.deriveFont(16f); // set font size
-        font = new TrueTypeFont(awtFont2, true);
+        Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream); //Regular Font
+        awtFont = awtFont.deriveFont(16f); //Set font size
+        font = new TrueTypeFont(awtFont, true);
+
+        inputStream	= Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("mff:Roboto-Regular.ttf")).getInputStream();
+        Font awtFontDebug = Font.createFont(Font.TRUETYPE_FONT, inputStream); //Debug Font
+        awtFontDebug = awtFontDebug.deriveFont(12f); //Set font size
+        debugFont = new TrueTypeFont(awtFontDebug, true);
     }
 
     public static double getDelta() {
-        long time = Sys.getTime();
-        int delta = (int) (time - lastFrame);
-        lastFrame = time;
-
         return delta / 1000d;
+    }
+
+    public static void calcDelta() {
+        long time = Sys.getTime();
+        delta = (time - lastFrame);
+        lastFrame = time;
     }
 
     public static void drawQuad(PosXY p1, PosXY p2, PosXY p3, PosXY p4, UIColor col) {
@@ -86,30 +94,6 @@ public class GuiUtils {
                 new PosXY(p2.x, p1.y),
                 col
         );
-
-        if (debugEnabled) {
-
-            if (Mouse.getX() >= p1.x && Mouse.getX() <= p2.x && Mouse.getY() >= Display.getHeight() - p2.y && Mouse.getY() <= Display.getHeight() - p1.y) {
-                GL11.glColor4d(UIColor.matBlue().r, UIColor.matBlue().g, UIColor.matBlue().b, 0.5);
-            } else {
-                GL11.glColor4d(UIColor.matGrey900().r, UIColor.matGrey900().g, UIColor.matGrey900().b, 0.5);
-            }
-
-
-            GL11.glLineWidth(2f);
-            GL11.glBegin(GL11.GL_LINES);
-            {
-                GL11.glVertex2d(p1.x, 0);
-                GL11.glVertex2d(p1.x, Display.getHeight());
-                GL11.glVertex2d(0, p1.y);
-                GL11.glVertex2d(Display.getWidth(), p1.y);
-                GL11.glVertex2d(p2.x, 0);
-                GL11.glVertex2d(p2.x, Display.getHeight());
-                GL11.glVertex2d(0, p2.y);
-                GL11.glVertex2d(Display.getWidth(), p2.y);
-            }
-            GL11.glEnd();
-        }
     }
 
     public static void drawQuad(PosXY p1, PosXY p2) {
@@ -119,29 +103,6 @@ public class GuiUtils {
                 new PosXY(p2.x, p2.y),
                 new PosXY(p2.x, p1.y)
         );
-
-        if (debugEnabled) {
-
-            if (Mouse.getX() >= p1.x && Mouse.getX() <= p2.x && Mouse.getY() >= Display.getHeight() - p2.y && Mouse.getY() <= Display.getHeight() - p1.y) {
-                GL11.glColor4d(UIColor.matBlue().r, UIColor.matBlue().g, UIColor.matBlue().b, 0.5);
-            } else {
-                GL11.glColor4d(UIColor.matGrey900().r, UIColor.matGrey900().g, UIColor.matGrey900().b, 0.5);
-            }
-
-            GL11.glLineWidth(2f);
-            GL11.glBegin(GL11.GL_LINES);
-            {
-                GL11.glVertex2d(p1.x, 0);
-                GL11.glVertex2d(p1.x, Display.getHeight());
-                GL11.glVertex2d(0, p1.y);
-                GL11.glVertex2d(Display.getWidth(), p1.y);
-                GL11.glVertex2d(p2.x, 0);
-                GL11.glVertex2d(p2.x, Display.getHeight());
-                GL11.glVertex2d(0, p2.y);
-                GL11.glVertex2d(Display.getWidth(), p2.y);
-            }
-            GL11.glEnd();
-        }
     }
 
     public static void drawQuadGradientHorizontal(PosXY p1, PosXY p2, UIColor colFrom, UIColor colTo) {
@@ -161,14 +122,6 @@ public class GuiUtils {
                 new PosXY(p1.x, p2.y),
                 new PosXY(p2.x, p2.y),
                 colFrom, colTo
-        );
-    }
-
-    public static void drawBackground(UIColor col) {
-        drawQuad(
-                new PosXY(0, 0),
-                new PosXY(Display.getWidth(), Display.getHeight()),
-                col
         );
     }
 
@@ -196,6 +149,16 @@ public class GuiUtils {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         font.drawString(x, y, string, new Color((float) col.r, (float) col.g, (float) col.b, (float) col.a));
         GL11.glDisable(GL11.GL_TEXTURE_2D);
+    }
+
+    public static void drawLine(PosXY p1, PosXY p2, UIColor col) {
+        GL11.glColor4d(col.r, col.g, col.b, col.a);
+        GL11.glBegin(GL11.GL_LINES);
+        {
+            GL11.glVertex2d(p1.x, p1.y);
+            GL11.glVertex2d(p2.x, p2.y);
+        }
+        GL11.glEnd();
     }
 
 }

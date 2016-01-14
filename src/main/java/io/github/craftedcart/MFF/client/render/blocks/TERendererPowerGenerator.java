@@ -33,6 +33,8 @@ public class TERendererPowerGenerator extends TileEntitySpecialRenderer {
         //<editor-fold desc="Draw line between power cube above and the ff projector">
         //Draw line between power cube above and the ff projector
         if (te.getWorld().getTileEntity(te.getPos().add(0, -1, 0)) instanceof TEPoweredBlock && ((TEPowerGenerator) te).isSendingPower) {
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glDisable(GL11.GL_LIGHTING);
             float powerPercent;
             if (((TEPowerGenerator) te).maxPower == -1) { //If it's a creative power generator
                 powerPercent = 1;
@@ -59,6 +61,8 @@ public class TERendererPowerGenerator extends TileEntitySpecialRenderer {
             GL11.glVertex3d(MathUtils.randDouble(0.45, 0.55), MathUtils.randDouble(-0.4, -0.5), MathUtils.randDouble(0.45, 0.55));
             GL11.glVertex3d(0.5, -0.5, 0.5);
             GL11.glEnd();
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_LIGHTING);
         }
         //</editor-fold>
 
