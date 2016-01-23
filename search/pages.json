@@ -241,6 +241,31 @@
 				"wiki",
 				"home"
 			]
+		},
+		{
+			"title": "Manual Dependency Install",
+			"path": "/Modular-FluxFields/documentation/manualDepInstall.html",
+			"tags": [
+				"manual",
+				"dependency",
+				"dep",
+				"dependencies",
+				"deps",
+				"install",
+				"slick",
+				"util",
+				"slick-util",
+				"slick-util.jar",
+				"slick2d",
+				"guide",
+				"error",
+				"download",
+				"dl",
+				"documentation",
+				"docs",
+				"doc",
+				"wiki"
+			]
 		}
 	]
 }
