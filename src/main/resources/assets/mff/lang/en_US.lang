@@ -103,3 +103,7 @@ stat.mff:-50%PowerUsageTick=§a-50% Power Usage / tick
 
 #Deaths
 death.attack.forcefieldSecurityKill=%1$s was disintegrated by a forcefield
+
+#Easter Eggs
+gui.mff:loadingEasterEgg=Loading Easter Egg...
+gui.mff:openYourEyesEasterEgg=Now Playing: Aviators - Open Your Eyes (MIDI)

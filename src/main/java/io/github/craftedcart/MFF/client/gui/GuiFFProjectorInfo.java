@@ -2,14 +2,26 @@ package io.github.craftedcart.MFF.client.gui;
 
 import io.github.craftedcart.MFF.client.gui.guiutils.*;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
+
+import javax.sound.midi.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by CraftedCart on 30/11/2015 (DD/MM/YYYY)
  */
 
 public class GuiFFProjectorInfo extends GuiFFProjectorBase {
+
+    public static int konamiCodeProgress = 0;
+    public static boolean upKeyDown = false;
+    public static boolean downKeyDown = false;
 
     public GuiFFProjectorInfo(EntityPlayer player, TEFFProjector te) {
         this.te = te;
@@ -19,6 +31,8 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
     @Override
     public void onInit() {
         super.onInit();
+
+        konamiCodeProgress = 0;
 
         setTitle(StatCollector.translateToLocal("gui.mff:info"));
 
@@ -142,6 +156,100 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
             }
         });
 
+        final UILabel openYourEyesEasterEggLabel = new UILabel(getWorkspace(),
+                "openYourEyesKonamiCodeEasterEggLabel",
+                new PosXY(8, -24),
+                new AnchorPoint(0, 1),
+                GuiUtils.font);
+        openYourEyesEasterEggLabel.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                //Up Up
+                if (konamiCodeProgress <= 1) {
+                    if (!upKeyDown) {
+                        if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+                            upKeyDown = true;
+                            konamiCodeProgress += 1;
+                        }
+                    } else {
+                        if (!Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+                            upKeyDown = false;
+                        }
+                    }
+                }
+
+                //Down Down
+                if (konamiCodeProgress == 2 || konamiCodeProgress == 3) {
+                    if (!downKeyDown) {
+                        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+                            downKeyDown = true;
+                            konamiCodeProgress += 1;
+                        }
+                    } else {
+                        if (!Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+                            downKeyDown = false;
+                        }
+                    }
+                }
+
+                //Left - Left
+                if ((konamiCodeProgress == 4 || konamiCodeProgress == 6) && Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+                    konamiCodeProgress += 1;
+                }
+
+                //Right - Right
+                if ((konamiCodeProgress == 5 || konamiCodeProgress == 7) && Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+                    konamiCodeProgress += 1;
+                }
+
+                //B
+                if ((konamiCodeProgress == 8) && Keyboard.isKeyDown(Keyboard.KEY_B)) {
+                    konamiCodeProgress += 1;
+                }
+
+                //A
+                if ((konamiCodeProgress == 9) && Keyboard.isKeyDown(Keyboard.KEY_A)) {
+                    //Play Open Your Eyes (MIDI) by Aviators
+                    konamiCodeProgress += 1;
+
+                    try {
+                        if (GuiUtils.sequencer != null) {
+
+                            GuiUtils.drawString(GuiUtils.font, sidebarWidth + 8, Display.getHeight() - 24, StatCollector.translateToLocal("loadingEasterEgg"), UIColor.matGrey900());
+
+                            GuiUtils.sequencer.open();
+                            InputStream midiFile = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("mff:eastereggs/AviatorsOpenYourEyesMIDI.mid")).getInputStream();
+                            Sequence sequence = MidiSystem.getSequence(midiFile);
+                            GuiUtils.sequencer.setSequence(sequence);
+                            GuiUtils.sequencer.setTempoInBPM(125);
+                            GuiUtils.sequencer.start();
+
+                            openYourEyesEasterEggLabel.setText(StatCollector.translateToLocal("gui.mff:openYourEyesEasterEgg"));
+
+                        }
+                    } catch (MidiUnavailableException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InvalidMidiDataException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (konamiCodeProgress == 10) {
+                    openYourEyesEasterEggLabel.setText(StatCollector.translateToLocal("gui.mff:openYourEyesEasterEgg") +
+                            String.format(" [%06.2f / %06.2f]", GuiUtils.sequencer.getMicrosecondPosition() / 1000000f, GuiUtils.sequencer.getSequence().getMicrosecondLength() / 1000000f));
+                }
+            }
+        });
+
     }
 
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        if (GuiUtils.sequencer.isRunning()) {
+            GuiUtils.sequencer.stop();
+        }
+    }
 }

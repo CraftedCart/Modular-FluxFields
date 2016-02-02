@@ -10,6 +10,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.TextureImpl;
 
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +29,7 @@ public class GuiUtils {
     private static long delta = 0;
     public static boolean debugEnabled = false;
     public static int debugSidebarWidth = 256;
+    public static Sequencer sequencer;
 
     public static void init() throws FontFormatException, IOException {
         InputStream inputStream	= Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("mff:Roboto-Regular.ttf")).getInputStream();
@@ -38,6 +42,12 @@ public class GuiUtils {
         Font awtFontDebug = Font.createFont(Font.TRUETYPE_FONT, inputStream); //Debug Font
         awtFontDebug = awtFontDebug.deriveFont(12f); //Set font size
         debugFont = new TrueTypeFont(awtFontDebug, true);
+
+        try {
+            sequencer = MidiSystem.getSequencer();
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     public static double getDelta() {
