@@ -27,9 +27,7 @@ public class GuiHandler implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if (ID == FFProjector_Sizing_TILE_ENTITY_GUI) {
-            return new ContainerFFProjectorSizing(player.inventory, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
-        } else if (ID == CrystalRefinery_TILE_ENTITY_GUI) {
+        if (ID == CrystalRefinery_TILE_ENTITY_GUI) {
             return new ContainerCrystalRefinery(player.inventory, (TECrystalRefinery) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == FFProjector_Security_TILE_ENTITY_GUI) {
             return new ContainerFFProjectorSecurity(player.inventory, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
@@ -45,7 +43,7 @@ public class GuiHandler implements IGuiHandler {
         if (ID == FFProjector_Info_TILE_ENTITY_GUI) {
             return new GuiFFProjectorInfo(player, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == FFProjector_Sizing_TILE_ENTITY_GUI) {
-            return new GuiFFProjectorSizing(player, player.inventory, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
+            return new GuiFFProjectorSizing(player, (TEFFProjector) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == CrystalRefinery_TILE_ENTITY_GUI) {
             return new GuiCrystalRefinery(player.inventory, (TECrystalRefinery) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == FFProjector_Security_TILE_ENTITY_GUI) {

@@ -113,7 +113,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
                 new PosXY(24, 100),
                 new AnchorPoint(0, 0),
                 GuiUtils.font);
-        ownerTitleLabel.setText(StatCollector.translateToLocal("gui.mff:sizing"));
+        ownerTitleLabel.setText(StatCollector.translateToLocal("gui.mff:owner"));
 
         final UILabel ownerLabel = new UILabel(getWorkspace(),
                 "ownerLabel",
@@ -250,6 +250,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
         super.onGuiClosed();
         if (GuiUtils.sequencer.isRunning()) {
             GuiUtils.sequencer.stop();
+            GuiUtils.sequencer.close();
         }
     }
 }

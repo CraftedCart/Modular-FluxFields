@@ -122,7 +122,7 @@ public class GuiFFProjectorBase extends UIDisplay {
         sidebarSizingButton.setOnClickAction(new UIAction() {
             @Override
             public void execute() {
-                NetworkHandler.network.sendToServer(new MessageRequestOpenGui(te.getPos(), player, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI));
+                player.openGui(ModMFF.instance, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI,te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
             }
         });
 

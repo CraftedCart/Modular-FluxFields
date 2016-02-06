@@ -100,12 +100,20 @@ public class UIColor {
         return matRed(1);
     }
 
-    public static UIColor matOrange(double a) { //Short for Material Blue
+    public static UIColor matOrange(double a) { //Short for Material Orange
         return new UIColor(255, 152, 0, a);
     }
 
     public static UIColor matOrange() {
         return matOrange(1);
+    }
+
+    public static UIColor matGreen(double a) { //Short for Material Green
+        return new UIColor(76, 175, 80, a);
+    }
+
+    public static UIColor matGreen() {
+        return matGreen(1);
     }
 
 }
