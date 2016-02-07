@@ -1,6 +1,5 @@
 package io.github.craftedcart.MFF.client.gui.guiutils;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.TrueTypeFont;
 
 /**
@@ -12,6 +11,12 @@ public class UILabel extends UIComponent {
     protected TrueTypeFont font;
     protected String text = "";
     protected UIColor textColor = UIColor.matGrey900();
+    /**
+     * -1: Left<br>
+     *  0: Center<br>
+     *  1: Right<br>
+     */
+    protected byte horizontalAlign = -1;
 
     public UILabel(UIComponent parentComponent, String name, PosXY topLeftPoint,
                    AnchorPoint topLeftAnchor, TrueTypeFont font) {
@@ -21,18 +26,18 @@ public class UILabel extends UIComponent {
         this.setPanelBackgroundColor(UIColor.transparent());
     }
 
-    public UILabel(UIComponent parentComponent, String name, PosXY topLeftPoint,
-                   AnchorPoint topLeftAnchor, AnchorPoint bottomRightAnchor, TrueTypeFont font) {
-        super(parentComponent, name, topLeftPoint, topLeftPoint,
-                bottomRightAnchor, topLeftAnchor);
-        this.font = font;
-        this.setPanelBackgroundColor(UIColor.transparent());
-    }
-
     @Override
     protected void onUpdate() {
         super.onUpdate();
-        GuiUtils.drawString(font, (int) topLeftPx.x, (int) topLeftPx.y, text, textColor);
+        int xPoint = 0;
+        if (horizontalAlign == -1) { //Left align
+            xPoint = (int) topLeftPx.x;
+        } else if (horizontalAlign == 0) { //Center align
+            xPoint = (int) (topLeftPx.x - font.getWidth(text) / 2);
+        } else if (horizontalAlign == 1) {
+            xPoint = (int) (topLeftPx.x - font.getWidth(text));
+        }
+        GuiUtils.drawString(font, xPoint, (int) topLeftPx.y, text, textColor);
     }
 
     public void setTextColor(UIColor textColor) {
@@ -48,4 +53,14 @@ public class UILabel extends UIComponent {
         this.font = font;
         bottomRightPoint = topLeftPoint.add(font.getWidth(text), font.getHeight());
     }
+
+    /**
+     * -1: Left<br>
+     *  0: Center<br>
+     *  1: Right<br>
+     */
+    public void setHorizontalAlign(int horizontalAlign) {
+        this.horizontalAlign = (byte) horizontalAlign;
+    }
+
 }

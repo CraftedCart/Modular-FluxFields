@@ -81,7 +81,7 @@ gui.mff:addToGroup=Add to group
 gui.mff:setPerms=Permissions
 gui.mff:group=Group
 gui.mff:everyone=Everyone
-gui.mff:calculating=Calculating
+gui.mff:initializing=Initializing
 
 gui.mff:secs=s
 gui.mff:mins=m

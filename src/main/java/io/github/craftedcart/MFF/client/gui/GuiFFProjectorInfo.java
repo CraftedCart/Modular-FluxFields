@@ -156,6 +156,99 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
             }
         });
 
+        //<editor-fold desc="Initialization radial progress bars and labels">
+        final UIComponent initGroup = new UIComponent(getWorkspace(),
+                "initGroup",
+                new PosXY(24, 148),
+                new PosXY(-24, -24),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 1));
+        initGroup.setPanelBackgroundColor(UIColor.transparent());
+
+        final UIRadialProgressBar initWallsRadialProgBar = new UIRadialProgressBar(initGroup,
+                "initWallsRadialProgBar",
+                new PosXY(0, 0),
+                new PosXY(0, 0),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 1));
+        initWallsRadialProgBar.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                initWallsRadialProgBar.setProgress((double) te.blockPlaceProgress / te.wallBlockList.size());
+            }
+        });
+
+        final UIRadialProgressBar initInnerRadialProgBar = new UIRadialProgressBar(initGroup,
+                "initInnerRadialProgBar",
+                new PosXY(6, 6),
+                new PosXY(-6, -6),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 1));
+        initInnerRadialProgBar.setRadialForegroundColor(UIColor.matOrange());
+        initInnerRadialProgBar.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                initInnerRadialProgBar.setProgress((double) (te.blockPlaceProgress - te.wallBlockList.size()) / te.innerBlockList.size());
+            }
+        });
+
+        final UILabel initializingTitleLabel = new UILabel(initGroup,
+                "initializingTitleLabel",
+                new PosXY(0, -35),
+                new AnchorPoint(0.5, 0.5),
+                GuiUtils.font);
+        initializingTitleLabel.setHorizontalAlign(0);
+        initializingTitleLabel.setText(StatCollector.translateToLocal("gui.mff:initializing"));
+
+        final UILabel remainingLabel = new UILabel(initGroup,
+                "initPercentLabel",
+                new PosXY(0, -12),
+                new AnchorPoint(0.5, 0.5),
+                GuiUtils.font);
+        remainingLabel.setHorizontalAlign(0);
+        remainingLabel.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                //Calculate init time remaining
+                double calcSecsDiff = (double) ((te.wallBlockList.size() + te.innerBlockList.size()) - te.blockPlaceProgress) / 20;
+                int chr = (int) (calcSecsDiff / 3600);
+                int crem = (int) (calcSecsDiff % 3600);
+                int cmn = crem / 60;
+                int csec = crem % 60;
+                String chrStr = (chr < 10 ? "0" : "") + chr;
+                String cmnStr = (cmn < 10 ? "0" : "") + cmn;
+                String csecStr = (csec < 10 ? "0" : "") + csec;
+
+                remainingLabel.setText(String.format("%s : %s : %s", chrStr, cmnStr, csecStr));
+            }
+        });
+
+        final UILabel initPercentLabel = new UILabel(initGroup,
+                "initPercentLabel",
+                new PosXY(0, 12),
+                new AnchorPoint(0.5, 0.5),
+                GuiUtils.font);
+        initPercentLabel.setHorizontalAlign(0);
+        initPercentLabel.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                initPercentLabel.setText(String.format("%06.2f%%", (double) te.blockPlaceProgress / (te.wallBlockList.size() + te.innerBlockList.size()) * 100));
+            }
+        });
+
+        initGroup.setOnUpdateAction(new UIAction() {
+            @Override
+            public void execute() {
+                if (te.hasCalcInnerBlocksUpgrade) {
+                    initInnerRadialProgBar.setVisible(true);
+                } else {
+                    initInnerRadialProgBar.setVisible(false);
+                }
+            }
+        });
+        //</editor-fold>
+
+        //<editor-fold desc="Open Your Eyes Konami Code Easter Egg (UILabel)">
         final UILabel openYourEyesEasterEggLabel = new UILabel(getWorkspace(),
                 "openYourEyesKonamiCodeEasterEggLabel",
                 new PosXY(8, -24),
@@ -242,6 +335,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
                 }
             }
         });
+        //</editor-fold>
 
     }
 
