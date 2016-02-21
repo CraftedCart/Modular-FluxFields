@@ -5,9 +5,9 @@
 
     "package": {
         "name": "Modular-FluxFields-Bleeding-Edge", // Bintray package name
-        "repo": "Modular-FluxFields", // Bintray repository name
+        "repo": "CraftedCart-Java", // Bintray repository name
         "subject": "craftedcart", // Bintray subject (user or organization)
-        "desc": "I was pushed completely automatically",
+        "desc": "Automatic uploads are pushed here from Travis CI, which are taken from the GitHub repo",
         "website_url": "http://craftedcart.github.io/Modular-FluxFields/",
         "issue_tracker_url": "https://github.com/CraftedCart/Modular-FluxFields/issues",
         "vcs_url": "https://github.com/CraftedCart/Modular-FluxFields.git",
@@ -37,7 +37,7 @@
 
     "files":
         [
-            {"includePattern": "build/libs/(.*\.jar)",  "uploadPattern": "builds/$1"}
+            {"includePattern": "build/libs/(.*\.jar)",  "uploadPattern": "Modular-FluxFields/|||BUILD|||-|||COMMIT|||/$1"}
         ],
     "publish": true
 }
