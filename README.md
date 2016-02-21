@@ -1,7 +1,9 @@
 Modular FluxFields
 ==================
 
-[![Build Status](https://travis-ci.org/CraftedCart/Modular-FluxFields.svg)](https://travis-ci.org/CraftedCart/Modular-FluxFields)
+[![Build Status](https://travis-ci.org/CraftedCart/Modular-FluxFields.svg)](https://travis-ci.org/CraftedCart/Modular-FluxFields)  
+Alpha: [ ![Download](https://api.bintray.com/packages/craftedcart/Modular-FluxFields/Modular-FluxFields-Alpha/images/download.svg) ](https://bintray.com/craftedcart/Modular-FluxFields/Modular-FluxFields-Alpha/_latestVersion)  
+Bleeding Edge: [ ![Download](https://api.bintray.com/packages/craftedcart/Modular-FluxFields/Modular-FluxFields-Bleeding-Edge/images/download.svg)   ](https://bintray.com/craftedcart/Modular-FluxFields/Modular-FluxFields-Bleeding-Edge/_latestVersion)
 
 A Minecraft Mod that adds forcefields to protect your base!
 
