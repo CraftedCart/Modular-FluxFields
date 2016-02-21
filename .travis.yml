@@ -1,1 +1,12 @@
 language: java
+deploy:
+  skip-cleanup: true
+  provider: bintray
+  file: ".bintrayDescriptor"
+  user: "craftedcart"
+  key:
+    secure: F07bFIT2lgVOAh74MeK22WTZCFf0mpnyLBWTJaGa9x/r5Bpm5KIS79JgL3w1n7ldrc7IPYtPbVlrCQkGKZxBeQG5lZiC9XEdelG94RppfC8EOOZ4gq1eht8QgXcKipnX5wYnJJnl5gJypJsaMHtGfK7jKniQmvou3yrggs036RrxQMxrxjjrVhcjbDI+aclUqCp164wshzqttqqIwMAPm8VeOZlm+u2GQ3PF8ddRD1kb2CyN2y8KaAYLWNWqu+LJw1ea6N19H/fyd85Lo7dJ1KWmjPr3xEwNBVSjB7KeiFYiKhwhb26Nqa/cLOuufYvCG4t+Zun2xENrHzpIjaq2qST82LZabDf6PTPk2E5ANQFzvFN6OpXVpIvcBB7IxphzwIByh8E7jXch/E+GNBRBZ8DNkz226dzoFHNz/qnCPVyp09nNIYJh3UXa91drSimpY8eqh1BdGaYFhe2uKi2gUzSsOqR84Y8bm/xi/b/ZCmRYEYrI0JNW5l1dgPuV2VQ04sX8FEWtAsfsfAGCBoB/LcbQKVWBBEqe6e+cJvIEn2h77dWci60XO/AmaOupodB31/gco4nKmWkGw9FQKvDkNpbB6eofsx4kj3tq1lfdu3NHD1+bOTDsuFm9mkx9dhV3nzJt9/3iHG8hBatIdtmaURaXlFnCE93RVeTDObuIBEA=
+
+before_deploy:
+  - sed -ie "s/|||COMMIT|||/${TRAVIS_COMMIT}/g" .bintrayDescriptor
+  - sed -ie "s/|||BUILD|||/${TRAVIS_BUILD_NUMBER}/g" .bintrayDescriptor

@@ -1,0 +1,43 @@
+{
+    /* Bintray package information.
+       In case the package already exists on Bintray, only the name, repo and subject
+       fields are mandatory. */
+
+    "package": {
+        "name": "Modular-FluxFields-Bleeding-Edge", // Bintray package name
+        "repo": "Modular-FluxFields", // Bintray repository name
+        "subject": "craftedcart", // Bintray subject (user or organization)
+        "desc": "I was pushed completely automatically",
+        "website_url": "http://craftedcart.github.io/Modular-FluxFields/",
+        "issue_tracker_url": "https://github.com/CraftedCart/Modular-FluxFields/issues",
+        "vcs_url": "https://github.com/CraftedCart/Modular-FluxFields.git",
+        "licenses": ["GPL-2.0"],
+        "labels": ["Minecraft", "mod"],
+        "public_download_numbers": true,
+        "public_stats": true
+    },
+
+    /* Package version information.
+       In case the version already exists on Bintray, only the name fields is mandatory. */
+
+    "version": {
+        "name": "|||BUILD|||-|||COMMIT|||",
+        "desc": "Built from travis-ci #|||BUILD|||, GitHub commit #|||COMMIT|||"
+    },
+
+    /* Configure the files you would like to upload to Bintray and their upload path.
+    You can define one or more groups of patterns.
+    Each group contains three patterns:
+
+    includePattern: Pattern in the form of Ruby regular expression, indicating the path of files to be uploaded to Bintray.
+    excludePattern: Optional. Pattern in the form of Ruby regular expression, indicating the path of files to be removed from the list of files specified by the includePattern.
+    uploadPattern: Upload path on Bintray. The path can contain symbols in the form of $1, $2,... that are replaced with capturing groups defined in the include pattern.
+
+    Note: Regular expressions defined as part of the includePattern property must be wrapped with brackets. */
+
+    "files":
+        [
+            {"includePattern": "build/libs/(.*\.jar)",  "uploadPattern": "builds/$1"}
+        ],
+    "publish": true
+}
