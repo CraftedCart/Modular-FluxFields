@@ -3,18 +3,15 @@ package io.github.craftedcart.MFF.utility;
 import net.minecraft.util.StatCollector;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.*;
 import java.nio.file.Files;
 
 /**
@@ -163,6 +160,25 @@ public class DependencyUtils {
             frame.setVisible(false);
             frame.dispose();
         }
+    }
+
+    public static String httpGetString(String url) throws IOException {
+
+        StringBuilder result = new StringBuilder();
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+        conn.setRequestMethod("GET");
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String line;
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
+        }
+        rd.close();
+        return result.toString();
+
+    }
+
+    public static BufferedImage httpGetImage(String url) throws IOException {
+        return ImageIO.read(new URL(url));
     }
 
 }

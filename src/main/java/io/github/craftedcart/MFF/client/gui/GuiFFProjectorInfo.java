@@ -27,7 +27,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
         this.te = te;
         this.player = player;
     }
-
+    
     @Override
     public void onInit() {
         super.onInit();
@@ -201,7 +201,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
         initializingTitleLabel.setText(StatCollector.translateToLocal("gui.mff:initializing"));
 
         final UILabel remainingLabel = new UILabel(initGroup,
-                "initPercentLabel",
+                "initRemainingLabel",
                 new PosXY(0, -12),
                 new AnchorPoint(0.5, 0.5),
                 GuiUtils.font);

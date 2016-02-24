@@ -28,6 +28,14 @@ public class UIColor {
         return new UIColor(0, 0, 0, 0);
     }
 
+    public static UIColor pureWhite(double a) {
+        return new UIColor(255, 255, 255, a);
+    }
+
+    public static UIColor pureWhite() {
+        return pureWhite(1);
+    }
+
     public static UIColor matBlue(double a) { //Short for Material Blue
         return new UIColor(33, 150, 243, a);
     }

@@ -59,28 +59,48 @@ gui.mff:t=t
 gui.mff:remaining=Remaining
 gui.mff:time=Time
 
-gui.mff:securityPlayers=Security: Manage Players
-gui.mff:securityGroups=Security: Manage Groups
-gui.mff:securityAddToGroup=Security: Add to Group
-gui.mff:securitySetGroupPerms=Set Group Permissions
-gui.mff:securitySetGeneralPerms=Set General Permissions
-gui.mff:securityNoUpgrade=No Security Upgrade Found
-gui.mff:securityDamagePlayers=Damage and kill players
-gui.mff:securityDamageHostileMobs=Damage and kill hostile mobs
-gui.mff:securityDamagePeacefulMobs=Damage and kill peaceful animals
-gui.mff:playerNotOnline=That player's not online
-gui.mff:addedPermittedPlayer=Added player to the whitelist
-gui.mff:permittedPlayerAlreadyExists=Player's already on the list
-gui.mff:remove=Remove
 gui.mff:owner=Owner
 gui.mff:uptime=Uptime
-gui.mff:addedNewGroup=Added new group
-gui.mff:groupAlreadyExists=Group already exists
-gui.mff:chooseAName=Choose a name
-gui.mff:addToGroup=Add to group
-gui.mff:setPerms=Permissions
-gui.mff:group=Group
+
+#Security
+gui.mff:addPlayer=Add player
+gui.mff:addPermGroup=Add permission group
 gui.mff:everyone=Everyone
+gui.mff:securityNoUpgrade=No security upgrade found
+gui.mff:players=Players
+gui.mff:permGroups=Permission Groups
+gui.mff:playerRegistered=Registered player
+gui.mff:playerAlreadyRegistered=That player has already been registered
+gui.mff:cantContactMojang=Can't contact Mojang's servers
+gui.mff:invalidResponseMojang=Invalid response from Mojang's servers
+gui.mff:playerDoesNotExist=Player does not exist
+gui.mff:runningTasks=Running tasks
+gui.mff:cantContactCrafatar=Can't contact Crafatar's servers
+gui.mff:groupRegistered=Registered permission group
+gui.mff:groupAlreadyRegistered=That group has already been registered
+gui.mff:playerOptions=Player Options
+gui.mff:group=Group
+gui.mff:multiple=[Multiple]
+gui.mff:nothingSelected=[Nothing Selected]
+gui.mff:name=Name
+gui.mff:uuid=UUID
+gui.mff:assignToSelectedGroup=Assign to the selected group
+gui.mff:selectAGroup=Select a group to assign that player to
+gui.mff:tooManyGroupsSelected=Too many groups selected - Select one to assign that player to
+gui.mff:removePlayers=Remove the selected players
+gui.mff:selectPlayersToRemove=Select players to remove
+gui.mff:groupOptions=Group Options
+gui.mff:selectMembersOfGroup=Select the members of the selected groups
+gui.mff:removeGroups=Remove the selected groups
+gui.mff:selectGroupsToRemove=Select groups to remove
+gui.mff:selectGroupsToSelectMembers=Select groups first to select their members
+gui.mff:selectPlayersToAssign=Select players to assign to a group
+gui.mff:renameGroup=Rename group
+gui.mff.killPlayers=Kill players
+gui.mff:allowSecurityModification=Allow players to modify the security system
+
+gui.mff:undo=Undo
+
 gui.mff:initializing=Initializing
 
 gui.mff:secs=s

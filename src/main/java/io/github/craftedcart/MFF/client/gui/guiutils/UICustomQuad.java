@@ -23,13 +23,13 @@ public class UICustomQuad extends UIComponent {
     protected void onUpdate() {
         if (visible) {
             topRightPx = new PosXY(
-                    parentComponent.width * bottomRightAnchor.xPercent + topRightPoint.x + parentComponent.topLeftPx.x,
-                    parentComponent.height * topLeftAnchor.yPercent + topRightPoint.y + parentComponent.topLeftPx.y
+                    parentComponent.width * bottomRightAnchor.xPercent + topRightPoint.x + parentComponent.topLeftPx.x + parentComponent.pointOffset.x,
+                    parentComponent.height * topLeftAnchor.yPercent + topRightPoint.y + parentComponent.topLeftPx.y + parentComponent.pointOffset.y
             );
 
             bottomLeftPx = new PosXY(
-                    parentComponent.width * topLeftAnchor.xPercent + bottomLeftPoint.x + parentComponent.topLeftPx.x,
-                    parentComponent.height * bottomRightAnchor.yPercent + bottomLeftPoint.y + parentComponent.topLeftPx.y
+                    parentComponent.width * topLeftAnchor.xPercent + bottomLeftPoint.x + parentComponent.topLeftPx.x + parentComponent.pointOffset.x,
+                    parentComponent.height * bottomRightAnchor.yPercent + bottomLeftPoint.y + parentComponent.topLeftPx.y + parentComponent.pointOffset.y
             );
         }
         super.onUpdate();

@@ -28,16 +28,18 @@ public class UILabel extends UIComponent {
 
     @Override
     protected void onUpdate() {
-        super.onUpdate();
-        int xPoint = 0;
-        if (horizontalAlign == -1) { //Left align
-            xPoint = (int) topLeftPx.x;
-        } else if (horizontalAlign == 0) { //Center align
-            xPoint = (int) (topLeftPx.x - font.getWidth(text) / 2);
-        } else if (horizontalAlign == 1) {
-            xPoint = (int) (topLeftPx.x - font.getWidth(text));
+        if (visible) {
+            super.onUpdate();
+            int xPoint = 0;
+            if (horizontalAlign == -1) { //Left align
+                xPoint = (int) topLeftPx.x;
+            } else if (horizontalAlign == 0) { //Center align
+                xPoint = (int) (topLeftPx.x - font.getWidth(text) / 2);
+            } else if (horizontalAlign == 1) {
+                xPoint = (int) (topLeftPx.x - font.getWidth(text));
+            }
+            GuiUtils.drawString(font, xPoint, (int) topLeftPx.y, text, textColor);
         }
-        GuiUtils.drawString(font, xPoint, (int) topLeftPx.y, text, textColor);
     }
 
     public void setTextColor(UIColor textColor) {

@@ -1,563 +1,1071 @@
 package io.github.craftedcart.MFF.client.gui;
 
-import io.github.craftedcart.MFF.ModMFF;
-import io.github.craftedcart.MFF.container.ContainerFFProjectorSecurity;
-import io.github.craftedcart.MFF.handler.GuiHandler;
-import io.github.craftedcart.MFF.handler.NetworkHandler;
-import io.github.craftedcart.MFF.network.MessageFFProjectorGuiSaveSecurity;
-import io.github.craftedcart.MFF.network.MessageRequestOpenGui;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import io.github.craftedcart.MFF.client.gui.guiutils.*;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.utility.PlayerUtils;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
+import io.github.craftedcart.MFF.utility.DependencyUtils;
+import io.github.craftedcart.MFF.utility.LogHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
- * Created by CraftedCart on 06/12/2015 (DD/MM/YYYY)
+ * Created by CraftedCart on 07/02/2016 (DD/MM/YYYY)
  */
 
-public class GuiFFProjectorSecurity extends GuiContainer {
+public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
 
-    private IInventory playerInv;
-    private TEFFProjector te;
-    private EntityPlayer player;
-    private List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //List containing lists containing a player's UUID, the player's username, and the player's group ID (in that order)
-    private List<List<Object>> permissionGroups = new ArrayList<List<Object>>(); //List containing lists of groups containing the group ID and its permissions (in that order)
+    private Map<String, String[]> permittedPlayers = new HashMap<String, String[]>(); //Map containing players | Key: UUID, String[]: Player name, Group ID
+    private Map<String, Map<String, Boolean>> permissionGroups = new HashMap<String, Map<String, Boolean>>();
+    //Map containing permission groups | Key: Group ID, Map<String, Boolean>: Permissions assigned for that group
     /*
-     * Perm 1: Boolean: Should players be killed
+     * Perm 1: Should players be killed
      */
-    private List<Object> generalPermissions = new ArrayList<Object>(); //List containing the general permissions
-    /*
-     * Perm 1: Boolean: Should hostile mobs be killed
-     * Perm 2: Boolean: Should peaceful mobs be killed
+    private UINotificationManager notificationManager;
+    protected List<String> selectedPlayerUUIDs = new ArrayList<String>();
+    protected List<String> selectedGroupIDs = new ArrayList<String>();
+    protected PlayerData aggregateSelectedPlayerData;
+    protected GroupData aggregateSelectedGroupData;
+
+    private Map<String, BufferedImage> bodyImageCache = new HashMap<String, BufferedImage>();
+
+    protected UIComponent playerOptionsBodyImage;
+    protected UILabel playerOptionsNameLabel;
+    protected UILabel playerOptionsUUIDLabel;
+    protected UILabel playerOptionsGroupLabel;
+    protected UILabel groupNameLabel;
+
+    /**
+     * <b>Array possibilities:</b><br>
+     * UndoAction addPlayer, String playerUUID<br>
+     * UndoAction addGroup, String groupName<br>
+     * UndoAction playersGroupChanged, List&lt;String&gt; selectedPlayerUUIDs, Map&lt;String, String[]&gt; permittedPlayers<br>
+     * UndoAction removePlayers, Map&lt;String, String[]&gt; Map of the permitted player entries that were removed<br>
+     * UndoAction removeGroups, Map&lt;Map&lt;String, Map&lt;String, Boolean&gt;&gt;, String[]&gt; (Key: The group data map, Value: The removed players)<br>
+     * UndoAction renameGroups, Map&lt;String, String&gt; (Key: The new name of the group, Value: The previous name of the group)
      */
-    private Integer selectedItem; //The selected player on the permitted player list
-    private byte guiMode = 0;
-    /*
-     * Gui Modes
-     * 0: Add and manage players
-     * 1: Add and manage groups
-     * 2: Add a player to a group
-     * 3: Set group permissions
-     * 4: Set general permissions
-     */
+    private List<Object[]> undoHistory = new ArrayList<Object[]>();
 
-    //Gui Elements
-    private GuiTextField addItemTextField; //The text box to add a player to the permitted players list or to create a new group
-    private GuiButton removeButton; //The remove button
-    private GuiButton addToGroupButton; //The add a player to a group button
-    private GuiButton setGroupPermsButton; //The set group permissions to a group button
-    //Gui(ish) Elements
-    private String statusMessage; //The status message text
+    protected Map<String, Boolean> permissionGroupDefaultPermissions = new HashMap<String, Boolean>(){{
+        put("gui.mff.killPlayers", false);
+        put("gui.mff:allowSecurityModification", false);
+    }};
 
-    public GuiFFProjectorSecurity(EntityPlayer player, IInventory playerInv, TEFFProjector te) {
-        super(new ContainerFFProjectorSecurity(playerInv, te));
-
-        this.playerInv = playerInv;
+    public GuiFFProjectorSecurity(EntityPlayer player, TEFFProjector te) {
         this.te = te;
         this.player = player;
-
-        this.xSize = 256;
-        this.ySize = 178;
-
-        this.permittedPlayers.addAll(this.te.permittedPlayers);
-        this.permissionGroups.addAll(this.te.permissionGroups);
-        this.generalPermissions.addAll(this.te.generalPermissions);
     }
 
     @Override
-    public void initGui() {
-        super.initGui();
-        this.addItemTextField = new GuiTextField(0, this.fontRendererObj, 15, 29, 154, 9); //Create text field to add a player to the security system
-        addItemTextField.setMaxStringLength(16); //Set the text field's max length to 16 (the max length of a Minecraft username)
-        this.addItemTextField.setFocused(true); //Automatically focus the text box by default
-        buttonList.add(this.removeButton = new GuiButton(0, this.guiLeft + 7, this.guiTop + 62, 64, 20, StatCollector.translateToLocal("gui.mff:remove"))); //Create remove button
-        buttonList.add(this.addToGroupButton = new GuiButton(1, this.guiLeft + 73, this.guiTop + 62, 72, 20, StatCollector.translateToLocal("gui.mff:addToGroup"))); //Create add player to group button
-        buttonList.add(this.setGroupPermsButton = new GuiButton(1, this.guiLeft + 73, this.guiTop + 62, 72, 20, StatCollector.translateToLocal("gui.mff:setPerms"))); //Create add player to group button
+    public void onInit() {
+        super.onInit();
+
+        aggregateSelectedPlayerData = getAggregatePlayerData(selectedPlayerUUIDs);
+        aggregateSelectedGroupData = getAggregateGroupData(selectedGroupIDs);
+
+        setTitle(StatCollector.translateToLocal("gui.mff:security"));
+
+        if (te.hasSecurityUpgrade) {
+
+            final UIComponent undoManager = new UIComponent(getWorkspace(),
+                    "undoManager",
+                    new PosXY(0, 0),
+                    new PosXY(0, 0),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(0, 0));
+            //Undo manager onUpdateAction is set later
+
+            //<editor-fold desc="Text Fields & List Boxes">
+            final UITextField addPlayerTextField = new UITextField(getWorkspace(),
+                    "addPlayerTextField",
+                    new PosXY(24, 24),
+                    new PosXY(-12, 48),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(0.4, 0));
+            addPlayerTextField.setPlaceholderText(StatCollector.translateToLocal("gui.mff:addPlayer"));
+
+            final UITextField addPermGroupTextField = new UITextField(getWorkspace(),
+                    "addPermGroupTextField",
+                    new PosXY(24, 52),
+                    new PosXY(-12, 76),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(0.4, 0));
+            addPermGroupTextField.setPlaceholderText(StatCollector.translateToLocal("gui.mff:addPermGroup"));
+
+            final UILabel playersTitleLabel = new UILabel(getWorkspace(),
+                    "playersTitleLabel",
+                    new PosXY(12, 24),
+                    new AnchorPoint(0.4, 0),
+                    GuiUtils.font);
+            playersTitleLabel.setText(StatCollector.translateToLocal("gui.mff:players"));
+
+            final UIListBox playersListBox = new UIListBox(getWorkspace(),
+                    "playersListBox",
+                    new PosXY(12, 48),
+                    new PosXY(-12, -24),
+                    new AnchorPoint(0.4, 0),
+                    new AnchorPoint(0.7, 1));
+
+            final UILabel permGroupsTitleLabel = new UILabel(getWorkspace(),
+                    "permGroupsTitleLabel",
+                    new PosXY(12, 24),
+                    new AnchorPoint(0.7, 0),
+                    GuiUtils.font);
+            permGroupsTitleLabel.setText(StatCollector.translateToLocal("gui.mff:permGroups"));
+
+            final UIListBox permGroupsListBox = new UIListBox(getWorkspace(),
+                    "permGroupsListBox",
+                    new PosXY(12, 48),
+                    new PosXY(-24, -24),
+                    new AnchorPoint(0.7, 0),
+                    new AnchorPoint(1, 1));
+
+            addPlayerTextField.setOnTabAction(new UIAction() {
+                @Override
+                public void execute() {
+                    getWorkspace().setSelectedComponent(addPermGroupTextField.componentID);
+                }
+            });
+            addPermGroupTextField.setOnTabAction(new UIAction() {
+                @Override
+                public void execute() {
+                    getWorkspace().setSelectedComponent(addPlayerTextField.componentID);
+                }
+            });
+
+            addPlayerTextField.setOnReturnAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (!addPlayerTextField.value.isEmpty()) {
+                        addPlayer(addPlayerTextField.value, playersListBox);
+                        addPlayerTextField.clearValue();
+                    }
+                }
+            });
+
+            addPermGroupTextField.setOnReturnAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (!addPermGroupTextField.value.isEmpty()) {
+                        addGroup(addPermGroupTextField.value, permGroupsListBox);
+                        addPermGroupTextField.clearValue();
+                    }
+                }
+            });
+            //</editor-fold>
+
+            //<editor-fold desc="Tasks Components & Undo Button">
+            final UIComponent tasksComponent = new UIComponent(getWorkspace(),
+                    "tasksComponent",
+                    new PosXY(24, 80),
+                    new PosXY(-12, 104),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(0.4, 0));
+            tasksComponent.setPanelBackgroundColor(UIColor.transparent());
+
+            final UIIndeterminateRadialProgressBar tasksProgBar = new UIIndeterminateRadialProgressBar(tasksComponent, //Tasks indeterminate radial progress bar
+                    "tasksProgBar",
+                    new PosXY(0, 0),
+                    new PosXY(24, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(0, 0));
+
+            final UILabel tasksLabel = new UILabel(tasksComponent,
+                    "tasksLabel",
+                    new PosXY(28, 4),
+                    new AnchorPoint(0, 0),
+                    GuiUtils.font);
+
+            tasksComponent.setOnUpdateAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (SecurityTaskManager.runningTasks == 0) {
+                        tasksProgBar.setVisible(false);
+                        tasksLabel.setVisible(false);
+                    } else {
+                        tasksProgBar.setVisible(true);
+                        tasksLabel.setVisible(true);
+                        tasksLabel.setText(String.format("%s: %d", StatCollector.translateToLocal("gui.mff:runningTasks"), SecurityTaskManager.runningTasks));
+                    }
+                }
+            });
+
+            final UITextButton undoButton = new UITextButton(tasksComponent,
+                    "undoButton",
+                    new PosXY(-GuiUtils.font.getWidth(StatCollector.translateToLocal("gui.mff:undo")) - 24, 0),
+                    new PosXY(0, 0),
+                    new AnchorPoint(1, 0),
+                    new AnchorPoint(1, 1));
+            undoButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+            undoButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            undoButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            undoButton.uiLabel.setTextColor(UIColor.matWhite());
+            undoButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:undo"));
+            //The undo button action is set later
+            //</editor-fold>
+
+            final UIListBox securityOptionsListBox = new UIListBox(getWorkspace(),
+                    "securityOptionsListBox",
+                    new PosXY(24, 128),
+                    new PosXY(-12, -24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(0.4, 1));
+            securityOptionsListBox.setPanelBackgroundColor(UIColor.transparent());
+
+            //<editor-fold desc="Player Options Title">
+            final UIComponent playerOptionsTitleLabelComponent = new UIComponent(null,
+                    "playerOptionsTitleLabelComponent",
+                    new PosXY(0, 4),
+                    new PosXY(0, 32),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            playerOptionsTitleLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+            final UILabel playerOptionsLabel = new UILabel(playerOptionsTitleLabelComponent,
+                    "playerOptionsLabel",
+                    new PosXY(0, 0),
+                    new AnchorPoint(0.5, 0),
+                    GuiUtils.font);
+            playerOptionsLabel.setHorizontalAlign(0);
+            playerOptionsLabel.setText(StatCollector.translateToLocal("gui.mff:playerOptions"));
+
+            securityOptionsListBox.addItem("playerOptionsTitleLabelComponent", playerOptionsTitleLabelComponent);
+            //</editor-fold>
+
+            //<editor-fold desc="Player Options Player Info">
+            final UIComponent playerOptionsPlayerInfo = new UIComponent(null,
+                    "playerOptionsPlayerInfo",
+                    new PosXY(0, 0),
+                    new PosXY(0, 128),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            playerOptionsPlayerInfo.setPanelBackgroundColor(UIColor.transparent());
+
+            playerOptionsBodyImage = new UIComponent(playerOptionsPlayerInfo,
+                    "playerOptionsBodyImage",
+                    new PosXY(0, 0),
+                    new PosXY(57, 128),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(0, 0));
+            playerOptionsBodyImage.setPanelBackgroundColor(UIColor.transparent());
+
+            playerOptionsNameLabel = new UILabel(playerOptionsPlayerInfo,
+                    "playerOptionsNameLabel",
+                    new PosXY(81, 4),
+                    new AnchorPoint(0, 0),
+                    GuiUtils.font);
+
+            playerOptionsUUIDLabel = new UILabel(playerOptionsPlayerInfo,
+                    "playerOptionsUUIDLabel",
+                    new PosXY(81, 28),
+                    new AnchorPoint(0, 0),
+                    GuiUtils.debugFont);
+
+            playerOptionsGroupLabel = new UILabel(playerOptionsPlayerInfo,
+                    "playerOptionsGroupLabel",
+                    new PosXY(81, 46),
+                    new AnchorPoint(0, 0),
+                    GuiUtils.font);
+
+            final UITextButton playerOptionsSetGroupButton = new UITextButton(playerOptionsPlayerInfo,
+                    "playerOptionsSetGroupButton",
+                    new PosXY(81, 70),
+                    new PosXY(0, 94),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            playerOptionsSetGroupButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+            playerOptionsSetGroupButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            playerOptionsSetGroupButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            playerOptionsSetGroupButton.uiLabel.setTextColor(UIColor.matWhite());
+            playerOptionsSetGroupButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:assignToSelectedGroup"));
+            playerOptionsSetGroupButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (selectedPlayerUUIDs.size() > 0) {
+                        if (selectedGroupIDs.size() > 0) {
+                            if (selectedGroupIDs.size() < 2) {
+
+                                List<String> undoPlayerUUIDs = new ArrayList<String>(selectedPlayerUUIDs);
+
+                                Map<String, String[]> undoPermittedPlayersMap = new HashMap<String, String[]>(permittedPlayers);
+                                for (Map.Entry<String, String[]> entry : undoPermittedPlayersMap.entrySet()) {
+                                    String[] newArray = new String[entry.getValue().length];
+                                    System.arraycopy(entry.getValue(), 0, newArray, 0, entry.getValue().length);
+                                    entry.setValue(newArray);
+                                }
+
+                                undoHistory.add(new Object[]{UndoAction.playersGroupChanged, undoPlayerUUIDs, undoPermittedPlayersMap});
+
+                                for (String uuid : selectedPlayerUUIDs) {
+                                    String[] currentPlayerData = permittedPlayers.get(uuid);
+                                    currentPlayerData[1] = selectedGroupIDs.get(0); //Set player group
+                                    permittedPlayers.put(uuid, currentPlayerData);
+                                }
+                                selectedPlayerUUIDsChanged();
+                            } else {
+                                notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:tooManyGroupsSelected"), UIColor.matRed());
+                            }
+                        } else {
+                            notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:selectAGroup"), UIColor.matRed());
+                        }
+                    } else {
+                        notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:selectPlayersToAssign"), UIColor.matRed());
+                    }
+                }
+            });
+
+            final UITextButton playerOptionsRemoveButton = new UITextButton(playerOptionsPlayerInfo,
+                    "playerOptionsRemoveButton",
+                    new PosXY(81, 96),
+                    new PosXY(0, 120),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            playerOptionsRemoveButton.setPanelDefaultBackgroundColor(UIColor.matRed());
+            playerOptionsRemoveButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            playerOptionsRemoveButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            playerOptionsRemoveButton.uiLabel.setTextColor(UIColor.matWhite());
+            playerOptionsRemoveButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:removePlayers"));
+            playerOptionsRemoveButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (selectedPlayerUUIDs.size() > 0) {
+                        //Add undo action
+                        Map<String, String[]> undoMap = new HashMap<String, String[]>();
+                        for (String selectedPlayerUUID : selectedPlayerUUIDs) {
+                            undoMap.put(selectedPlayerUUID, permittedPlayers.get(selectedPlayerUUID));
+                        }
+                        undoHistory.add(new Object[]{UndoAction.removePlayers, undoMap});
+
+                        playersListBox.removeItems(selectedPlayerUUIDs.toArray(new String [selectedPlayerUUIDs.size()]));
+                        for (String UUID : selectedPlayerUUIDs) {
+                            permittedPlayers.remove(UUID);
+                        }
+                        selectedPlayerUUIDs.clear();
+                        selectedPlayerUUIDsChanged();
+                    } else {
+                        notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:selectPlayersToRemove"), UIColor.matRed());
+                    }
+                }
+            });
+
+            securityOptionsListBox.addItem("playerOptionsPlayerInfo", playerOptionsPlayerInfo);
+            //</editor-fold>
+
+            //<editor-fold desc="Group Options Title">
+            final UIComponent groupOptionsTitleLabelComponent = new UIComponent(null,
+                    "groupOptionsTitleLabelComponent",
+                    new PosXY(0, 4),
+                    new PosXY(0, 32),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            groupOptionsTitleLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+            final UILabel GroupOptionsLabel = new UILabel(groupOptionsTitleLabelComponent,
+                    "groupOptionsLabel",
+                    new PosXY(0, 0),
+                    new AnchorPoint(0.5, 0),
+                    GuiUtils.font);
+            GroupOptionsLabel.setHorizontalAlign(0);
+            GroupOptionsLabel.setText(StatCollector.translateToLocal("gui.mff:groupOptions"));
+
+            securityOptionsListBox.addItem("groupOptionsTitleLabelComponent", groupOptionsTitleLabelComponent);
+            //</editor-fold>
+
+            //<editor-fold desc="Group Options Buttons">
+            UIComponent groupNameLabelComponent = new UIComponent(null,
+                    "groupNameLabelComponent",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            groupNameLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+            groupNameLabel = new UILabel(groupNameLabelComponent,
+                    "groupNameLabel",
+                    new PosXY(0, 0),
+                    new AnchorPoint(0, 0),
+                    GuiUtils.font);
+            securityOptionsListBox.addItem("groupNameLabelComponent", groupNameLabelComponent);
+
+            securityOptionsListBox.addItem("spacer1", new UIListSpacer(null, "spacer1", 2)); //Add 2px spacer
+
+            final UITextField renameGroupTextField = new UITextField(null,
+                    "renameGroupTextField",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            renameGroupTextField.setPlaceholderText(StatCollector.translateToLocal("gui.mff:renameGroup"));
+            renameGroupTextField.setOnReturnAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (!renameGroupTextField.value.isEmpty()) {
+                        ArrayList<String> prevGroupIDs = new ArrayList<String>();
+                        prevGroupIDs.addAll(selectedGroupIDs);
+                        renameGroups(prevGroupIDs, renameGroupTextField.value, permGroupsListBox);
+                        renameGroupTextField.clearValue();
+                    }
+                }
+            });
+            securityOptionsListBox.addItem("renameGroupTextField", renameGroupTextField);
+
+            securityOptionsListBox.addItem("spacer2", new UIListSpacer(null, "spacer2", 2)); //Add 2px spacer
+
+            UITextButton groupSelectMembersButton = new UITextButton(null,
+                    "groupSelectMembersButton",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            groupSelectMembersButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+            groupSelectMembersButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            groupSelectMembersButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            groupSelectMembersButton.uiLabel.setTextColor(UIColor.matWhite());
+            groupSelectMembersButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:selectMembersOfGroup"));
+            groupSelectMembersButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (selectedGroupIDs.size() > 0) {
+                        selectedPlayerUUIDs.clear();
+                        for (Map.Entry<String, String[]> entry : permittedPlayers.entrySet()) { //Loop through the registered players
+                            if (selectedGroupIDs.contains(entry.getValue()[1])) { //If the player is in one of the selected groups
+                                selectedPlayerUUIDs.add(entry.getKey());
+                            }
+                        }
+                        selectedPlayerUUIDsChanged();
+                    } else {
+                        notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:selectGroupsToSelectMembers"), UIColor.matRed());
+                    }
+                }
+            });
+            securityOptionsListBox.addItem("groupSelectMembersButton", groupSelectMembersButton);
+
+            securityOptionsListBox.addItem("spacer3", new UIListSpacer(null, "spacer3", 2)); //Add 2px spacer
+
+            UITextButton groupRemoveButton = new UITextButton(null,
+                    "groupRemoveButton",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            groupRemoveButton.setPanelDefaultBackgroundColor(UIColor.matRed());
+            groupRemoveButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            groupRemoveButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            groupRemoveButton.uiLabel.setTextColor(UIColor.matWhite());
+            groupRemoveButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:removeGroups"));
+            groupRemoveButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (selectedGroupIDs.size() > 0) {
+
+                        //<editor-fold desc="Store undo data">
+                        Map<Map<String, Map<String, Boolean>>, String[]> undoData = new HashMap<Map<String, Map<String, Boolean>>, String[]>();
+                        for (final String selectedGroupID : selectedGroupIDs) {
+
+                            List<String> prevPlayers = new ArrayList<String>();
+
+                            for (Map.Entry<String, String[]> entry : permittedPlayers.entrySet()) { //Loop through all players
+                                if (entry.getValue()[1].equals(selectedGroupID)) { //If that player is assigned to the current group
+                                    prevPlayers.add(entry.getKey()); //Store the player UUID in the prevPlayers list
+                                }
+                            }
+
+                            undoData.put(new HashMap<String, Map<String, Boolean>>(){{
+                                put(selectedGroupID, permissionGroups.get(selectedGroupID));
+                            }}, prevPlayers.toArray(new String[prevPlayers.size()]));
+                        }
+
+                        undoHistory.add(new Object[]{UndoAction.removeGroups, undoData});
+                        //</editor-fold>
+
+                        permGroupsListBox.removeItems(selectedGroupIDs.toArray(new String [selectedGroupIDs.size()]));
+                        for (String groupID : selectedGroupIDs) {
+                            permissionGroups.remove(groupID);
+                            for (Map.Entry<String, String[]> entry : permittedPlayers.entrySet()) { //Loop through all players
+                                if (entry.getValue()[1].equals(groupID)) { //If that player is assigned to the current group
+                                    entry.setValue(new String[]{entry.getValue()[0], "gui.mff:everyone"}); //Assign that player to the everyone group
+                                }
+                            }
+                        }
+                        selectedGroupIDs.clear();
+                        selectedGroupIDsChanged();
+                        selectedPlayerUUIDsChanged();
+                    } else {
+                        notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:selectGroupsToRemove"), UIColor.matRed());
+                    }
+                }
+            });
+            securityOptionsListBox.addItem("groupRemoveButton", groupRemoveButton);
+            //</editor-fold>
+
+            //<editor-fold desc="Loop through and add permissions">
+            for (Map.Entry<String, Boolean> entry : permissionGroupDefaultPermissions.entrySet()) {
+                final UIComponent permWrapperComponent = new UIComponent(null,
+                        entry.getKey() + "Component",
+                        new PosXY(0, 0),
+                        new PosXY(0, 32),
+                        new AnchorPoint(0, 0),
+                        new AnchorPoint(1, 0));
+                permWrapperComponent.setPanelBackgroundColor(UIColor.transparent());
+
+                final UILabel permLabel = new UILabel(permWrapperComponent,
+                        "permLabel",
+                        new PosXY(4, 4),
+                        new AnchorPoint(0, 0),
+                        GuiUtils.font);
+                permLabel.setText(StatCollector.translateToLocal(entry.getKey()));
+
+                final UIToggleBox permToggleBox = new UIToggleBox(permWrapperComponent,
+                        "permToggleBox",
+                        new PosXY(-28, 4),
+                        new PosXY(-4, -4),
+                        new AnchorPoint(1, 0),
+                        new AnchorPoint(1, 1));
+                permToggleBox.setValue(entry.getValue());
+
+                securityOptionsListBox.addItem(entry.getKey() + "Component", permWrapperComponent);
+            }
+            //</editor-fold>
+
+            undoManager.setOnUpdateAction(new UIAction() {
+                @Override
+                public void execute() {
+                    if (UIDisplay.keyBuffer.contains(Keyboard.KEY_Z) &&
+                            ((Minecraft.isRunningOnMac && (Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMENU))) || //If on Mac and Cmd Z pressed
+                            !Minecraft.isRunningOnMac && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)))) { //If not on mac and Ctrl Z pressed
+
+                        int keyZIndex = UIDisplay.keyBuffer.indexOf(Keyboard.KEY_Z);
+                        UIDisplay.keyBuffer.remove(keyZIndex); //Prevent Z from being typed into text fields
+                        UIDisplay.keyCharBuffer.remove(keyZIndex);
+                        UIDisplay.keyStateBuffer.remove(keyZIndex);
+
+                        undo(playersListBox, permGroupsListBox);
+
+                    }
+                }
+            });
+
+            undoButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    undo(playersListBox, permGroupsListBox);
+                }
+            });
+
+            notificationManager = new UINotificationManager(getWorkspace(), "notificationManager");
+
+            updateSecurityOptions();
+
+        } else {
+            final UILabel noSecurityUpgradeLabel = new UILabel(getWorkspace(),
+                    "noSecurityUpgradeLabel",
+                    new PosXY(24, 24),
+                    new AnchorPoint(0, 0),
+                    GuiUtils.font);
+            noSecurityUpgradeLabel.setText(StatCollector.translateToLocal("gui.mff:securityNoUpgrade"));
+        }
+
     }
 
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    private void addPlayer(final String playerName, final UIListBox playersListBox, final String groupID, final boolean shouldAddUndoAction) {
 
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f); //Make sure the GUI isn't tinted
+        SecurityTaskManager.addTask(new UIAction() {
+            @Override
+            public void execute() {
+                try {
 
-        if (this.te.hasSecurityUpgrade) { //If a security upgrade is installed in the FF Projector
-            if (guiMode == 0) { //If it's on add/manage players mode
-                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityPlayers.png")); //Set the bg image to the players one
-            } else if (guiMode == 1) { //If it's on add/manage groups mode
-                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityGroups.png")); //Set the bg image to the groups one
-            } else if (guiMode == 2) { //If it's on add player to group mode
-                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityAddToGroup.png")); //Set the bg image to the add player to group one
-            } else if (guiMode == 3) { //If it's on set group perms mode
-                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecuritySetGroupPerms.png")); //Set the bg image to the add player to group one
-            } else if (guiMode == 4) { //If it's on set general perms mode
-                this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecuritySetGeneralPerms.png")); //Set the bg image to the add player to group one
+                    String response = DependencyUtils.httpGetString("https://api.mojang.com/users/profiles/minecraft/" + playerName);
+
+                    if (!response.isEmpty()) {
+
+                        JsonObject jsonObject = new JsonParser().parse(response).getAsJsonObject();
+
+                        if (jsonObject.has("name") && jsonObject.has("id")) {
+
+                            final String playerUUID = jsonObject.get("id").getAsString();
+                            final String playerName = jsonObject.get("name").getAsString();
+
+                            if (!permittedPlayers.containsKey(playerUUID)) { //If the player's not already on the permitted players list
+
+                                final String[] playerInfo = new String[]{playerName, groupID};
+                                permittedPlayers.put(playerUUID, playerInfo); //Add the player info the permitted players list
+
+                                final UIButton listItem = new UIButton(null,
+                                        "item" + playerName,
+                                        new PosXY(0, 0),
+                                        new PosXY(0, 32),
+                                        new AnchorPoint(0, 0),
+                                        new AnchorPoint(1, 0));
+                                listItem.setPanelActiveBackgroundColor(UIColor.matBlueGrey700());
+                                listItem.setPanelHitBackgroundColor(UIColor.matBlueGrey300());
+                                listItem.setOnClickAction(new UIAction() { //Click to select the player
+                                    @Override
+                                    public void execute() {
+                                        if (!((Minecraft.isRunningOnMac && (Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA))) || //If on Mac and CMD key down (Negated)
+                                                (!Minecraft.isRunningOnMac && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))))) { //If not on Mac and CTRL key down (Negated)
+                                            selectedPlayerUUIDs.clear();
+                                        }
+                                        if (selectedPlayerUUIDs.contains(playerUUID)) {
+                                            selectedPlayerUUIDs.remove(playerUUID);
+                                        } else {
+                                            selectedPlayerUUIDs.add(playerUUID);
+                                        }
+                                        selectedPlayerUUIDsChanged();
+                                    }
+                                });
+                                listItem.setOnUpdateAction(new UIAction() { //Check if selected and update the bg color
+                                    @Override
+                                    public void execute() {
+                                        if (selectedPlayerUUIDs.contains(playerUUID)) {
+                                            listItem.setPanelDefaultBackgroundColor(UIColor.matBlue());
+                                            listItem.setPanelActiveBackgroundColor(UIColor.matBlue());
+                                        } else {
+                                            listItem.setPanelDefaultBackgroundColor(UIColor.matGrey900());
+                                            listItem.setPanelActiveBackgroundColor(UIColor.matBlueGrey700());
+                                        }
+                                    }
+                                });
+                                final UIComponent listItemPlayerFace = new UIComponent(listItem,
+                                        "playerFaceComponent",
+                                        new PosXY(0, 0),
+                                        new PosXY(32, 32),
+                                        new AnchorPoint(0, 0),
+                                        new AnchorPoint(0, 0));
+                                listItemPlayerFace.setPanelBackgroundColor(UIColor.transparent());
+                                final UILabel listItemPlayerNameLabel = new UILabel(listItem,
+                                        "playerNameLabel",
+                                        new PosXY(36, 4),
+                                        new AnchorPoint(0, 0),
+                                        GuiUtils.font);
+                                listItemPlayerNameLabel.setText(playerName);
+                                listItemPlayerNameLabel.setTextColor(UIColor.matWhite());
+
+                                playersListBox.addItem(playerUUID, listItem);
+                                playersListBox.setTargetScrollY(Math.min(playersListBox.height - playersListBox.getTotalHeightOfComponents(), 0));
+
+                                selectedPlayerUUIDs.clear();
+                                selectedPlayerUUIDs.add(playerUUID);
+                                selectedPlayerUUIDsChanged(); //Update the security options panel
+
+                                if (shouldAddUndoAction) {
+                                    undoHistory.add(new Object[]{UndoAction.addPlayer, playerUUID});
+                                }
+
+                                SecurityTaskManager.addTask(new UIAction() {
+                                    @Override
+                                    public void execute() {
+                                        try {
+
+                                            BufferedImage faceImage = DependencyUtils.httpGetImage("https://crafatar.com/avatars/" + playerUUID + "?overlay=true");
+                                            listItemPlayerFace.setQueuedImage(faceImage);
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                            notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:cantContactCrafatar"), UIColor.matRed());
+                                        }
+                                    }
+                                });
+
+                                notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:playerRegistered"), UIColor.matGreen());
+                            } else {
+                                //Show player already registered notification
+                                notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:playerAlreadyRegistered"), UIColor.matRed());
+                            }
+
+                        } else {
+                            notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:invalidResponseMojang"), UIColor.matRed());
+                        }
+
+                    } else {
+                        notificationManager.addNotification(String.format("%s: %s", StatCollector.translateToLocal("gui.mff:playerDoesNotExist"), playerName), UIColor.matRed());
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:cantContactMojang"), UIColor.matRed());
+                }
+            }
+        });
+
+    }
+
+    private void addPlayer(final String playerName, final UIListBox playersListBox) {
+        addPlayer(playerName, playersListBox, "gui.mff:everyone", true);
+    }
+
+    private void addGroup(final String groupName, final UIListBox permGroupsListBox) {
+
+        if (!permissionGroups.containsKey(groupName)) { //If the group doesn't exist
+
+            permissionGroups.put(groupName, permissionGroupDefaultPermissions); //Add the player info the permitted players list
+
+            addGroupListBoxItem(groupName, permGroupsListBox);
+
+            undoHistory.add(new Object[]{UndoAction.addGroup, groupName});
+
+            notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:groupRegistered"), UIColor.matGreen());
+        } else {
+            //Show player already registered notification
+            notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:groupAlreadyRegistered"), UIColor.matRed());
+        }
+
+    }
+
+    private void renameGroups(final List<String> previousGroupIDs, final String newGroupID, UIListBox permGroupsListBox) {
+        Map<String, String> undoData = new HashMap<String, String>(); //Key: The new group name, Value: The previous group name
+
+        permGroupsListBox.removeItems(previousGroupIDs.toArray(new String[previousGroupIDs.size()])); //Remove the previous group items from the list box
+
+        int appendOffset = 0; //Used in case we try to rename a group to something that already exists
+        for (int i = 0; i < previousGroupIDs.size(); i++) {
+            permissionGroups.remove(previousGroupIDs.get(i)); //Remove the old group
+
+            String toAppendToEnd = i == 0 ? "" : String.valueOf(i + appendOffset); // If the appendOffset is 0, then don't append a number to the end...
+            //...of the new group name, otherwise do append a number
+
+            while (permissionGroups.containsKey(newGroupID + toAppendToEnd)) { //If the new group name already exists
+                appendOffset++; //Keep adding 1 to the number at the end
+                toAppendToEnd = String.valueOf(i + appendOffset);
             }
 
-        } else { //If no security upgrade is installed
-            this.mc.getTextureManager().bindTexture(new ResourceLocation("mff:textures/gui/container/ffProjectorSecurityNoUpgrade.png")); //Set the bg image to the upgrade warning one
+            final String appendToEnd = toAppendToEnd; //I need a variable to be final (maybe?)
+
+            addGroup(newGroupID + appendToEnd, permGroupsListBox);
+
+            undoData.put(newGroupID + appendToEnd, previousGroupIDs.get(i)); //Add the new, old group name to the undo data map
+
+            for (Map.Entry<String, String[]> playerData : permittedPlayers.entrySet()) { //Loop through all players
+                if (playerData.getValue()[1].equals(previousGroupIDs.get(i))) { //If the player's group ID matches the one we're renaming
+                    playerData.setValue(new String[]{playerData.getValue()[0], newGroupID + appendToEnd}); //Set the players group ID the the renamed one
+                }
+            }
+
+            previousGroupIDs.set(i, newGroupID + appendToEnd);
         }
-        this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize); //Draw the bg image
+        Collections.sort(permGroupsListBox.componentNumberIDs);
+        permGroupsListBox.reorganiseItems();
 
-        //Draw power value
-        double power = this.te.power;
-        double maxPower = this.te.maxPower;
-        double powerUsage = this.te.powerUsage;
+        selectedPlayerUUIDsChanged();
+        selectedGroupIDsChanged();
 
-        drawRect(this.guiLeft, this.guiTop - 8, this.guiLeft + xSize, this.guiTop - 6, 0xFF212121);
-        drawRect(this.guiLeft, this.guiTop - 8, (int) (this.guiLeft + (double) xSize * power / maxPower), this.guiTop - 6, 0xFF2196F3);
-
-        this.fontRendererObj.drawString(
-                String.format("%s: %012.2f / %09.0f %s (%.2f %s / t)",
-                        StatCollector.translateToLocal("gui.mff:power"), power, maxPower, StatCollector.translateToLocal("gui.mff:fe"), powerUsage, StatCollector.translateToLocal("gui.mff:fe")),
-                guiLeft, guiTop - 18, 0xFAFAFA, false);
-
+        undoHistory.add(new Object[]{UndoAction.renameGroups, undoData});
     }
 
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    private void addGroupListBoxItem(final String groupName, final UIListBox permGroupsListBox) {
+        final UIButton listItem = new UIButton(null,
+                "item" + groupName,
+                new PosXY(0, 0),
+                new PosXY(0, 32),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        listItem.setPanelActiveBackgroundColor(UIColor.matBlueGrey700());
+        listItem.setPanelHitBackgroundColor(UIColor.matBlueGrey300());
+        listItem.setOnClickAction(new UIAction() { //Click to select the player
+            @Override
+            public void execute() {
+                if (!((Minecraft.isRunningOnMac && (Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA))) || //If on Mac and CMD key down (Negated)
+                        (!Minecraft.isRunningOnMac && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))))) { //If not on Mac and CTRL key down (Negated)
+                    selectedGroupIDs.clear();
+                }
+                if (selectedGroupIDs.contains(groupName)) {
+                    selectedGroupIDs.remove(groupName);
+                } else {
+                    selectedGroupIDs.add(groupName);
+                }
+                selectedGroupIDsChanged();
+            }
+        });
+        listItem.setOnUpdateAction(new UIAction() { //Check if selected and update the bg color
+            @Override
+            public void execute() {
+                if (selectedGroupIDs.contains(groupName)) {
+                    listItem.setPanelDefaultBackgroundColor(UIColor.matBlue());
+                    listItem.setPanelActiveBackgroundColor(UIColor.matBlue());
+                } else {
+                    listItem.setPanelDefaultBackgroundColor(UIColor.matGrey900());
+                    listItem.setPanelActiveBackgroundColor(UIColor.matBlueGrey700());
+                }
+            }
+        });
+        final UILabel listItemGroupNameLabel = new UILabel(listItem,
+                "groupNameLabel",
+                new PosXY(4, 4),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        listItemGroupNameLabel.setText(StatCollector.translateToLocal(groupName));
+        listItemGroupNameLabel.setTextColor(UIColor.matWhite());
 
-        String s = this.te.getDisplayName().getUnformattedText(); //Get the display name of the FF Projector
-        this.fontRendererObj.drawString(s, 75, 4, 0x404040); //Draw block name
-        this.fontRendererObj.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, 84, 0x404040); //Draw inventory name
+        permGroupsListBox.addItem(groupName, listItem);
+        Collections.sort(permGroupsListBox.componentNumberIDs);
+        permGroupsListBox.reorganiseItems();
+        permGroupsListBox.setTargetScrollY(Math.min(permGroupsListBox.height - permGroupsListBox.componentMap.get(groupName).height, 0));
+        selectedGroupIDs.clear();
+        selectedGroupIDs.add(groupName);
+        selectedGroupIDsChanged(); //Update the security options panel
+    }
 
-        if (!this.te.hasSecurityUpgrade) { //If a security upgrade isn't installed
-            this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityNoUpgrade"), 15, 29, 0xFAFAFA); //Draw no upgrade warning
-            this.removeButton.visible = false;
-            this.addToGroupButton.visible = false;
-            this.setGroupPermsButton.visible = false;
+    private PlayerData getAggregatePlayerData(List<String> selectedPlayerUUIDs) {
+
+        PlayerData playerData = new PlayerData();
+        if (selectedPlayerUUIDs.size() == 0) {
+
+            playerData.name = StatCollector.translateToLocal("gui.mff:nothingSelected");
+            playerData.uuid = StatCollector.translateToLocal("gui.mff:nothingSelected");
+            playerData.group = StatCollector.translateToLocal("gui.mff:nothingSelected");
+
+        } else if (selectedPlayerUUIDs.size() == 1) {
+
+            playerData.name = permittedPlayers.get(selectedPlayerUUIDs.get(0))[0];
+            playerData.uuid = selectedPlayerUUIDs.get(0);
+            playerData.group = permittedPlayers.get(selectedPlayerUUIDs.get(0))[1];
+
         } else {
 
-            try { //I can't figure out why I get an IndexOutOfBoundsException occasionally, so here's a hacky way of preventing it
+            //<editor-fold desc="Aggregate groups">
+            boolean allSame = true;
+            for (String selectedPlayerUUID : selectedPlayerUUIDs) {
+                if (!permittedPlayers.get(selectedPlayerUUID)[1].equals(permittedPlayers.get(selectedPlayerUUIDs.get(0))[1])) {
+                    allSame = false;
+                    break;
+                }
+            }
 
-                if (guiMode == 0) { //If it's on add/manage players mode
+            if (allSame) {
+                playerData.group = permittedPlayers.get(selectedPlayerUUIDs.get(0))[1];
+            }
+            //</editor-fold>
 
-                    //<editor-fold desc="Add/Manage players mode">
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityPlayers"), 15, 18, 0x404040); //Draw tab name
+        }
 
-                    this.addItemTextField.drawTextBox(); //Draw add item text box
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
+        return playerData;
 
-                    //<editor-fold desc="Draw the list of players">
-                    GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size
-                    Iterator<List<String>> iter = permittedPlayers.iterator();
-                    int index = 0;
-                    while (iter.hasNext()) { //Loop through the list of permitted players
-                        int col;
-                        if (selectedItem != null && selectedItem == index) { //If the player it's about to draw is selected
-                            col = 0x2196F3; //Set the colour to blue
-                        } else {
-                            col = 0x404040; //Set the colour to grey
+    }
+
+    private GroupData getAggregateGroupData(List<String> selectedGroupIDs) {
+
+        GroupData groupData = new GroupData();
+        if (selectedGroupIDs.size() == 0) {
+
+            groupData.name = StatCollector.translateToLocal("gui.mff:nothingSelected");
+
+        } else if (selectedGroupIDs.size() == 1) {
+
+            groupData.name = selectedGroupIDs.get(0);
+
+        } else {
+
+            //<editor-fold desc="Aggregate groups">
+//            boolean allSame = true;
+//            for (String selectedPlayerUUID : selectedPlayerUUIDs) {
+//                if (!permittedPlayers.get(selectedPlayerUUID)[1].equals(permittedPlayers.get(selectedPlayerUUIDs.get(0))[1])) {
+//                    allSame = false;
+//                    break;
+//                }
+//            }
+//
+//            if (allSame) {
+//                playerData.group = permittedPlayers.get(selectedPlayerUUIDs.get(0))[1];
+//            }
+            //</editor-fold>
+
+            //TODO
+
+        }
+
+        return groupData;
+
+    }
+
+    protected void selectedPlayerUUIDsChanged() {
+        aggregateSelectedPlayerData = getAggregatePlayerData(selectedPlayerUUIDs);
+        updateSecurityOptions();
+    }
+
+    protected void selectedGroupIDsChanged() {
+        aggregateSelectedGroupData = getAggregateGroupData(selectedGroupIDs);
+        updateSecurityOptions();
+    }
+
+    private void updateSecurityOptions() {
+
+        //<editor-fold desc="Get player body render">
+        if (selectedPlayerUUIDs.size() > 0) {
+            if (bodyImageCache.containsKey(selectedPlayerUUIDs.get(0))) {
+                playerOptionsBodyImage.setQueuedImage(bodyImageCache.get(selectedPlayerUUIDs.get(0)));
+            } else {
+
+                SecurityTaskManager.addTask(new UIAction() {
+                    @Override
+                    public void execute() {
+                        try {
+
+                            String uuidToGet = selectedPlayerUUIDs.get(0);
+
+                            BufferedImage bodyImage = DependencyUtils.httpGetImage("https://crafatar.com/renders/body/" + uuidToGet + "?overlay=true");
+                            if (selectedPlayerUUIDs.get(0).equals(uuidToGet)) {
+                                playerOptionsBodyImage.setQueuedImage(bodyImage);
+                            }
+                            bodyImageCache.put(uuidToGet, bodyImage);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            notificationManager.addNotification(StatCollector.translateToLocal("gui.mff:cantContactCrafatar"), UIColor.matRed());
                         }
-                        this.fontRendererObj.drawString(iter.next().get(1), 344, 58 + 9 * index, col); //Draw the player's name
-                        index++;
                     }
-                    //</editor-fold>
+                });
 
-                    GL11.glScalef(2f, 2f, 2f); //Reset scaling
+            }
+        } else {
+            playerOptionsBodyImage.setImage(null);
+        }
+        //</editor-fold>
 
-                    if (selectedItem == null) { //If there's no selected player on the permitted player's list
-                        removeButton.enabled = false; //Disable the remove button
-                        addToGroupButton.enabled = false; //Disable the add to group button
-                    } else {
-                        removeButton.enabled = true; //Enable the remove button
-                        addToGroupButton.enabled = true; //Enable the add to group button
-                        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:group") + ": " + StatCollector.translateToLocal(permittedPlayers.get(selectedItem).get(2)), 15, 51, 0x404040); //Draw selected player's group
-                    }
+        playerOptionsNameLabel.setText(String.format("%s: %s", StatCollector.translateToLocal("gui.mff:name"), aggregateSelectedPlayerData.name));
+        playerOptionsUUIDLabel.setText(String.format("%s: %s", StatCollector.translateToLocal("gui.mff:uuid"), aggregateSelectedPlayerData.uuid));
+        playerOptionsGroupLabel.setText(String.format("%s: %s", StatCollector.translateToLocal("gui.mff:group"), StatCollector.translateToLocal(aggregateSelectedPlayerData.group)));
+        groupNameLabel.setText(String.format("%s: %s", StatCollector.translateToLocal("gui.mff:name"), aggregateSelectedGroupData.name));
 
-                    this.removeButton.visible = true;
-                    this.addToGroupButton.visible = true;
-                    this.setGroupPermsButton.visible = false;
-                    //</editor-fold>
+    }
 
-                } else if (guiMode == 1) { //If it's on add/manage groups mode
+    @SuppressWarnings("unchecked")
+    private void undo(UIListBox playersListBox, UIListBox permGroupsListBox) {
 
-                    //<editor-fold desc="Add/Manage groups mode">
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityGroups"), 15, 18, 0x404040); //Draw tab name
+        if (undoHistory.size() > 0) {
+            Object[] undo = undoHistory.get(undoHistory.size() - 1);
+            UndoAction undoAction = (UndoAction) undo[0];
 
-                    this.addItemTextField.drawTextBox(); //Draw add item text box
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 40, 0x404040); //Draw status message
+            switch (undoAction) {
+                case addPlayer: { //Remove the added player
+                    String playerUUID = (String) undo[1];
 
-                    //<editor-fold desc="Draw the list of groups">
-                    GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size
-                    Iterator<List<Object>> iter = permissionGroups.iterator();
-                    int index = 0;
-                    while (iter.hasNext()) { //Loop through the list of groups
-                        int col;
-                        if (selectedItem != null && selectedItem == index) { //If the group it's about to draw is selected
-                            col = 0x2196F3; //Set the colour to blue
-                        } else {
-                            col = 0x404040; //Set the colour to grey
+                    if (playerUUID != null && permittedPlayers.containsKey(playerUUID)) {
+                        playersListBox.removeItems(playerUUID);
+                        permittedPlayers.remove(playerUUID);
+
+                        if (selectedPlayerUUIDs.contains(playerUUID)) {
+                            selectedPlayerUUIDs.remove(playerUUID);
+                            selectedPlayerUUIDsChanged();
                         }
-                        this.fontRendererObj.drawString(StatCollector.translateToLocal((String) iter.next().get(0)), 344, 58 + 9 * index, col); //Draw the group's name
-                        index++;
-                    }
-                    //</editor-fold>
-
-                    GL11.glScalef(2f, 2f, 2f); //Reset scaling
-
-                    if (selectedItem == null) { //If there's no selected group on the permitted player's list
-                        removeButton.enabled = false; //Disable the remove button
-                        setGroupPermsButton.enabled = false; //Disable the set group perms button
-
                     } else {
-                        setGroupPermsButton.enabled = true; //Enable the set group perms button
-                        if (!permissionGroups.get(selectedItem).get(0).equals("gui.mff:everyone")) { //If the selected group is not Everyone
-                            removeButton.enabled = true; //Enable the remove button
-                        } else {
-                            removeButton.enabled = false; //Disable the remove button
+                        LogHelper.warn("Failed to undo! Action: addPlayer");
+                    }
+
+                    break;
+                } case addGroup: { //Remove the added group
+                    String groupID = (String) undo[1];
+
+                    if (groupID != null) {
+                        permGroupsListBox.removeItems(groupID);
+                        permissionGroups.remove(groupID);
+
+                        for (Map.Entry<String, String[]> entry : permittedPlayers.entrySet()) { //Loop through all players
+                            if (entry.getValue()[1].equals(groupID)) { //If that player is assigned to the current group
+                                entry.setValue(new String[]{entry.getValue()[0], "gui.mff:everyone"}); //Assign that player to the everyone group
+                            }
                         }
-                    }
 
-                    this.removeButton.visible = true;
-                    this.addToGroupButton.visible = false;
-                    this.setGroupPermsButton.visible = true;
-                    //</editor-fold>
-
-                } else if (guiMode == 2) { //If it's on add player to group mode
-
-                    //<editor-fold desc="Add player to group mode">
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securityAddToGroup"), 15, 18, 0x404040); //Draw tab name
-
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 27, 0x404040); //Draw status message
-
-                    //<editor-fold desc="Draw the list of groups">
-                    GL11.glScalef(0.5f, 0.5f, 0.5f); //Used to half the text size
-                    Iterator<List<Object>> iter = permissionGroups.iterator();
-                    int index = 0;
-                    while (iter.hasNext()) { //Loop through the list of groups
-                        this.fontRendererObj.drawString(StatCollector.translateToLocal((String) iter.next().get(0)), 344, 58 + 9 * index, 0x404040); //Draw the group's name
-                        index++;
-                    }
-                    //</editor-fold>
-
-                    GL11.glScalef(2f, 2f, 2f); //Reset scaling
-
-                    this.removeButton.visible = false;
-                    this.addToGroupButton.visible = false;
-                    this.setGroupPermsButton.visible = false;
-                    //</editor-fold>
-
-                } else if (guiMode == 3) { //If it's on set group permissions mode
-
-                    //<editor-fold desc="Set group permissions mode">
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securitySetGroupPerms"), 15, 18, 0x404040); //Draw tab name
-
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal(statusMessage), 15, 27, 0x404040); //Draw status message
-
-                    int mX = mouseX - guiLeft;
-                    int mY = mouseY - guiTop;
-
-                    //<editor-fold desc="Damage players">
-                    if ((Boolean) permissionGroups.get(selectedItem).get(1)) {
-                        drawRect(6, 57, 22, 65, 0xFF4CAF50);
-                    } else {
-                        drawRect(6, 57, 22, 65, 0xFFF44336);
-                    }
-
-                    if (mX >= 6 && mX <= 22 && mY >= 37 && mY <= 53) { //Draw kill players mobs tooltip
-                        List<String> tooltip = new ArrayList<String>();
-                        tooltip.add(StatCollector.translateToLocal("gui.mff:securityDamagePlayers"));
-                        this.drawHoveringText(tooltip, mX, mY, this.fontRendererObj);
-                    }
-                    //</editor-fold>
-
-                    this.removeButton.visible = false;
-                    this.addToGroupButton.visible = false;
-                    this.setGroupPermsButton.visible = false;
-                    //</editor-fold>
-
-                } else if (guiMode == 4) { //If it's on set general perms mode
-
-                    //<editor-fold desc="Set general permissions mode">
-                    this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.mff:securitySetGeneralPerms"), 15, 18, 0x404040); //Draw tab name
-
-                    int mX = mouseX - guiLeft;
-                    int mY = mouseY - guiTop;
-
-                    //<editor-fold desc="Damage hostile mobs">
-                    if ((Boolean) generalPermissions.get(0)) {
-                        drawRect(6, 49, 22, 57, 0xFF4CAF50);
-                    } else {
-                        drawRect(6, 49, 22, 57, 0xFFF44336);
-                    }
-
-                    if (mX >= 6 && mX <= 22 && mY >= 29 && mY <= 45) { //Draw kill hostile mobs tooltip
-                        List<String> tooltip = new ArrayList<String>();
-                        tooltip.add(StatCollector.translateToLocal("gui.mff:securityDamageHostileMobs"));
-                        this.drawHoveringText(tooltip, mX, mY, this.fontRendererObj);
-                    }
-                    //</editor-fold>
-
-                    //<editor-fold desc="Damage peaceful mobs">
-                    if ((Boolean) generalPermissions.get(1)) {
-                        drawRect(26, 49, 42, 57, 0xFF4CAF50);
-                    } else {
-                        drawRect(26, 49, 42, 57, 0xFFF44336);
-                    }
-
-                    if (mX >= 26 && mX <= 42 && mY >= 29 && mY <= 45) { //Draw kill hostile mobs tooltip
-                        List<String> tooltip = new ArrayList<String>();
-                        tooltip.add(StatCollector.translateToLocal("gui.mff:securityDamagePeacefulMobs"));
-                        this.drawHoveringText(tooltip, mX, mY, this.fontRendererObj);
-                    }
-                    //</editor-fold>
-
-                    this.removeButton.visible = false;
-                    this.addToGroupButton.visible = false;
-                    this.setGroupPermsButton.visible = false;
-
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
-    }
-
-    @Override
-    protected void mouseClicked(int x, int y, int btn) {
-
-        try {
-            super.mouseClicked(x, y, btn);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //Minus offsets
-        x -= this.guiLeft;
-        y -= this.guiTop;
-
-        this.addItemTextField.mouseClicked(x, y, btn);
-
-        int x2 = x * 2;
-        int y2 = y * 2;
-        //Select player in the currently displayed list
-        if (guiMode == 0) { //If it's on manage players mode
-            if (x2 >= 344 && x2 <= 504 && y2 >= 58) {
-                for (int i = 0; i < permittedPlayers.size(); i++) {
-                    if ((y2 - 58) / 9 <= permittedPlayers.size()) {
-                        selectedItem = (y2 - 58) / 9;
-                    }
-                }
-            }
-        } else if (guiMode == 1) { //If it's on manage groups mode
-            if (x2 >= 344 && x2 <= 504 && y2 >= 58) {
-                for (int i = 0; i < permissionGroups.size(); i++) {
-                    if ((y2 - 58) / 9 <= permissionGroups.size()) {
-                        selectedItem = (y2 - 58) / 9;
-                    }
-                }
-            }
-        } else if (guiMode == 2) { //If it's on add player to group mode
-            if (x2 >= 344 && x2 <= 504 && y2 >= 58) {
-                for (int i = 0; i < permissionGroups.size(); i++) {
-                    if ((y2 - 58) / 9 <= permissionGroups.size()) {
-                        int groupID = (y2 - 58) / 9;
-                        permittedPlayers.get(selectedItem).set(2, (String) permissionGroups.get(groupID).get(0)); //Set the selected player's group
-                        guiMode = 0; //Set the gui mode to the add/manage players mode
-                    }
-                }
-            }
-        } else if (guiMode == 3) { //If it's on set group perms mode
-
-            if (x >= 6 && x <= 22 && y >= 57 && y <= 65) { //Toggle the player kill mode
-                permissionGroups.get(selectedItem).set(1, !((Boolean) permissionGroups.get(selectedItem).get(1)));
-            }
-
-        } else if (guiMode == 4) { //If it's on set general perms mode
-
-            if (x >= 6 && x <= 22 && y >= 49 && y <= 57) { //Toggle the hostile mobs kill mode
-                generalPermissions.set(0, !((Boolean) generalPermissions.get(0)));
-            } else if (x >= 26 && x <= 42 && y >= 49 && y <= 57) { //Toggle the peaceful mobs kill mode
-                generalPermissions.set(1, !((Boolean) generalPermissions.get(1)));
-            }
-
-        }
-
-        if (x >= 214 && x <= 227 && y >= 148 && y <= 178) {
-            //General permissions management button clicked
-            selectedItem = null; //Deselect stuff
-            guiMode = 4; //Set the Gui mode to general perms management mode
-        } else if (x >= 228 && x <= 242 && y >= 148 && y <= 178) {
-            //Security groups management button clicked
-            selectedItem = null; //Deselect stuff
-            guiMode = 1; //Set the Gui mode to groups management mode
-        } else if (x >= 243 && x <= 257 && y >= 148 && y <= 178) {
-            //Security players management button clicked
-            selectedItem = null; //Deselect stuff
-            guiMode = 0; //Set the Gui mode to players management mode
-        } else if (x >= 1 && x <= 15 && y >= 1 && y <= 13) {
-            //Info button clicked
-            NetworkHandler.network.sendToServer(new MessageRequestOpenGui(this.te.getPos(), player, GuiHandler.FFProjector_Info_TILE_ENTITY_GUI));
-        } else if (x >= 16 && x <= 29 && y >= 1 && y <= 13) {
-            //Sizing button clicked
-            NetworkHandler.network.sendToServer(new MessageRequestOpenGui(this.te.getPos(), player, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI));
-//        } else if (x >= 30 && x <= 43 && y >= 1 && y <= 13) {
-//            //Security button clicked
-//            //NO-OP, We're already on the security tab
-        } else if (x >= 44 && x <= 57 && y >= 1 && y <= 13) {
-            //Upgrades button clicked
-        } else if (x >= 58 && x <= 71 && y >= 1 && y <= 13) {
-            //Power Usage button clicked
-            player.openGui(ModMFF.instance, GuiHandler.FFProjector_PowerStats_TILE_ENTITY_GUI, te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
-        }
-
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-
-        if (button == removeButton) { //Player clicked on remove
-
-            if (guiMode == 0) { //If it's on player management mode
-
-                if (selectedItem != null) { //If a player has been selected from the permitted players list
-                    permittedPlayers.remove((int) selectedItem); //Remove the player from the permitted players list
-                    if (selectedItem - 1 >= 0 && permittedPlayers.size() > 0) { //If there is a player before the one removed
-                        selectedItem -= 1; //Select the previous player
-                    } else if (!(permittedPlayers.size() > 0)) { //If they're no players left on the list
-                        selectedItem = null; //Deselect
-                    }
-                }
-
-            } else if (guiMode == 1) { //If it's on group management mode
-
-                if (selectedItem != null) { //If a group has been selected from the permitted players list
-
-                    //Set all players on that group's group to everyone
-                    Iterator<List<String>> iter = permittedPlayers.iterator();
-                    int index = 0;
-                    while (iter.hasNext()) { //Loop through the list of permitted players
-                        if (iter.next().get(2).equals(permissionGroups.get(selectedItem).get(0))) { //If that player's on the group about to be removed
-                            permittedPlayers.get(index).set(2, "gui.mff:everyone"); //Set its group to everyone
+                        if (selectedGroupIDs.contains(groupID)) {
+                            selectedGroupIDs.remove(groupID);
+                            selectedGroupIDsChanged();
+                            selectedPlayerUUIDsChanged();
                         }
-                        index++;
-                    }
-
-                    permissionGroups.remove((int) selectedItem); //Remove the group from the permission groups list
-
-                    if (selectedItem - 1 >= 0 && permissionGroups.size() > 0) { //If there is a group before the one removed
-                        selectedItem -= 1; //Select the previous group
-                    } else if (!(permissionGroups.size() > 0)) { //If they're no groups left on the list (This should never happen)
-                        selectedItem = null; //Deselect
-                    }
-                }
-
-            }
-        } else if (button == addToGroupButton) { //Player clicked on add player to group
-
-            guiMode = 2; //Set GuiMode to add to group mode
-            statusMessage = permittedPlayers.get(selectedItem).get(1);
-
-        } else if (button == setGroupPermsButton) {
-
-            guiMode = 3; //Set GuiMode to edit perms mode
-            statusMessage = permissionGroups.get(selectedItem).get(0).toString();
-
-            //Do checks in case an update adds more permissions
-            if (permissionGroups.get(selectedItem).size() < 2) {
-                permissionGroups.get(selectedItem).add(false); //Perm 1: Should players be killed
-            }
-
-        }
-
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        this.addItemTextField.textboxKeyTyped(typedChar, keyCode);
-        if (keyCode == Keyboard.KEY_RETURN && this.addItemTextField.isFocused()) { //If enter was pressed while typing in the add player text box
-            if (guiMode == 0) { //If it's on add/manage players mode
-
-                //Add player to permitted players list
-
-                List<Object> player = PlayerUtils.getUUIDFromPlayerName(addItemTextField.getText()); //Get the player's UUID
-
-                if (player != null) {
-                    //That player's online! Add the player to the list it the player's not on there already
-                    if (!doesItemNameExistInList(player.get(0).toString(), permittedPlayers)) { //If the player's not already on the permitted players list
-                        List playerInfo = new ArrayList<String>();
-                        playerInfo.add(player.get(0).toString()); //Add the UUID
-                        playerInfo.add(player.get(1)); //Add the username
-                        playerInfo.add("gui.mff:everyone"); //Add the group ID
-                        permittedPlayers.add(playerInfo); //Add the UUID and player name to the permitted players list
-                        statusMessage = "gui.mff:addedPermittedPlayer"; //Set the status message to the success message
                     } else {
-                        statusMessage = "gui.mff:permittedPlayerAlreadyExists"; //Set the status message to the player already exists on the list message
+                        LogHelper.warn("Failed to undo! Action: addGroup");
                     }
-                } else {
-                    //That players not online. Show a warning
-                    statusMessage = "gui.mff:playerNotOnline";
-                }
 
-            } else if (guiMode == 1) { //It it's on add/manage groups mode
+                    break;
+                } case playersGroupChanged: { //Change the players' groups back
+                    List<String> playerUUIDs = (List<String>) undo[1];
+                    Map<String, String[]> oldPermittedPlayers = (Map<String, String[]>) undo[2];
 
-                if (addItemTextField.getText().matches(".*\\w.*")) { //If it contains ASCII
-                    if (!doesItemNameExistInList(addItemTextField.getText(), permissionGroups)) { //If the player's not already on the permitted players list
-                        List groupInfo = new ArrayList<Object>();
-                        groupInfo.add(addItemTextField.getText()); //Add the Group ID
-                        groupInfo.add(false); //Perm 1: Don't auto kill players
-                        permissionGroups.add(groupInfo); //Add the Group info the player list
-                        statusMessage = "gui.mff:addedNewGroup"; //Set the status message to the success message
+                    if (playerUUIDs != null) {
+                        for (String uuid : playerUUIDs) {
+                            String[] currentPlayerData = permittedPlayers.get(uuid);
+                            currentPlayerData[1] = oldPermittedPlayers.get(uuid)[1]; //Set player group
+                            permittedPlayers.put(uuid, currentPlayerData);
+                        }
+
+                        selectedPlayerUUIDsChanged();
                     } else {
-                        statusMessage = "gui.mff:groupAlreadyExists"; //Set the status message to the group already exists on the list message
+                        LogHelper.warn("Failed to undo! Action: playersGroupChanged");
                     }
-                } else {
-                    statusMessage = "gui.mff:chooseAName"; //Set the status message to the choose a name message
+
+                    break;
+                } case removePlayers: { //Re-add the removed players
+                    Map<String, String[]> removedPlayers = (Map<String, String[]>) undo[1];
+
+                    if (removedPlayers != null) {
+                        for (Map.Entry<String, String[]> entry : removedPlayers.entrySet()) {
+                            addPlayer(entry.getValue()[0], playersListBox, entry.getValue()[1], false);
+                        }
+                    } else {
+                        LogHelper.warn("Failed to undo! Action: removePlayers");
+                    }
+
+                    break;
+                } case removeGroups: {
+                    final Map<Map<String, Map<String, Boolean>>, String[]> groupData = (Map<Map<String, Map<String, Boolean>>, String[]>) undo[1];
+
+                    for (final Map.Entry<Map<String, Map<String, Boolean>>, String[]> entry : groupData.entrySet()) {
+                        Map<String, Map<String, Boolean>> mapData = new HashMap<String, Map<String, Boolean>>(){{
+                            put(entry.getKey().entrySet().iterator().next().getKey(), entry.getKey().entrySet().iterator().next().getValue());
+                        }};
+
+                        permissionGroups.putAll(mapData);
+
+                        for (int i = 0; i < entry.getValue().length; i++) {
+                            permittedPlayers.put(entry.getValue()[i], new String[]{permittedPlayers.get(entry.getValue()[i])[0],
+                                    entry.getKey().entrySet().iterator().next().getKey()});
+                        }
+
+                        addGroupListBoxItem(entry.getKey().entrySet().iterator().next().getKey(), permGroupsListBox);
+
+                    }
+
+                    selectedPlayerUUIDsChanged();
+
+                    break;
+                } case renameGroups: {
+                    final Map<String, String> renameData = (Map<String, String>) undo[1];
+
+                    for (final Map.Entry<String, String> entry : renameData.entrySet()) {
+                        renameGroups(new ArrayList<String>(){{
+                            add(entry.getKey());
+                        }}, entry.getValue(), permGroupsListBox);
+                    }
+
+                    break;
                 }
-
             }
 
-            //Clear text field
-            this.addItemTextField.setText("");
-
-        } else if (!this.addItemTextField.isFocused() || keyCode == 1){ //Prevent typing any keys (apart from ESC) from closing the gui if the text box is focused
-            try {
-                super.keyTyped(typedChar, keyCode);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void onGuiClosed() {
-
-        super.onGuiClosed();
-
-        if (this.te.hasSecurityUpgrade) {
-            NetworkHandler.network.sendToServer(new MessageFFProjectorGuiSaveSecurity(this.te.getPos(), permittedPlayers, permissionGroups, generalPermissions));
+            undoHistory.remove(undoHistory.size() - 1);
         }
 
     }
 
-    private boolean doesItemNameExistInList(String item, List list) { //Check if an item exists in a 2D list (In index 0)
+}
 
-        Iterator<List<String>> iter = list.iterator();
-        while (iter.hasNext()) {
-            if (item.toLowerCase().equals(iter.next().get(0).toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
+class PlayerData {
+    protected String name = StatCollector.translateToLocal("gui.mff:multiple");
+    protected String uuid = StatCollector.translateToLocal("gui.mff:multiple");
+    protected String group = StatCollector.translateToLocal("gui.mff:multiple");
+}
 
-    }
+class GroupData {
+    protected String name = StatCollector.translateToLocal("gui.mff:multiple");
+}
 
+enum UndoAction {
+    addPlayer,
+    addGroup,
+    playersGroupChanged,
+    removePlayers,
+    removeGroups,
+    renameGroups
 }

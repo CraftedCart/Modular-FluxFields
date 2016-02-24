@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
 /**
- * Created by CraftedCart on 12/01/2016 (DD/MM/YYYY)
+ * Created by CraftedCart on 07/02/2016 (DD/MM/YYYY)
  */
 
 public class UIRadialProgressBar extends UIComponent {
@@ -13,6 +13,10 @@ public class UIRadialProgressBar extends UIComponent {
     protected float thickness = 4;
     protected UIColor radialBackgroundColor = UIColor.matGrey900();
     protected UIColor radialForegroundColor = UIColor.matBlue();
+    /**
+     * This is in degrees
+     */
+    protected double rotationalOffset = 0;
 
     public UIRadialProgressBar(UIComponent parentComponent, String name, PosXY topLeftPoint, PosXY bottomRightPoint,
                                AnchorPoint topLeftAnchor, AnchorPoint bottomRightAnchor) {
@@ -35,8 +39,8 @@ public class UIRadialProgressBar extends UIComponent {
             {
                 for (double i = 0; i < 361 * progress; i += 0.2) {
                     GL11.glVertex2d(
-                            ((topLeftPx.x + bottomRightPx.x) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.cos(Math.toRadians(i - 90)),
-                            ((topLeftPx.y + bottomRightPx.y) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.sin(Math.toRadians(i - 90))
+                            ((topLeftPx.x + bottomRightPx.x) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.cos(Math.toRadians(i - 90 + rotationalOffset)),
+                            ((topLeftPx.y + bottomRightPx.y) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.sin(Math.toRadians(i - 90 + rotationalOffset))
                     );
                 }
             }
@@ -49,8 +53,8 @@ public class UIRadialProgressBar extends UIComponent {
             {
                 for (double i = (361 * progress) - 0.2; i < 361; i += 0.2) {
                     GL11.glVertex2d(
-                            ((topLeftPx.x + bottomRightPx.x) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.cos(Math.toRadians(i - 90)),
-                            ((topLeftPx.y + bottomRightPx.y) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.sin(Math.toRadians(i - 90))
+                            ((topLeftPx.x + bottomRightPx.x) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.cos(Math.toRadians(i - 90 + rotationalOffset)),
+                            ((topLeftPx.y + bottomRightPx.y) / 2) + ((Math.min(bottomRightPx.x - topLeftPx.x, bottomRightPx.y - topLeftPx.y) - thickness) / 2) * Math.sin(Math.toRadians(i - 90 + rotationalOffset))
                     );
                 }
             }
@@ -91,6 +95,14 @@ public class UIRadialProgressBar extends UIComponent {
 
     public UIColor getRadialForegroundColor() {
         return radialForegroundColor;
+    }
+
+    public void setRotationalOffset(double rotationalOffset) {
+        this.rotationalOffset = rotationalOffset;
+    }
+
+    public double getRotationalOffset() {
+        return rotationalOffset;
     }
 
 }

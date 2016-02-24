@@ -40,18 +40,13 @@ public class UIRootComponent extends UIComponent {
         width = bottomRightPx.x - topLeftPx.x;
         height = bottomRightPx.y - topLeftPx.y;
 
-        int mx = Mouse.getX();
-        int my = Display.getHeight() - Mouse.getY();
-
-        if (Keyboard.getEventKey() == debugKeycode) {
-            if (Keyboard.getEventKeyState()) {
-                if (!debugKeyHit) {
-                    debugKeyHit = true;
-                    GuiUtils.debugEnabled = !GuiUtils.debugEnabled;
-                }
-            } else {
-                debugKeyHit = false;
+        if (Keyboard.isKeyDown(debugKeycode)) {
+            if (!debugKeyHit) {
+                debugKeyHit = true;
+                GuiUtils.debugEnabled = !GuiUtils.debugEnabled;
             }
+        } else {
+            debugKeyHit = false;
         }
 
         if (GuiUtils.debugEnabled) {
@@ -76,8 +71,12 @@ public class UIRootComponent extends UIComponent {
                     bottomRightPx,
                     panelDefaultBackgroundColor);
 
-            for (UIComponent component : childUiComponents) { //Loop through every component
-                component.onUpdate(); //Update all registered components
+            //noinspection ForLoopReplaceableByForEach
+            for (int i = 0; i < childUiComponents.size(); i++) { //Loop through every component
+                UIComponent component = childUiComponents.get(i);
+                if (component != null) {
+                    component.onUpdate(); //Update all registered components
+                }
             }
 
         } else {
@@ -153,7 +152,9 @@ public class UIRootComponent extends UIComponent {
         );
 
         int hierarchyIndex = 0;
-        for (UIComponent childComponent : debugSelectedComponent.childUiComponents) {
+        for (int i = 0; i < debugSelectedComponent.childUiComponents.size(); i++) {
+
+            UIComponent childComponent = debugSelectedComponent.childUiComponents.get(i);
 
             if (childComponent != null) {
                 UIColor textCol;
@@ -293,7 +294,9 @@ public class UIRootComponent extends UIComponent {
         }
 
         for (UIComponent childComponent : component.childUiComponents) {
-            drawDebugOverlayOnComponentAndChildren(childComponent, true);
+            if (childComponent != null) {
+                drawDebugOverlayOnComponentAndChildren(childComponent, true);
+            }
         }
     }
 

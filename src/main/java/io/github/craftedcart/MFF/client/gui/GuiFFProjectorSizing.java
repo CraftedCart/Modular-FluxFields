@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
 
 /**
- * Created by CraftedCart on 06/02/2016 (DD/MM/YYYY)
+ * Created by CraftedCart on 30/11/2015 (DD/MM/YYYY)
  */
 
 public class GuiFFProjectorSizing extends GuiFFProjectorBase {
