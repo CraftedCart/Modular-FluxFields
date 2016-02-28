@@ -250,7 +250,7 @@ public class TECrystalConstructor extends TEPoweredBlock implements IInventory, 
     public void update() {
 
         if (!doneWorldSetup) {
-            init(PowerConf.crystalConstructorMaxPower, PowerConf.crystalConstructorDrawRate);
+            setup(PowerConf.crystalConstructorMaxPower, PowerConf.crystalConstructorDrawRate);
             doneWorldSetup = true;
         }
 

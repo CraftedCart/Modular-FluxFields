@@ -28,7 +28,6 @@ public class UITextField extends UIComponent {
                        AnchorPoint topLeftAnchor, AnchorPoint bottomRightAnchor) {
         super(parentComponent, name, topLeftPoint, bottomRightPoint,
                 topLeftAnchor, bottomRightAnchor);
-        Keyboard.enableRepeatEvents(true);
     }
 
     @Override

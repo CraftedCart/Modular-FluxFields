@@ -24,7 +24,7 @@ public class TEPowerCube extends TEPoweredBlock implements IUpdatePlayerListBox 
         super.update();
 
         if (!doneWorldSetup) {
-            init(PowerConf.powerCubeMaxPower);
+            setup(PowerConf.powerCubeMaxPower);
             doneWorldSetup = true;
         }
 

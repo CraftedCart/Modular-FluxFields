@@ -6,8 +6,8 @@ package io.github.craftedcart.MFF.client.gui.guiutils;
 
 public class AnchorPoint {
 
-    protected double xPercent;
-    protected double yPercent;
+    public double xPercent;
+    public double yPercent;
 
     public AnchorPoint(double xPercent, double yPercent) {
         this.xPercent = xPercent;

@@ -40,7 +40,6 @@ public class UIToggleBox extends UIButton {
 
     @Override
     protected void onClick() {
-
         value = !value;
 
         if (value) {

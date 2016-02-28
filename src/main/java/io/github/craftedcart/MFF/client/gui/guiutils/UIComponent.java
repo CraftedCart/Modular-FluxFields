@@ -17,29 +17,29 @@ import java.util.List;
 public class UIComponent {
 
     public List<UIComponent> childUiComponents = new ArrayList<UIComponent>();
-    protected Integer selectedComponent = null;
-    protected int lastComponentID = 0;
-    protected String name; //This is only really used in the hierarchy inspector
+    public Integer selectedComponent = null;
+    public int lastComponentID = 0;
+    public String name; //This is only really used in the hierarchy inspector
 
-    protected boolean mouseOver = false;
-    protected boolean mouseOverChildComponent = false;
-    protected boolean selected = false;
-    protected boolean visible = true;
+    public boolean mouseOver = false;
+    public boolean mouseOverChildComponent = false;
+    public boolean selected = false;
+    public boolean visible = true;
 
     protected boolean lmbDown = true;
 
-    protected PosXY topLeftPoint;
-    protected PosXY bottomRightPoint;
-    protected PosXY pointOffset = new PosXY(0, 0);
+    public PosXY topLeftPoint;
+    public PosXY bottomRightPoint;
+    public PosXY pointOffset = new PosXY(0, 0);
     public double width;
     public double height;
-    protected PosXY topLeftPx = new PosXY(0, 0);
-    protected PosXY bottomRightPx = new PosXY(0, 0);
+    public PosXY topLeftPx = new PosXY(0, 0);
+    public PosXY bottomRightPx = new PosXY(0, 0);
 
-    protected AnchorPoint topLeftAnchor;
-    protected AnchorPoint bottomRightAnchor;
+    public AnchorPoint topLeftAnchor;
+    public AnchorPoint bottomRightAnchor;
 
-    protected UIComponent parentComponent;
+    public UIComponent parentComponent;
     public int componentID;
 
     protected UIAction onClickAction;

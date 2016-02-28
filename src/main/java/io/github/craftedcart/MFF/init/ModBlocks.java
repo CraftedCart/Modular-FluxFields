@@ -36,6 +36,8 @@ public class ModBlocks {
     public static final ModBlock solarPowerGenerator32768 = new BlockSolarPowerGenerator32768();
     public static final ModBlock solarPowerGenerator262144 = new BlockSolarPowerGenerator262144();
 
+    public static final ModBlock glTest = new BlockPowerRelay();
+
 
     public static void init() {
 
@@ -45,6 +47,7 @@ public class ModBlocks {
         GameRegistry.registerBlock(powerCube, Names.BlockPowerCube);
         GameRegistry.registerBlock(crystalRefinery, Names.BlockCrystalRefinery);
         GameRegistry.registerBlock(crystalConstructor, Names.BlockCrystalConstructor);
+        GameRegistry.registerBlock(glTest, Names.BlockPowerRelay);
         //Ores
         GameRegistry.registerBlock(oreAmethyst, Names.BlockOreAmethyst);
         OreDictionary.registerOre(Names.BlockOreAmethyst, new ItemStack(oreAmethyst));
@@ -70,6 +73,7 @@ public class ModBlocks {
         registerBlockRenderAsItem(powerCube, Names.BlockPowerCube);
         registerRender(crystalRefinery);
         registerRender(crystalConstructor);
+        //TODO: Power Relay Render as item
         //Ores
         registerRender(oreAmethyst);
         registerRender(oreRuby);

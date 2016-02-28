@@ -337,7 +337,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             doWorldLoadSetup = true;
             getWallBlocks(); //Calculate the blockposes of the walls
             getInnerBlocks(); //Calculate the blockposes of the inner blocks
-            init(PowerConf.ffProjectorMaxPower, PowerConf.ffProjectorDrawRate);
+            setup(PowerConf.ffProjectorMaxPower, PowerConf.ffProjectorDrawRate);
 
             if (permissionGroups.size() == 0) { //Setup the everyone permission group
                 List<Object> everyoneGroup = new ArrayList<Object>();

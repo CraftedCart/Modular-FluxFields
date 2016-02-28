@@ -45,7 +45,7 @@ public class BlockSolarPowerGenerator32768 extends ModBlock implements ITileEnti
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         TESolarPowerGenerator tepg = new TESolarPowerGenerator(); //tepc, short for TileEntityPowerGenerator
-        tepg.init(PowerConf.solarPowerGeneratorMaxPower);
+        tepg.setup(PowerConf.solarPowerGeneratorMaxPower);
         tepg.initSolar(PowerConf.solarPowerGeneratorBaseGenRate * 32768);
         return tepg;
     }

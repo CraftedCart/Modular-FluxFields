@@ -27,7 +27,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
         this.te = te;
         this.player = player;
     }
-    
+
     @Override
     public void onInit() {
         super.onInit();
@@ -209,7 +209,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
         remainingLabel.setOnUpdateAction(new UIAction() {
             @Override
             public void execute() {
-                //Calculate init time remaining
+                //Calculate setup time remaining
                 double calcSecsDiff = (double) ((te.wallBlockList.size() + te.innerBlockList.size()) - te.blockPlaceProgress) / 20;
                 int chr = (int) (calcSecsDiff / 3600);
                 int crem = (int) (calcSecsDiff % 3600);

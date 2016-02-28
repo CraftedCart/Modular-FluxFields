@@ -43,13 +43,13 @@ public abstract class UIDisplay extends GuiScreen {
 
         }
 
+        GuiUtils.calcDelta(isFirstFrame);
+        GuiUtils.calcMouseDWheel();
+
         if (isFirstFrame) {
             isFirstFrame = false;
             onInit();
         }
-
-        GuiUtils.calcDelta();
-        GuiUtils.calcMouseDWheel();
 
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) { //Close the GUI if Esc is pressed
             while (Keyboard.next()) {} //Exhaust the keyboard buffer
@@ -80,6 +80,8 @@ public abstract class UIDisplay extends GuiScreen {
         return rootComponent;
     }
 
-    public abstract void onInit(); //Override me!
+    public void onInit() {
+        Keyboard.enableRepeatEvents(true);
+    }
 
 }

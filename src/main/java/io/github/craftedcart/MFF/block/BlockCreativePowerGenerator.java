@@ -40,7 +40,7 @@ public class BlockCreativePowerGenerator extends ModBlock implements ITileEntity
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         TECreativePowerGenerator tepg = new TECreativePowerGenerator(); //tepc, short for TileEntityPowerGenerator
-        tepg.init(-1);
+        tepg.setup(-1);
         return tepg;
     }
 

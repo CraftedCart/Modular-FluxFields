@@ -10,7 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 /**
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
-
 public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
 
     public double power = 0;
@@ -27,7 +26,7 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
      * @param maxPower The maximum amount of power the TileEntity can store
      * @param powerDrawRate How much power the TileEntity can draw in one tick
      */
-    public void init(double maxPower, double powerDrawRate) {
+    public void setup(double maxPower, double powerDrawRate) {
         this.maxPower = maxPower;
         this.powerDrawRate = powerDrawRate;
     }
@@ -37,9 +36,14 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
      *
      * @param maxPower The maximum amount of power the TileEntity can store
      */
-    public void init(double maxPower) {
-        init(maxPower, 0);
+    public void setup(double maxPower) {
+        setup(maxPower, 0);
     }
+
+    /**
+     * Override me! This is called on the first tick
+     */
+    public void init() {}
 
     public void update() {
 
@@ -47,6 +51,9 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
 
         if (powerLastTick != -1) {
             powerUsage = power - powerLastTick;
+        } else {
+            //It's the first tick - Run init code here
+            init();
         }
         powerLastTick = power;
 

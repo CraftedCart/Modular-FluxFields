@@ -57,9 +57,13 @@ public class GuiUtils {
         return delta / 1000d;
     }
 
-    public static void calcDelta() {
+    public static void calcDelta(boolean isFirstFrame) {
         long time = Sys.getTime();
-        delta = (time - lastFrame);
+        if (!isFirstFrame) {
+            delta = (time - lastFrame);
+        } else {
+            delta = 0;
+        }
         lastFrame = time;
     }
 

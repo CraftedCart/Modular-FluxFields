@@ -37,7 +37,9 @@ public class GuiFFProjectorBase extends UIDisplay {
     @Override
     public void onInit() {
 
-        getRootComponent().setPanelDefaultBackgroundColor(UIColor.matWhite());
+        super.onInit();
+
+        getRootComponent().setPanelBackgroundColor(UIColor.matWhite());
         
         workspace.setPanelBackgroundColor(UIColor.transparent());
 

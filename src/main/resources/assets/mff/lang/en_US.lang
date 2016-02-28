@@ -1,6 +1,10 @@
 #Creative Tabs
 itemGroup.MFF=Modular FluxFields
 
+#Keybindings
+key.categories.MFF=Modular FluxFields
+mff:key.settings=MFF Settings
+
 #Items
 item.mff:prism.name=Prism
 item.mff:crystalSheet.name=Crystal Sheet
@@ -22,6 +26,7 @@ tile.mff:ffProjector.name=Forcefield Projector
 tile.mff:powerCube.name=Power Cube
 tile.mff:crystalRefinery.name=Crystal Refinery
 tile.mff:crystalConstructor.name=Crystal Constructor
+tile.mff:powerRelay.name=Power Relay
 #Ores
 tile.mff:oreAmethyst.name=Amethyst Ore
 tile.mff:oreRuby.name=Ruby Ore
@@ -127,3 +132,15 @@ death.attack.forcefieldSecurityKill=%1$s was disintegrated by a forcefield
 #Easter Eggs
 gui.mff:loadingEasterEgg=Loading Easter Egg...
 gui.mff:openYourEyesEasterEgg=Now Playing: Aviators - Open Your Eyes (MIDI)
+
+#Settings
+gui.mff:mffSettings=Modular FluxFields Settings
+gui.mff:chooseGraphicsPreset=Choose a graphical preset for Modular FluxFields
+gui.mff:fancyGraphics=Fancy Graphics
+gui.mff:fancyGraphicsInfo=<html><body>Will use high-polygon 3D models and GLSL shaders<br>OpenGL 2.0 or higher is required<br><p style="color: red;">This drastically impacts performance!</p></html></body>
+gui.mff:mediocreGraphics=Mediocre Graphics
+gui.mff:mediocreGraphicsInfo=<html><body>Will use low-polygon 3D models and GLSL shaders<br>OpenGL 2.0 or higher is required<br>Minimal impact on performance<br><b>Recommended</b></html></body>
+gui.mff:plainGraphics=Plain Graphics
+gui.mff:plainGraphicsInfo=<html><body>Will use low-polygon 3D models and standard shading<br>Minor impact on performance</html></body>
+gui.mff:useHighPolyModels=Use high-polygon 3D models (Drastically impacts performance!)
+gui.mff:useGLSLShaders=Use GLSL shaders (Requires OpenGL 2.0 or higher - Increases performance, plus it looks nice)

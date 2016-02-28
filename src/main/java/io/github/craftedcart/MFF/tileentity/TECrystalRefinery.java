@@ -263,7 +263,7 @@ public class TECrystalRefinery extends TEPoweredBlock implements IInventory, ISi
     public void update() {
 
         if (!doneWorldSetup) {
-            init(PowerConf.crystalRefineryMaxPower, PowerConf.crystalRefineryDrawRate);
+            setup(PowerConf.crystalRefineryMaxPower, PowerConf.crystalRefineryDrawRate);
             doneWorldSetup = true;
         }
 

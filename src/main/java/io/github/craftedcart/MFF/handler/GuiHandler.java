@@ -24,6 +24,7 @@ public class GuiHandler implements IGuiHandler {
     public static final int CrystalConstructor_TILE_ENTITY_GUI = 6;
     public static final int PowerCube_TILE_ENTITY_GUI = 7;
     public static final int SolarPowerGenerator_TILE_ENTITY_GUI = 8;
+    public static final int MFFSettings_GUI = 9;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -54,6 +55,8 @@ public class GuiHandler implements IGuiHandler {
             return new GuiPowerCube((TEPowerCube) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == SolarPowerGenerator_TILE_ENTITY_GUI) {
             return new GuiSolarPowerGenerator((TEPowerGenerator) world.getTileEntity(new BlockPos(x, y, z)));
+        } else if (ID == MFFSettings_GUI) {
+            return new GuiMFFSettings();
         }
 
         return null;
