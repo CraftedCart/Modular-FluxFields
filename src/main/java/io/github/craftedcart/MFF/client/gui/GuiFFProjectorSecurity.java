@@ -53,7 +53,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
     private List<Object[]> undoHistory = new ArrayList<Object[]>();
 
     protected Map<String, Boolean> permissionGroupDefaultPermissions = new HashMap<String, Boolean>(){{
-        put("gui.mff.killPlayers", false);
+        put("gui.mff:killPlayers", false);
         put("gui.mff:allowSecurityModification", false);
     }};
 

@@ -2,8 +2,14 @@ package io.github.craftedcart.MFF.client.gui;
 
 import io.github.craftedcart.MFF.client.gui.guiutils.*;
 import io.github.craftedcart.MFF.reference.MFFSettings;
+import io.github.craftedcart.MFF.reference.Reference;
 import io.github.craftedcart.MFF.utility.MathUtils;
 import net.minecraft.util.StatCollector;
+
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by CraftedCart on 27/02/2016 (DD/MM/YYYY)
@@ -50,23 +56,23 @@ public class GuiMFFSettings extends UIDisplay {
         settingsShadow.setHorizontalGradient(UIColor.matGrey900(0.9), UIColor.matGrey900(0));
         //</editor-fold>
 
-        //<editor-fold desc="Title">
-        final UIComponent titleLabelComponent = new UIComponent(null,
-                "titleLabelComponent",
+        //<editor-fold desc="Settings Title">
+        final UIComponent settingsTitleLabelComponent = new UIComponent(null,
+                "settingsTitleLabelComponent",
                 new PosXY(0, 0),
                 new PosXY(0, 32),
                 new AnchorPoint(0, 0),
                 new AnchorPoint(1, 0));
-        titleLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+        settingsTitleLabelComponent.setPanelBackgroundColor(UIColor.transparent());
 
-        final UILabel titleLabel = new UILabel(titleLabelComponent,
-                "titleLabel",
+        final UILabel settingsTitleLabel = new UILabel(settingsTitleLabelComponent,
+                "settingsTitleLabel",
                 new PosXY(24, 6),
                 new AnchorPoint(0, 0),
                 GuiUtils.font);
-        titleLabel.setText(StatCollector.translateToLocal("gui.mff:mffSettings"));
+        settingsTitleLabel.setText(StatCollector.translateToLocal("gui.mff:mffSettings"));
 
-        settingsListBox.addItem("titleLabelComponent", titleLabelComponent);
+        settingsListBox.addItem("settingsTitleLabelComponent", settingsTitleLabelComponent);
         //</editor-fold>
 
         //<editor-fold desc="Use high poly models?">
@@ -134,6 +140,261 @@ public class GuiMFFSettings extends UIDisplay {
 
         settingsListBox.addItem("GLSLComponent", GLSLComponent);
         //</editor-fold>
+
+        //<editor-fold desc="Divider 1">
+        final UIComponent divider1 = new UIComponent(null,
+                "divider1",
+                new PosXY(0, 0),
+                new PosXY(0, 2),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        divider1.setPanelBackgroundColor(UIColor.matGrey900());
+        settingsListBox.addItem("divider1", divider1);
+        //</editor-fold>
+
+        //<editor-fold desc="About Title">
+        final UIComponent aboutTitleLabelComponent = new UIComponent(null,
+                "aboutTitleLabelComponent",
+                new PosXY(0, 0),
+                new PosXY(0, 32),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        aboutTitleLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+        final UILabel aboutTitleLabel = new UILabel(aboutTitleLabelComponent,
+                "aboutTitleLabel",
+                new PosXY(24, 6),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        aboutTitleLabel.setText(StatCollector.translateToLocal("gui.mff:mffAbout"));
+
+        settingsListBox.addItem("aboutTitleLabelComponent", aboutTitleLabelComponent);
+        //</editor-fold>
+
+        //<editor-fold desc="MFF Version">
+        final UIComponent versionLabelComponent = new UIComponent(null,
+                "versionLabelComponent",
+                new PosXY(0, 0),
+                new PosXY(0, 32),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        versionLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+        final UILabel versionLabel = new UILabel(versionLabelComponent,
+                "versionLabel",
+                new PosXY(24, 6),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        versionLabel.setText(String.format("%s: %s", StatCollector.translateToLocal("gui.mff:version"), Reference.VERSION));
+
+        settingsListBox.addItem("versionLabelComponent", versionLabelComponent);
+        //</editor-fold>
+
+        //<editor-fold desc="Developed by">
+        final UIComponent developedByLabelComponent = new UIComponent(null,
+                "developedByLabelComponent",
+                new PosXY(0, 0),
+                new PosXY(0, 32),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        developedByLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+        final UILabel developedByLabel = new UILabel(developedByLabelComponent,
+                "developedByLabel",
+                new PosXY(24, 6),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        developedByLabel.setText(StatCollector.translateToLocal("gui.mff:developedBy"));
+
+        settingsListBox.addItem("developedByLabelComponent", developedByLabelComponent);
+        //</editor-fold>
+
+        if (Desktop.isDesktopSupported()) { //Check if it's possible to open web page links in a browser
+
+            //<editor-fold desc="View the Website">
+            final UITextButton viewWebsiteButton = new UITextButton(null,
+                    "viewWebsiteButton",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            viewWebsiteButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+            viewWebsiteButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            viewWebsiteButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            viewWebsiteButton.uiLabel.setTextColor(UIColor.matWhite());
+            viewWebsiteButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:viewWebsite"));
+            viewWebsiteButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    try {
+                        Desktop.getDesktop().browse(new URI(Reference.websitePage));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            settingsListBox.addItem("viewWebsiteButton", viewWebsiteButton);
+            //</editor-fold>
+
+            //<editor-fold desc="Spacer1">
+            final UIListSpacer spacer1 = new UIListSpacer(null, "spacer1", 2);
+            settingsListBox.addItem("spacer1", spacer1);
+            //</editor-fold>
+
+            //<editor-fold desc="View on GitHub">
+            final UITextButton viewOnGitHubButton = new UITextButton(null,
+                    "viewOnGitHubButton",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            viewOnGitHubButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+            viewOnGitHubButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            viewOnGitHubButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            viewOnGitHubButton.uiLabel.setTextColor(UIColor.matWhite());
+            viewOnGitHubButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:viewOnGitHub"));
+            viewOnGitHubButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    try {
+                        Desktop.getDesktop().browse(new URI(Reference.gitHubPage));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            settingsListBox.addItem("viewOnGitHubButton", viewOnGitHubButton);
+            //</editor-fold>
+
+            //<editor-fold desc="Spacer2">
+            final UIListSpacer spacer2 = new UIListSpacer(null, "spacer2", 2);
+            settingsListBox.addItem("spacer2", spacer2);
+            //</editor-fold>
+
+            //<editor-fold desc="View the Issue Tracker">
+            final UITextButton viewIssueTrackerButton = new UITextButton(null,
+                    "viewIssueTrackerButton",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            viewIssueTrackerButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+            viewIssueTrackerButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            viewIssueTrackerButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            viewIssueTrackerButton.uiLabel.setTextColor(UIColor.matWhite());
+            viewIssueTrackerButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:viewIssueTracker"));
+            viewIssueTrackerButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    try {
+                        Desktop.getDesktop().browse(new URI(Reference.issueTrackerPage));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            settingsListBox.addItem("viewIssueTrackerButton", viewIssueTrackerButton);
+            //</editor-fold>
+
+            //<editor-fold desc="Spacer3">
+            final UIListSpacer spacer3 = new UIListSpacer(null, "spacer3", 2);
+            settingsListBox.addItem("spacer3", spacer3);
+            //</editor-fold>
+
+            //<editor-fold desc="View the License">
+            final UITextButton viewLicenseButton = new UITextButton(null,
+                    "viewLicenseButton",
+                    new PosXY(0, 0),
+                    new PosXY(0, 24),
+                    new AnchorPoint(0, 0),
+                    new AnchorPoint(1, 0));
+            viewLicenseButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+            viewLicenseButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+            viewLicenseButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+            viewLicenseButton.uiLabel.setTextColor(UIColor.matWhite());
+            viewLicenseButton.uiLabel.setText(StatCollector.translateToLocal("gui.mff:viewLicense"));
+            viewLicenseButton.setOnClickAction(new UIAction() {
+                @Override
+                public void execute() {
+                    try {
+                        Desktop.getDesktop().browse(new URI(Reference.licensePage));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            settingsListBox.addItem("viewLicenseButton", viewLicenseButton);
+            //</editor-fold>
+
+        }
+
+        //<editor-fold desc="MFF Licence">
+        final UIComponent licenseLabelComponent = new UIComponent(null,
+                "licenceLabelComponent",
+                new PosXY(0, 0),
+                new PosXY(0, 32),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        licenseLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+        final UILabel licenceLabel = new UILabel(licenseLabelComponent,
+                "licenceLabel",
+                new PosXY(24, 6),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        licenceLabel.setText(StatCollector.translateToLocal("gui.mff:mffLicence"));
+
+        settingsListBox.addItem("licenceLabelComponent", licenseLabelComponent);
+        //</editor-fold>
+
+        //<editor-fold desc="MFF Licence Exempt Files Title">
+        final UIComponent licenseExemptFilesLabelComponent = new UIComponent(null,
+                "licenceExemptFilesLabelComponent",
+                new PosXY(0, 0),
+                new PosXY(0, 32),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        licenseExemptFilesLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+        final UILabel licenceExemptFilesLabel = new UILabel(licenseExemptFilesLabelComponent,
+                "licenceExemptFilesLabel",
+                new PosXY(24, 6),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        licenceExemptFilesLabel.setText(StatCollector.translateToLocal("gui.mff:licenceExemptFiles"));
+
+        settingsListBox.addItem("licenceExemptFilesLabelComponent", licenseExemptFilesLabelComponent);
+        //</editor-fold>
+
+        final UILabel licenceExemptRobotoLabel = new UILabel(null,
+                "licenceExemptRobotoLabel",
+                new PosXY(24, 0),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        licenceExemptRobotoLabel.setText(StatCollector.translateToLocal("gui.mff:licenceExemptRoboto"));
+
+        settingsListBox.addItem("licenceExemptRobotoLabel", licenceExemptRobotoLabel);
+
+        final UILabel licenceExemptAviatorsOpenYourEyesLabel = new UILabel(null,
+                "licenceExemptAviatorsOpenYourEyesLabel",
+                new PosXY(24, 0),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        licenceExemptAviatorsOpenYourEyesLabel.setText(StatCollector.translateToLocal("gui.mff:licenceExemptAviatorsOpenYourEyes"));
+
+        settingsListBox.addItem("licenceExemptAviatorsOpenYourEyesLabel", licenceExemptAviatorsOpenYourEyesLabel);
 
     }
 

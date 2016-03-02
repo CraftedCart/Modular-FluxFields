@@ -101,7 +101,7 @@ gui.mff:selectGroupsToRemove=Select groups to remove
 gui.mff:selectGroupsToSelectMembers=Select groups first to select their members
 gui.mff:selectPlayersToAssign=Select players to assign to a group
 gui.mff:renameGroup=Rename group
-gui.mff.killPlayers=Kill players
+gui.mff:killPlayers=Kill players
 gui.mff:allowSecurityModification=Allow players to modify the security system
 
 gui.mff:undo=Undo
@@ -144,3 +144,16 @@ gui.mff:plainGraphics=Plain Graphics
 gui.mff:plainGraphicsInfo=<html><body>Will use low-polygon 3D models and standard shading<br>Minor impact on performance</html></body>
 gui.mff:useHighPolyModels=Use high-polygon 3D models (Drastically impacts performance!)
 gui.mff:useGLSLShaders=Use GLSL shaders (Requires OpenGL 2.0 or higher - Increases performance, plus it looks nice)
+
+#About
+gui.mff:mffAbout=About Modular FluxFields
+gui.mff:version=Version
+gui.mff:mffLicence=Modular FluxFields is licenced under the GNU General Public Licence, Version 2
+gui.mff:developedBy=Developed by CraftedCart
+gui.mff:viewWebsite=View this mod's website
+gui.mff:viewOnGitHub=View this mod's GitHub repository
+gui.mff:viewLicense=View this mod's licence
+gui.mff:viewIssueTracker=View this mod's issue tracker
+gui.mff:licenceExemptFiles=The following files are exempt from MFF's licence
+gui.mff:licenceExemptRoboto=The font Roboto (Roboto-Regular.ttf) - Apache License, version 2.0 - Owner: Christian Robertson
+gui.mff:licenceExemptAviatorsOpenYourEyes=The MIDI file Open Your Eyes (AviatorsOpenYourEyesMIDI.mid) - CC BY-NC-CA 3.0 - Owner: Aviators (Tyler Shaw)
