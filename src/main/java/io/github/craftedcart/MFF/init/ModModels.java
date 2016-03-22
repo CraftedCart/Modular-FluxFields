@@ -19,6 +19,8 @@ public class ModModels {
 
     public static Model powerRelayModel;
     public static Model powerRelayLowPolyModel;
+    public static Model powerRelayOutputStaticModel;
+    public static Model powerRelayOutputRotateModel;
 
     public static void init() {
 
@@ -41,6 +43,28 @@ public class ModModels {
                     ).getInputStream());
         } catch (IOException e) {
             LogHelper.error("Failed to load mff:models/block/powerRelayLowPoly.obj");
+            e.printStackTrace();
+        }
+
+        try {
+            LogHelper.info("Loading mff:models/block/powerRelayOutputStatic.obj");
+            powerRelayOutputStaticModel = OBJLoader.loadModel(
+                    Minecraft.getMinecraft().getResourceManager().getResource(
+                            new ResourceLocation("mff:models/block/powerRelayOutputStatic.obj")
+                    ).getInputStream());
+        } catch (IOException e) {
+            LogHelper.error("Failed to load mff:models/block/powerRelayOutputStatic.obj");
+            e.printStackTrace();
+        }
+
+        try {
+            LogHelper.info("Loading mff:models/block/powerRelayOutputRotate.obj");
+            powerRelayOutputRotateModel = OBJLoader.loadModel(
+                    Minecraft.getMinecraft().getResourceManager().getResource(
+                            new ResourceLocation("mff:models/block/powerRelayOutputRotate.obj")
+                    ).getInputStream());
+        } catch (IOException e) {
+            LogHelper.error("Failed to load mff:models/block/powerRelayOutputRotate.obj");
             e.printStackTrace();
         }
 

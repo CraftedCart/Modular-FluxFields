@@ -1,7 +1,9 @@
 package io.github.craftedcart.MFF.handler;
 
 import io.github.craftedcart.MFF.client.gui.*;
-import io.github.craftedcart.MFF.container.*;
+import io.github.craftedcart.MFF.client.gui.blockconfig.GuiConfigPowerRelay;
+import io.github.craftedcart.MFF.container.ContainerCrystalConstructor;
+import io.github.craftedcart.MFF.container.ContainerCrystalRefinery;
 import io.github.craftedcart.MFF.tileentity.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -25,6 +27,7 @@ public class GuiHandler implements IGuiHandler {
     public static final int PowerCube_TILE_ENTITY_GUI = 7;
     public static final int SolarPowerGenerator_TILE_ENTITY_GUI = 8;
     public static final int MFFSettings_GUI = 9;
+    public static final int ConfigPowerRelay_GUI = 10;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -57,6 +60,8 @@ public class GuiHandler implements IGuiHandler {
             return new GuiSolarPowerGenerator((TEPowerGenerator) world.getTileEntity(new BlockPos(x, y, z)));
         } else if (ID == MFFSettings_GUI) {
             return new GuiMFFSettings();
+        } else if (ID == ConfigPowerRelay_GUI) {
+            return new GuiConfigPowerRelay(world, (TEPowerRelay) world.getTileEntity(new BlockPos(x, y, z)));
         }
 
         return null;

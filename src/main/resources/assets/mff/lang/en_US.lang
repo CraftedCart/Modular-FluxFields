@@ -11,6 +11,7 @@ item.mff:crystalSheet.name=Crystal Sheet
 item.mff:aluriteIngot.name=Alurite Ingot
 item.mff:aluriteBase.name=Alurite Base
 item.mff:powerTransceiver.name=Power Transceiver
+item.mff:forceManipulator.name=Force Manipulator
 #Crystals
 item.mff:refinedAmethyst.name=Refined Amethyst
 item.mff:rawAmethyst.name=Raw Amethyst
@@ -145,6 +146,19 @@ gui.mff:plainGraphicsInfo=<html><body>Will use low-polygon 3D models and standar
 gui.mff:useHighPolyModels=Use high-polygon 3D models (Drastically impacts performance!)
 gui.mff:useGLSLShaders=Use GLSL shaders (Requires OpenGL 2.0 or higher - Increases performance, plus it looks nice)
 
+#Block Config
+gui.mff:powerRelayConfig=Power Relay Configuration
+gui.mff:inputSide=Input side
+gui.mff:outputSide=Output side
+
+#Sides
+gui.mff:posX=+ X
+gui.mff:posY=+ Y
+gui.mff:posZ=+ Z
+gui.mff:negX=- X
+gui.mff:negY=- Y
+gui.mff:negZ=- Z
+
 #About
 gui.mff:mffAbout=About Modular FluxFields
 gui.mff:version=Version
@@ -157,3 +171,6 @@ gui.mff:viewIssueTracker=View this mod's issue tracker
 gui.mff:licenceExemptFiles=The following files are exempt from MFF's licence
 gui.mff:licenceExemptRoboto=The font Roboto (Roboto-Regular.ttf) - Apache License, version 2.0 - Owner: Christian Robertson
 gui.mff:licenceExemptAviatorsOpenYourEyes=The MIDI file Open Your Eyes (AviatorsOpenYourEyesMIDI.mid) - CC BY-NC-CA 3.0 - Owner: Aviators (Tyler Shaw)
+
+#Debug
+gui.mff:debug=Debug

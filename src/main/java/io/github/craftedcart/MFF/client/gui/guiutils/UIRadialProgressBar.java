@@ -1,7 +1,6 @@
 package io.github.craftedcart.MFF.client.gui.guiutils;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 
 /**
  * Created by CraftedCart on 07/02/2016 (DD/MM/YYYY)

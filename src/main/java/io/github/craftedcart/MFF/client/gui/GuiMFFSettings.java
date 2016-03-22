@@ -378,6 +378,7 @@ public class GuiMFFSettings extends UIDisplay {
         settingsListBox.addItem("licenceExemptFilesLabelComponent", licenseExemptFilesLabelComponent);
         //</editor-fold>
 
+        //<editor-fold desc="MFF Licence Exempt Roboto">
         final UILabel licenceExemptRobotoLabel = new UILabel(null,
                 "licenceExemptRobotoLabel",
                 new PosXY(24, 0),
@@ -386,7 +387,9 @@ public class GuiMFFSettings extends UIDisplay {
         licenceExemptRobotoLabel.setText(StatCollector.translateToLocal("gui.mff:licenceExemptRoboto"));
 
         settingsListBox.addItem("licenceExemptRobotoLabel", licenceExemptRobotoLabel);
+        //</editor-fold>
 
+        //<editor-fold desc="MFF Licence Exempt Aviators Open Your Eyes">
         final UILabel licenceExemptAviatorsOpenYourEyesLabel = new UILabel(null,
                 "licenceExemptAviatorsOpenYourEyesLabel",
                 new PosXY(24, 0),
@@ -395,6 +398,37 @@ public class GuiMFFSettings extends UIDisplay {
         licenceExemptAviatorsOpenYourEyesLabel.setText(StatCollector.translateToLocal("gui.mff:licenceExemptAviatorsOpenYourEyes"));
 
         settingsListBox.addItem("licenceExemptAviatorsOpenYourEyesLabel", licenceExemptAviatorsOpenYourEyesLabel);
+        //</editor-fold>
+
+//        //<editor-fold desc="Divider 2">
+//        final UIComponent divider2 = new UIComponent(null,
+//                "divider2",
+//                new PosXY(0, 0),
+//                new PosXY(0, 2),
+//                new AnchorPoint(0, 0),
+//                new AnchorPoint(1, 0));
+//        divider2.setPanelBackgroundColor(UIColor.matGrey900());
+//        settingsListBox.addItem("divider2", divider2);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Debug Title">
+//        final UIComponent debugLabelComponent = new UIComponent(null,
+//                "debugLabelComponent",
+//                new PosXY(0, 0),
+//                new PosXY(0, 32),
+//                new AnchorPoint(0, 0),
+//                new AnchorPoint(1, 0));
+//        debugLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+//
+//        final UILabel debugLabel = new UILabel(debugLabelComponent,
+//                "debugLabel",
+//                new PosXY(24, 6),
+//                new AnchorPoint(0, 0),
+//                GuiUtils.font);
+//        debugLabel.setText(StatCollector.translateToLocal("gui.mff:debug"));
+//
+//        settingsListBox.addItem("debugLabelComponent", debugLabelComponent);
+//        //</editor-fold>
 
     }
 

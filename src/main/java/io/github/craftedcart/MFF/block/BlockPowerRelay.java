@@ -3,7 +3,13 @@ package io.github.craftedcart.MFF.block;
 import io.github.craftedcart.MFF.reference.Names;
 import io.github.craftedcart.MFF.tileentity.TEPowerRelay;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 /**
@@ -35,4 +41,37 @@ public class BlockPowerRelay extends ModBlock implements ITileEntityProvider {
         return -1;
     }
 
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+
+        TileEntity te = worldIn.getTileEntity(pos);
+
+        if (te != null && te instanceof TEPowerRelay) {
+
+            TEPowerRelay tePowerRelay = (TEPowerRelay) te;
+
+            int directionInt = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+
+            switch (directionInt) {
+                case 0: { //North
+                    tePowerRelay.setInputSide(EnumFacing.NORTH);
+                    break;
+                }
+                case 1: { //East
+                    tePowerRelay.setInputSide(EnumFacing.EAST);
+                    break;
+                }
+                case 2: { //South
+                    tePowerRelay.setInputSide(EnumFacing.SOUTH);
+                    break;
+                }
+                case 3: { //West
+                    tePowerRelay.setInputSide(EnumFacing.WEST);
+                    break;
+                }
+            }
+        }
+
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+    }
 }

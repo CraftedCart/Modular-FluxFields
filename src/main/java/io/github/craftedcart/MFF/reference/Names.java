@@ -32,6 +32,7 @@ public final class Names {
     public static final String ItemAluriteIngot = "aluriteIngot";
     public static final String ItemAluriteBase = "aluriteBase";
     public static final String ItemPowerTransceiver = "powerTransceiver";
+    public static final String ItemForceManipulator = "forceManipulator";
     //Crystals
     public static final String ItemRefinedAmethyst = "refinedAmethyst";
     public static final String ItemRawAmethyst = "rawAmethyst";

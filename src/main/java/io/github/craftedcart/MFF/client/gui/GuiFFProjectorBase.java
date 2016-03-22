@@ -21,7 +21,7 @@ public class GuiFFProjectorBase extends UIDisplay {
             new PosXY(sidebarWidth, 24),
             new PosXY(0, 0),
             new AnchorPoint(0, 0),
-            new AnchorPoint(1, 1));;
+            new AnchorPoint(1, 1));
 
     protected TEFFProjector te;
     protected EntityPlayer player;

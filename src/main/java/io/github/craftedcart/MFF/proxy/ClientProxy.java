@@ -5,13 +5,15 @@ import io.github.craftedcart.MFF.client.render.blocks.*;
 import io.github.craftedcart.MFF.init.ModBlocks;
 import io.github.craftedcart.MFF.init.ModItems;
 import io.github.craftedcart.MFF.init.ModKeyBindings;
+import io.github.craftedcart.MFF.item.ItemForceManipulator;
 import io.github.craftedcart.MFF.tileentity.TEFFProjector;
-import io.github.craftedcart.MFF.tileentity.TEPowerRelay;
 import io.github.craftedcart.MFF.tileentity.TEPowerCube;
 import io.github.craftedcart.MFF.tileentity.TEPowerGenerator;
+import io.github.craftedcart.MFF.tileentity.TEPowerRelay;
 import io.github.craftedcart.MFF.utility.DependencyUtils;
 import io.github.craftedcart.MFF.utility.LogHelper;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.awt.*;
@@ -36,7 +38,6 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TEPowerCube.class, new TERendererPowerCube());
         ClientRegistry.bindTileEntitySpecialRenderer(TEFFProjector.class, new TERendererFFProjector());
         ClientRegistry.bindTileEntitySpecialRenderer(TEPowerGenerator.class, new TERendererPowerGenerator());
-
         ClientRegistry.bindTileEntitySpecialRenderer(TEPowerRelay.class, new TERendererPowerRelay());
 
     }
@@ -46,6 +47,8 @@ public class ClientProxy extends CommonProxy {
         super.init();
         GuiUtils.init();
         ModKeyBindings.init();
+
+        MinecraftForge.EVENT_BUS.register(new ItemForceManipulator.renderWorldOverlayHandler() );
     }
 
     @Override

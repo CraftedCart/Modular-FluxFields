@@ -32,10 +32,19 @@ public class UIRootComponent extends UIComponent {
 
     }
 
+    public UIRootComponent() {
+
+        this.topLeftPx = new PosXY(0, 0);
+        this.bottomRightPx = new PosXY(Display.getWidth(), Display.getHeight());
+
+        this.name = "rootComponent";
+
+    }
+
     /**
      * This is called every frame
      */
-    protected void onUpdate() {
+    public void onUpdate() {
 
         width = bottomRightPx.x - topLeftPx.x;
         height = bottomRightPx.y - topLeftPx.y;
