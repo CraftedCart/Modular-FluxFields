@@ -6,6 +6,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
+
 /**
  * Created by CraftedCart on 09/01/2016 (DD/MM/YYYY)
  */
@@ -302,7 +304,9 @@ public class UIRootComponent extends UIComponent {
             }
         }
 
-        for (UIComponent childComponent : component.childUiComponents) {
+        List<UIComponent> childUiComponents1 = component.childUiComponents;
+        for (int i = 0; i < childUiComponents1.size(); i++) {
+            UIComponent childComponent = childUiComponents1.get(i);
             if (childComponent != null) {
                 drawDebugOverlayOnComponentAndChildren(childComponent, true);
             }

@@ -9,10 +9,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,6 +22,8 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
     public static int konamiCodeProgress = 0;
     public static boolean upKeyDown = false;
     public static boolean downKeyDown = false;
+
+    private MetaEventListener midiMetaEventListener;
 
     public GuiFFProjectorInfo(EntityPlayer player, TEFFProjector te) {
         this.te = te;
@@ -315,7 +314,17 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
 
                             GuiUtils.sequencer.open();
                             InputStream midiFile = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("mff:eastereggs/AviatorsOpenYourEyesMIDI.mid")).getInputStream();
-                            Sequence sequence = MidiSystem.getSequence(midiFile);
+                            Sequence originalSequence = MidiSystem.getSequence(midiFile);
+                            Track[] tracks = originalSequence.getTracks();
+                            Sequence sequence = new Sequence(originalSequence.getDivisionType(), originalSequence.getResolution());
+
+                            for (Track track : tracks) {
+                                Track newTrack = sequence.createTrack();
+                                addNotesToTrack(track, newTrack);
+                            }
+
+                            GuiUtils.sequencer.addMetaEventListener(midiMetaEventListener);
+
                             GuiUtils.sequencer.setSequence(sequence);
                             GuiUtils.sequencer.setTempoInBPM(125);
                             GuiUtils.sequencer.start();
@@ -323,23 +332,81 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
                             openYourEyesEasterEggLabel.setText(StatCollector.translateToLocal("gui.mff:openYourEyesEasterEgg"));
 
                         }
-                    } catch (MidiUnavailableException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InvalidMidiDataException e) {
+                    } catch (MidiUnavailableException | IOException | InvalidMidiDataException e) {
                         e.printStackTrace();
                     }
                 }
 
                 if (konamiCodeProgress == 10) {
-                    openYourEyesEasterEggLabel.setText(StatCollector.translateToLocal("gui.mff:openYourEyesEasterEgg") +
-                            String.format(" [%06.2f / %06.2f]", GuiUtils.sequencer.getMicrosecondPosition() / 1000000f, GuiUtils.sequencer.getSequence().getMicrosecondLength() / 1000000f));
+                    if (GuiUtils.sequencer.getSequence() != null) { //Prevent crash
+                        openYourEyesEasterEggLabel.setText(StatCollector.translateToLocal("gui.mff:openYourEyesEasterEgg") +
+                                String.format(" [%06.2f / %06.2f]", GuiUtils.sequencer.getMicrosecondPosition() / 1000000f, GuiUtils.sequencer.getSequence().getMicrosecondLength() / 1000000f));
+                    }
                 }
             }
         });
+
+        midiMetaEventListener = new MetaEventListener() {
+            @Override
+            public void meta(MetaMessage meta) {
+                final UIComponent vizComponent = new UIComponent(getWorkspace(),
+                        "vizComponent (" + String.valueOf(meta.getMessage()[4]) + ")",
+                        new PosXY(meta.getMessage()[4] * 10, -48),
+                        new PosXY(meta.getMessage()[4] * 10 + 10, -24),
+                        new AnchorPoint(0, 1),
+                        new AnchorPoint(0, 1));
+                vizComponent.setPanelBackgroundColor(UIColor.matBlue());
+
+                class VizData {
+                    double lifetime = 1;
+                }
+
+                final VizData vizData = new VizData();
+
+                vizComponent.setOnUpdateAction(new UIAction() {
+                    @Override
+                    public void execute() {
+                        vizData.lifetime -= GuiUtils.getDelta() / 10;
+                        vizComponent.setPanelBackgroundColor(UIColor.matBlue(vizData.lifetime));
+                        vizComponent.setTopLeftAnchor(new AnchorPoint(0, vizData.lifetime ));
+                        vizComponent.setBottomRightAnchor(new AnchorPoint(0, vizData.lifetime));
+                        if (vizData.lifetime <= 0) {
+                            vizComponent.parentComponent.childUiComponents.set(vizComponent.componentID, null); //Destroy self
+                        }
+                    }
+                });
+            }
+        };
         //</editor-fold>
 
+    }
+
+    /** Iterates the MIDI events of the first track and if they are a
+     * NOTE_ON or NOTE_OFF message, adds them to the second track as a
+     * Meta event. */
+    public static void addNotesToTrack(Track track, Track trk) throws InvalidMidiDataException {
+        for (int ii = 0; ii < track.size(); ii++) {
+            MidiEvent me = track.get(ii);
+            MidiMessage mm = me.getMessage();
+            if (mm instanceof ShortMessage) {
+                ShortMessage sm = (ShortMessage) mm;
+                int command = sm.getCommand();
+                int com = -1;
+                if (command == ShortMessage.NOTE_ON) {
+                    com = 1;
+                } else if (command == ShortMessage.NOTE_OFF) {
+                    com = 2;
+                }
+                if (com > 0) {
+                    byte[] b = sm.getMessage();
+                    int l = (b == null ? 0 : b.length);
+                    MetaMessage metaMessage = new MetaMessage(com, b, l);
+                    MidiEvent me2 = new MidiEvent(metaMessage, me.getTick());
+                    trk.add(me2);
+                }
+            }
+            trk.add(me);
+        }
     }
 
     @Override
@@ -347,6 +414,7 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
         super.onGuiClosed();
         if (GuiUtils.sequencer.isRunning()) {
             GuiUtils.sequencer.stop();
+            GuiUtils.sequencer.removeMetaEventListener(midiMetaEventListener);
             GuiUtils.sequencer.close();
         }
     }
