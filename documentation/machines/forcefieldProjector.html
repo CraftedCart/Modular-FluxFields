@@ -116,7 +116,7 @@
 						<li>Sizing</li>
 						<li>Security <span class="label label-warning">In development</span></li>
 						<li>Upgrades <span class="label label-danger">In development - Currently non-existent</span></li>
-						<li>Power Statistics <span class="label label-danger">In development - Currently non-existent</span></li>
+						<li>Power Statistics</li>
 					</ul>
 					In all of the GUI screens, the current power level is displayed at the top.
 				</p>
@@ -151,12 +151,33 @@
 								Data displayed on the info screen includes:
 								<ul>
 									<li>The current amount of power stored</li>
-									<li>The power usage per tick and per second</li>
+									<li>The power usage per tick</li>
 									<li>The size of the projected forcefield</li>
 									<li>Who owns the Forcefield Projector</li>
-									<li>How long the forcefield has been up for</li>
+                  <li>How long the forcefield has been up for</li>
+									<li>How long the forcefield will take to initialize</li>
 								</ul>
 							</p>
+
+              <p>There's an easter egg to be found on this GUI screen. See if you can figure it out or expand the spoiler to find out (Hint: Inspect the hierarchy view with F3 for another hint).</p>
+
+              <div class="panel panel-default">
+      					<div class="panel-heading clearfix">
+        					<h3 class="panel-title">Easter Egg Spoiler
+    								<span class="pull-right"><button type="button" class="btn btn-info panel-expand-button" data-toggle="collapse" data-target="#ffpGuiInfoEasterEgg"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+    							</h3>
+    						</div>
+      					<div class="panel-body collapse" id="ffpGuiInfoEasterEgg">
+                  <p>Enter the Konami Code (Up, Up, Down, Down, Left, Right, Left, Right, B, A) and a MIDI file will start playing.
+                    Note that it may say that the song is playing whilst Java is loading the song.
+                    Exit out of the GUI to stop it.</p>
+                  <p>The song is <a href="https://www.youtube.com/watch?v=ia2aoTYY9PI">Open Your Eyes by Aviators (Tyler Shaw)</a>. <small>Please don't judge it based on the visuals...</small></p>
+                  <p>Aviators composes and remixes nice music.
+                    If you're interested, you can find his music on <a href="https://www.youtube.com/user/SoundOfTheAviators">YouTube</a>,
+                    <a href="http://music.soundoftheaviators.com/">BandCamp</a>,
+                    <a href="https://soundcloud.com/aviatorscompositions">SoundCloud</a> and in various other places (Search for Sound Of The Aviators).</p>
+      					</div>
+    					</div>
 
   					</div>
 					</div>
@@ -208,17 +229,17 @@
 						</div>
   					<div class="panel-body collapse" id="ffpGuiSecurity">
 
-							<a data-toggle="modal" data-target="#ffSecurityGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/ffGuiSecurityPlayers.png" class="docs-image-thumb center-block"></a>
+							<a data-toggle="modal" data-target="#ffSecurityGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/ffGuiSecurity.png" class="docs-image-thumb center-block"></a>
 
 							<div class="modal fade" id="ffSecurityGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
 					  		<div class="modal-dialog modal-lg" role="document">
 					    		<div class="modal-content">
 					      		<div class="modal-header">
 					        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        		<h4 class="modal-title">Forcefield Projector: Security GUI - Managing players</h4>
+					        		<h4 class="modal-title">Forcefield Projector: Security GUI</h4>
 					      		</div>
 					      		<div class="modal-body">
-					        		<img src="/Modular-FluxFields/img/gui/ffGuiSecurityPlayers.png" class="docs-image-full">
+					        		<img src="/Modular-FluxFields/img/gui/ffGuiSecurity.png" class="docs-image-full">
 					      		</div>
 					    		</div>
 					  		</div>
@@ -228,19 +249,20 @@
 							<p>
 								Here, you can manage the security system of the forcefield.
 								A security upgrade will be needed for this to function, but as there is no upgrade system for the Forcefield Projector yet, this requirement is overridden.
-								There are two tabs (found at the bottom) to this GUI screen, manage players mode (the person icon), and manage groups &amp; permissions mode (the padlock icon).<br>
-								<br>
-								In manage players mode, players can be added to the system, assigned a group and removed.
-								Adding players is as simple as entering their username into the text field (make sure they're online) and hitting return, selecting them, clicking "Add to group" and then selecting a group to assign them to.
-								Deleting a player is done by selecting their username on the sidebar, followed by pressing "Remove".
-								There is no warning dialog; once you've deleted them, they're gone and automatically assigned to the "Everyone" group.<br>
-								<br>
-								In manage groups mode, you can create groups by entering its name into the text field and hitting return.
-								You will have the ability to set permissions on a group, however the security system is still a work in progress and as such, this feature doesn't exist yet.
-								Removing a group is done by selecting it, followed by pressing "Remove".
-								The only group that can't be removed is the "Everyone" group.
-								As the name implies, the "Everyone" groups is used to manage permissions for all players not on the security system.
-								As with manage players mode, there is no warning dialog; Make sure you're certain when deleting a group, as you will have to reassign each player in that group to a new group.
+								Players and permission groups can be added using the two text fields at the top left.
+                By default, players are added to the "Everyone" group (Referenced internally as <code>gui.mff:everyone</code>).
+                You can assign players to other groups by selecting players and one group, followed by clicking the "Assign to the selected group" button.
+                Groups are assigned permissions by selecting groups, followed by selecting permissions on the left under the "Group Options" heading.
+                <br>
+                <h3>Tips</h3>
+                <ul>
+                  <li>Hold down Command (OS X) or Control (Other OSs) to select multiple players or groups.</li>
+                  <li>Press Command Z (OS X) or Control Z (Other OSs) to undo your last action</li>
+                  <li>You can rename multiple groups at once with the same name. Numbers will just be appended to the end of each name.</li>
+                  <li>You may not want to be using the default Minecraft window size when working with the security system. Text usually overlaps or is cut off.</li>
+                </ul>
+                <br>
+                The security system is currently a work in progress...
 							</p>
 
   					</div>
@@ -270,13 +292,29 @@
   					<div class="panel-heading clearfix">
     					<h3 class="panel-title">Power Statistics
 								<span class="pull-right"><button type="button" class="btn btn-info panel-expand-button" data-toggle="collapse" data-target="#ffpGuiPowerStatistics"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
-								<span class="pull-right"><span class="label label-danger">In development - Currently non-existent</span>&nbsp;</span>
 							</h3>
 						</div>
-  					<div class="panel-body collapse" id="ffpGuiPowerStatistics">
+            <div class="panel-body collapse" id="ffpGuiPowerStatistics">
 
+							<a data-toggle="modal" data-target="#ffPowerStatisticsGuiPreview" href="javascript:void(0)"><img src="/Modular-FluxFields/img/gui/ffGuiPowerStatistics.png" class="docs-image-thumb center-block"></a>
+
+							<div class="modal fade" id="ffPowerStatisticsGuiPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> <!-- Full image preview modal -->
+					  		<div class="modal-dialog modal-lg" role="document">
+					    		<div class="modal-content">
+					      		<div class="modal-header">
+					        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        		<h4 class="modal-title">Forcefield Projector: Power Statistics GUI</h4>
+					      		</div>
+					      		<div class="modal-body">
+					        		<img src="/Modular-FluxFields/img/gui/ffGuiPowerStatistics.png" class="docs-image-full">
+					      		</div>
+					    		</div>
+					  		</div>
+							</div> <!-- / modal -->
+
+							<br>
 							<p>
-								This GUI screen doesn't exist yet.
+								Here, you can see the power usage of the Forcefield Projector over time. It keeps track of power usage every tick for the past minute, as well as every second for the past half hour.
 							</p>
 
   					</div>
