@@ -1,0 +1,176 @@
+#Creative Tabs
+itemGroup.ModularFluxFields=Modular FluxFields
+
+#Keybindings
+key.categories.modularfluxfields=Modular FluxFields
+modularfluxfields:key.settings=modularfluxfields Settings
+
+#Items
+item.modularfluxfields:prism.name=Prism
+item.modularfluxfields:crystalSheet.name=Crystal Sheet
+item.modularfluxfields:aluriteIngot.name=Alurite Ingot
+item.modularfluxfields:aluriteBase.name=Alurite Base
+item.modularfluxfields:powerTransceiver.name=Power Transceiver
+item.modularfluxfields:forceManipulator.name=Force Manipulator
+#Crystals
+item.modularfluxfields:refinedAmethyst.name=Refined Amethyst
+item.modularfluxfields:rawAmethyst.name=Raw Amethyst
+item.modularfluxfields:refinedRuby.name=Refined Ruby
+item.modularfluxfields:rawRuby.name=Raw Ruby
+#Upgrades
+item.modularfluxfields:speedUpgrade.name=Speed Upgrade
+item.modularfluxfields:efficiencyUpgrade.name=Efficiency Upgrade
+
+#Blocks
+tile.modularfluxfields:forcefield.name=Forcefield
+tile.modularfluxfields:ffProjector.name=Forcefield Projector
+tile.modularfluxfields:powerCube.name=Power Cube
+tile.modularfluxfields:crystalRefinery.name=Crystal Refinery
+tile.modularfluxfields:crystalConstructor.name=Crystal Constructor
+tile.modularfluxfields:powerRelay.name=Power Relay
+#Ores
+tile.modularfluxfields:oreAmethyst.name=Amethyst Ore
+tile.modularfluxfields:oreRuby.name=Ruby Ore
+#Power Generators
+tile.modularfluxfields:creativePowerGenerator.name=Creative Power Generator
+tile.modularfluxfields:solarPowerGenerator1.name=Solar (x1) Power Generator
+tile.modularfluxfields:solarPowerGenerator8.name=Solar (x8) Power Generator
+tile.modularfluxfields:solarPowerGenerator64.name=Solar (x64) Power Generator
+tile.modularfluxfields:solarPowerGenerator512.name=Solar (x512) Power Generator
+tile.modularfluxfields:solarPowerGenerator4096.name=Solar (x4096) Power Generator
+tile.modularfluxfields:solarPowerGenerator32768.name=Solar (x32768) Power Generator
+tile.modularfluxfields:solarPowerGenerator262144.name=Solar (x262144) Power Generator
+
+#Chat
+chat.modularfluxfields:bypassedFFProtection=§eModular FluxFields: Bypassed a block that was protected by a forcefield (You're in creative mode!)
+chat.modularfluxfields:warnFFProtection=§cModular FluxFields: Nope! That block's protected by a forcefield
+
+#Gui
+container.modularfluxfields:crystalRefinery=Crystal Refinery
+container.modularfluxfields:crystalConstructor=Crystal Constructor
+container.modularfluxfields:ffProjector=Forcefield Projector
+
+gui.modularfluxfields:info=Info
+gui.modularfluxfields:sizing=Sizing
+gui.modularfluxfields:security=Security
+gui.modularfluxfields:upgrades=Upgrades
+gui.modularfluxfields:powerStats=Power Statistics
+
+gui.modularfluxfields:power=Power
+gui.modularfluxfields:powerUsage=Power Usage
+#FE - Short for Force Energy
+gui.modularfluxfields:fe=FE
+#t - Short for tick
+gui.modularfluxfields:t=t
+gui.modularfluxfields:remaining=Remaining
+gui.modularfluxfields:time=Time
+
+gui.modularfluxfields:owner=Owner
+gui.modularfluxfields:uptime=Uptime
+
+#Security
+gui.modularfluxfields:addPlayer=Add player
+gui.modularfluxfields:addPermGroup=Add permission group
+gui.modularfluxfields:everyone=Everyone
+gui.modularfluxfields:securityNoUpgrade=No security upgrade found
+gui.modularfluxfields:players=Players
+gui.modularfluxfields:permGroups=Permission Groups
+gui.modularfluxfields:playerRegistered=Registered player
+gui.modularfluxfields:playerAlreadyRegistered=That player has already been registered
+gui.modularfluxfields:cantContactMojang=Can't contact Mojang's servers
+gui.modularfluxfields:invalidResponseMojang=Invalid response from Mojang's servers
+gui.modularfluxfields:playerDoesNotExist=Player does not exist
+gui.modularfluxfields:runningTasks=Running tasks
+gui.modularfluxfields:cantContactCrafatar=Can't contact Crafatar's servers
+gui.modularfluxfields:groupRegistered=Registered permission group
+gui.modularfluxfields:groupAlreadyRegistered=That group has already been registered
+gui.modularfluxfields:playerOptions=Player Options
+gui.modularfluxfields:group=Group
+gui.modularfluxfields:multiple=[Multiple]
+gui.modularfluxfields:nothingSelected=[Nothing Selected]
+gui.modularfluxfields:name=Name
+gui.modularfluxfields:uuid=UUID
+gui.modularfluxfields:assignToSelectedGroup=Assign to the selected group
+gui.modularfluxfields:selectAGroup=Select a group to assign that player to
+gui.modularfluxfields:tooManyGroupsSelected=Too many groups selected - Select one to assign that player to
+gui.modularfluxfields:removePlayers=Remove the selected players
+gui.modularfluxfields:selectPlayersToRemove=Select players to remove
+gui.modularfluxfields:groupOptions=Group Options
+gui.modularfluxfields:selectMembersOfGroup=Select the members of the selected groups
+gui.modularfluxfields:removeGroups=Remove the selected groups
+gui.modularfluxfields:selectGroupsToRemove=Select groups to remove
+gui.modularfluxfields:selectGroupsToSelectMembers=Select groups first to select their members
+gui.modularfluxfields:selectPlayersToAssign=Select players to assign to a group
+gui.modularfluxfields:renameGroup=Rename group
+gui.modularfluxfields:killPlayers=Kill players
+gui.modularfluxfields:allowSecurityModification=Allow players to modify the security system
+
+gui.modularfluxfields:undo=Undo
+
+gui.modularfluxfields:initializing=Initializing
+
+gui.modularfluxfields:secs=s
+gui.modularfluxfields:mins=m
+gui.modularfluxfields:now=Now
+gui.modularfluxfields:minsAgo=minutes ago
+gui.modularfluxfields:secsAgo=seconds ago
+
+gui.modularfluxfields:downloadingDeps=Downloading Dependencies
+gui.modularfluxfields:modularfluxfieldsDownloadingDeps=Modular FluxFields is now downloading dependencies
+gui.modularfluxfields:downloadFailed=Download failed
+gui.modularfluxfields:loadCannotContinue=Loading Minecraft cannot continue without the required dependencies for Modular FluxFields
+gui.modularfluxfields:quit=Quit
+gui.modularfluxfields:manualInstall=Manual Installation Guide
+
+#Stats
+stat.modularfluxfields:+100%Speed=§a+100% Speed
+stat.modularfluxfields:+25%PowerUsageTick=§c+25% Power Usage / tick
+stat.modularfluxfields:-50%PowerUsageTick=§a-50% Power Usage / tick
+
+#Deaths
+death.attack.forcefieldSecurityKill=%1$s was disintegrated by a forcefield
+
+#Easter Eggs
+gui.modularfluxfields:loadingEasterEgg=Loading Easter Egg...
+gui.modularfluxfields:openYourEyesEasterEgg=Now Playing: Aviators - Open Your Eyes (MIDI)
+
+#Settings
+gui.modularfluxfields:modularfluxfieldsSettings=Modular FluxFields Settings
+gui.modularfluxfields:chooseGraphicsPreset=Choose a graphical preset for Modular FluxFields
+gui.modularfluxfields:fancyGraphics=Fancy Graphics
+gui.modularfluxfields:fancyGraphicsInfo=<html><body>Will use high-polygon 3D models and GLSL shaders<br>OpenGL 2.0 or higher is required<br><p style="color: red;">This drastically impacts performance!</p></html></body>
+gui.modularfluxfields:mediocreGraphics=Mediocre Graphics
+gui.modularfluxfields:mediocreGraphicsInfo=<html><body>Will use low-polygon 3D models and GLSL shaders<br>OpenGL 2.0 or higher is required<br>Minimal impact on performance<br><b>Recommended</b></html></body>
+gui.modularfluxfields:plainGraphics=Plain Graphics
+gui.modularfluxfields:plainGraphicsInfo=<html><body>Will use low-polygon 3D models and standard shading<br>Minor impact on performance</html></body>
+gui.modularfluxfields:useHighPolyModels=Use high-polygon 3D models (Drastically impacts performance!)
+gui.modularfluxfields:useGLSLShaders=Use GLSL shaders (Requires OpenGL 2.0 or higher - Increases performance, plus it looks nice)
+
+#Block Config
+gui.modularfluxfields:powerRelayConfig=Power Relay Configuration
+gui.modularfluxfields:inputSide=Input side
+gui.modularfluxfields:outputSide=Output side
+
+#Sides
+gui.modularfluxfields:posX=+ X
+gui.modularfluxfields:posY=+ Y
+gui.modularfluxfields:posZ=+ Z
+gui.modularfluxfields:negX=- X
+gui.modularfluxfields:negY=- Y
+gui.modularfluxfields:negZ=- Z
+
+#About
+gui.modularfluxfields:modularfluxfieldsAbout=About Modular FluxFields
+gui.modularfluxfields:version=Version
+gui.modularfluxfields:modularfluxfieldsLicence=Modular FluxFields is licenced under the GNU General Public Licence, Version 2
+gui.modularfluxfields:developedBy=Developed by CraftedCart
+gui.modularfluxfields:viewWebsite=View this mod's website
+gui.modularfluxfields:viewOnGitHub=View this mod's GitHub repository
+gui.modularfluxfields:viewLicense=View this mod's licence
+gui.modularfluxfields:viewIssueTracker=View this mod's issue tracker
+gui.modularfluxfields:licenceExemptFiles=The following files are exempt from modularfluxfields's licence
+gui.modularfluxfields:licenceExemptRoboto=The font Roboto (Roboto-Regular.ttf) - Apache License, version 2.0 - Owner: Christian Robertson
+gui.modularfluxfields:licenceExemptAviatorsOpenYourEyes=The MIDI file Open Your Eyes (AviatorsOpenYourEyesMIDI.mid) - CC BY-NC-CA 3.0 - Owner: Aviators (Tyler Shaw)
+
+#Debug
+gui.modularfluxfields:debug=Debug

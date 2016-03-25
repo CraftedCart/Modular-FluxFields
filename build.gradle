@@ -23,8 +23,8 @@ plugins {
 }
 
 version = "1.0.0-Alpha3-Development-Minecraft1.8"
-group= "io.github.craftedcart.MFF" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "MFF"
+group= "io.github.craftedcart.modularfluxfields" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "ModularFluxFields"
 
 targetCompatibility = "1.7"
 sourceCompatibility = "1.7"

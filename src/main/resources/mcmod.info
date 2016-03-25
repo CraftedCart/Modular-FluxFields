@@ -1,6 +1,6 @@
 [
     {
-      "modid": "MFF",
+      "modid": "ModularFluxFields",
       "name": "Modular FluxFields",
       "description": "Forcefields to protect your base!",
       "version": "1.0.0-Alpha3-Development",
@@ -9,7 +9,7 @@
       "updateUrl": "",
       "authorList": ["CraftedCart"],
       "credits": "FearLolzGuy, for moral support, and coming up with the concept",
-      "logoFile": "/assets/mff/MFFBanner.png",
+      "logoFile": "/assets/modularfluxfields/MFFBanner.png",
       "screenshots": [],
       "dependencies": ["NotEnoughItems"]
     }
