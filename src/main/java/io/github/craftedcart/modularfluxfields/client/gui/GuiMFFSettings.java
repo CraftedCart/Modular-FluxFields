@@ -1,9 +1,12 @@
 package io.github.craftedcart.modularfluxfields.client.gui;
 
 import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
+import io.github.craftedcart.modularfluxfields.handler.ConfigurationHandler;
 import io.github.craftedcart.modularfluxfields.reference.MFFSettings;
 import io.github.craftedcart.modularfluxfields.reference.Reference;
 import io.github.craftedcart.modularfluxfields.utility.MathUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.StatCollector;
 
 import java.awt.*;
@@ -15,6 +18,15 @@ import java.net.URISyntaxException;
  * Created by CraftedCart on 27/02/2016 (DD/MM/YYYY)
  */
 public class GuiMFFSettings extends UIDisplay {
+
+    private boolean isFullscreen = false;
+
+    public GuiMFFSettings() {}
+
+    public GuiMFFSettings(GuiScreen guiScreen) {
+        isFullscreen = true;
+        Minecraft.getMinecraft().displayGuiScreen(this);
+    }
 
     @Override
     public void onInit() {
@@ -44,15 +56,15 @@ public class GuiMFFSettings extends UIDisplay {
                 new PosXY(0, 0),
                 new PosXY(0, 0),
                 new AnchorPoint(0, 0),
-                new AnchorPoint(0.75, 1));
+                new AnchorPoint(isFullscreen ? 1 : 0.75, 1));
         settingsListBox.setPanelBackgroundColor(UIColor.matWhite(0.9));
 
         final UIGradientPanel settingsShadow = new UIGradientPanel(workspace,
                 "settingsShadow",
                 new PosXY(0, 0),
                 new PosXY(4, 0),
-                new AnchorPoint(0.75, 0),
-                new AnchorPoint(0.75, 1));
+                new AnchorPoint(isFullscreen ? 1 : 0.75, 0),
+                new AnchorPoint(isFullscreen ? 1 : 0.75, 1));
         settingsShadow.setHorizontalGradient(UIColor.matGrey900(0.9), UIColor.matGrey900(0));
         //</editor-fold>
 
@@ -424,4 +436,10 @@ public class GuiMFFSettings extends UIDisplay {
 
     }
 
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+
+        ConfigurationHandler.saveMFFSettings();
+    }
 }

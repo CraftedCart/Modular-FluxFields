@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
  */
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "after:NotEnoughItems")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "after:NotEnoughItems", guiFactory = Reference.GUI_FACTORY_CLASS)
 public class ModModularFluxFields
 {
 

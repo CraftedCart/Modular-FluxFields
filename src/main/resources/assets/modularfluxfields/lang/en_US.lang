@@ -135,7 +135,7 @@ gui.modularfluxfields:loadingEasterEgg=Loading Easter Egg...
 gui.modularfluxfields:openYourEyesEasterEgg=Now Playing: Aviators - Open Your Eyes (MIDI)
 
 #Settings
-gui.modularfluxfields:modularfluxfieldsSettings=Modular FluxFields Settings
+gui.modularfluxfields:MFFSettings=Modular FluxFields Settings
 gui.modularfluxfields:chooseGraphicsPreset=Choose a graphical preset for Modular FluxFields
 gui.modularfluxfields:fancyGraphics=Fancy Graphics
 gui.modularfluxfields:fancyGraphicsInfo=<html><body>Will use high-polygon 3D models and GLSL shaders<br>OpenGL 2.0 or higher is required<br><p style="color: red;">This drastically impacts performance!</p></html></body>
@@ -168,7 +168,7 @@ gui.modularfluxfields:viewWebsite=View this mod's website
 gui.modularfluxfields:viewOnGitHub=View this mod's GitHub repository
 gui.modularfluxfields:viewLicense=View this mod's licence
 gui.modularfluxfields:viewIssueTracker=View this mod's issue tracker
-gui.modularfluxfields:licenceExemptFiles=The following files are exempt from modularfluxfields's licence
+gui.modularfluxfields:licenceExemptFiles=The following files are exempt from Modular FluxField's licence
 gui.modularfluxfields:licenceExemptRoboto=The font Roboto (Roboto-Regular.ttf) - Apache License, version 2.0 - Owner: Christian Robertson
 gui.modularfluxfields:licenceExemptAviatorsOpenYourEyes=The MIDI file Open Your Eyes (AviatorsOpenYourEyesMIDI.mid) - CC BY-NC-CA 3.0 - Owner: Aviators (Tyler Shaw)
 

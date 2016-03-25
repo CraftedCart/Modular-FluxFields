@@ -34,7 +34,8 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void getConfig(FMLPreInitializationEvent e) {
-        ConfigurationHandler.initClient(e.getSuggestedConfigurationFile());
+        ConfigurationHandler.initCommon(e.getSuggestedConfigurationFile());
+        ConfigurationHandler.initClient();
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.io.File;
  */
 public class SelectGraphicsPreset {
 
-    public static void askUser(final File configFile) {
+    public static void askUser() {
 
         final JFrame frame = new JFrame("selectGraphicsPresetFrame");
         frame.setTitle(StatCollector.translateToLocal("gui.modularfluxfields:chooseGraphicsPreset"));
@@ -41,7 +41,7 @@ public class SelectGraphicsPreset {
                 MFFSettings.useHighPolyModels = true;
                 MFFSettings.useGLSLShaders = true;
 
-                ConfigurationHandler.saveGraphicsConfig(configFile);
+                ConfigurationHandler.saveGraphicsConfig();
 
                 frame.dispose();
             }
@@ -58,7 +58,7 @@ public class SelectGraphicsPreset {
                 MFFSettings.useHighPolyModels = false;
                 MFFSettings.useGLSLShaders = true;
 
-                ConfigurationHandler.saveGraphicsConfig(configFile);
+                ConfigurationHandler.saveGraphicsConfig();
 
                 frame.dispose();
             }
@@ -73,7 +73,7 @@ public class SelectGraphicsPreset {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Plain graphics settings should be the defaults in MFFSettings.java
-                ConfigurationHandler.saveGraphicsConfig(configFile);
+                ConfigurationHandler.saveGraphicsConfig();
 
                 frame.dispose();
             }

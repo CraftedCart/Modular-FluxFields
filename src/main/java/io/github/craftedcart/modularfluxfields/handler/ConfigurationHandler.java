@@ -12,9 +12,9 @@ import java.io.File;
  */
 public class ConfigurationHandler {
 
-    public static void initClient(File configFile) {
+    private static Configuration configuration;
 
-        Configuration configuration = new Configuration(configFile);
+    public static void initClient() {
 
         try {
 
@@ -23,40 +23,54 @@ public class ConfigurationHandler {
             if (configuration.hasKey("graphics", "useHighPolyModels") &&
                     configuration.hasKey("graphics", "useGLSLShaders")) {
 
-                MFFSettings.useHighPolyModels = configuration.get("graphics", "useHighPolyModels", true).getBoolean();
-                MFFSettings.useGLSLShaders = configuration.get("graphics", "useGLSLShaders", true).getBoolean();
+                MFFSettings.useHighPolyModels = configuration.getBoolean("useHighPolyModels", "graphics", MFFSettings.useHighPolyModels,
+                        "Should MFF use high polygon count models? This drastically impacts performance");
+                MFFSettings.useGLSLShaders = configuration.getBoolean("useHighPolyModels", "graphics", MFFSettings.useGLSLShaders,
+                        "Should MFF use GLSL shaders? This improves performance, and looks fancy");
 
             } else {
-                SelectGraphicsPreset.askUser(configFile);
+                SelectGraphicsPreset.askUser();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             LogHelper.error(e.getMessage());
         } finally {
-            configuration.save();
+            if (configuration.hasChanged()) {
+                configuration.save();
+            }
         }
 
     }
 
-    public static void saveGraphicsConfig(File configFile) {
+    public static void initCommon(File configFile) {
+        if (configuration == null) {
+            configuration = new Configuration(configFile);
+        }
+    }
 
-        Configuration configuration = new Configuration(configFile);
+    public static void saveGraphicsConfig() {
 
         try {
 
             configuration.load();
 
-            configuration.get("graphics", "useHighPolyModels", MFFSettings.useHighPolyModels);
-            configuration.get("graphics", "useGLSLShaders", MFFSettings.useGLSLShaders);
+            configuration.get("graphics", "useHighPolyModels", MFFSettings.useHighPolyModels).set(MFFSettings.useHighPolyModels);
+            configuration.get("graphics", "useGLSLShaders", MFFSettings.useGLSLShaders).set(MFFSettings.useGLSLShaders);
 
         } catch (Exception e) {
             e.printStackTrace();
             LogHelper.error(e.getMessage());
         } finally {
-            configuration.save();
+            if (configuration.hasChanged()) {
+                configuration.save();
+            }
         }
 
+    }
+
+    public static void saveMFFSettings() {
+        saveGraphicsConfig();
     }
 
 }

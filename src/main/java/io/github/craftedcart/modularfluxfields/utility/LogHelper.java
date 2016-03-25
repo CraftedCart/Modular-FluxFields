@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Level;
 public class LogHelper {
 
     private static void log(Level logLevel, Object object) {
-        FMLLog.log(Reference.MOD_NAME, logLevel, Reference.MOD_ID + ": " + String.valueOf(object));
+        FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
     }
 
     public static void all(Object object) {
