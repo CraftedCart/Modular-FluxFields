@@ -7,13 +7,11 @@
 			"PANEL-CLASS": "panel-warning release-mc-1-8 release-alpha",
 			"RELEASE-DATE": "24 Nov 2015",
 			"MC-VERSION": "1.8",
-			"DOWNLOAD-JAR": "https://bintray.com/artifact/download/craftedcart/Modular-FluxFields/1.0-alpha/MFF-1.8-1.0-Alpha1.jar",
+			"DOWNLOAD-JAR": "https://bintray.com/artifact/download/craftedcart/CraftedCart-Java/Modular-FluxFields/1.0-alpha/MFF-1.8-1.0-Alpha1.jar",
 			"JAR-RELEASE-PROVIDER": "Bintray",
 			"JAR-SIZE": "51.4 KB",
-			"DOWNLOAD-SOURCES-JAR": "",
-			"SOURCES-JAR-RELEASE-PROVIDER": "Bintray",
-			"SOURCES-JAR-SIZE": "36.1 KB",
-			"GITHUB-RELEASE-LINK": "https://bintray.com/artifact/download/craftedcart/Modular-FluxFields/1.0-alpha/MFF-1.8-1.0-Alpha1-sources.jar",
+			"BINTRAY-RELEASE-LINK": "https://bintray.com/craftedcart/CraftedCart-Java/Modular-FluxFields-Alpha/v1.0-Alpha1/view",
+			"GITHUB-RELEASE-LINK": "https://github.com/CraftedCart/Modular-FluxFields/releases/tag/v1.0-Alpha1",
 			"RELEASE-DESCRIPTION": "v1.0-Alpha1.html"
 		},
 		{
@@ -23,12 +21,10 @@
 			"PANEL-CLASS": "panel-warning release-mc-1-8 release-alpha",
 			"RELEASE-DATE": "21 Dec 2015",
 			"MC-VERSION": "1.8",
-			"DOWNLOAD-JAR": "https://bintray.com/artifact/download/craftedcart/Modular-FluxFields/1.0-alpha/MFF-1.8-1.0-Alpha2.jar",
+			"DOWNLOAD-JAR": "https://bintray.com/artifact/download/craftedcart/CraftedCart-Java/Modular-FluxFields/1.0-alpha/MFF-1.8-1.0-Alpha2.jar",
 			"JAR-RELEASE-PROVIDER": "Bintray",
 			"JAR-SIZE": "1.48 MB",
-			"DOWNLOAD-SOURCES-JAR": "https://bintray.com/artifact/download/craftedcart/Modular-FluxFields/1.0-alpha/MFF-1.8-1.0-Alpha2-sources.jar",
-			"SOURCES-JAR-RELEASE-PROVIDER": "Bintray",
-			"SOURCES-JAR-SIZE": "1.43 MB",
+			"BINTRAY-RELEASE-LINK": "https://bintray.com/craftedcart/CraftedCart-Java/Modular-FluxFields-Alpha/v1.0-Alpha2/view",
 			"GITHUB-RELEASE-LINK": "https://github.com/CraftedCart/Modular-FluxFields/releases/tag/v1.0-Alpha2",
 			"RELEASE-DESCRIPTION": "v1.0-Alpha2.html"
 		}
