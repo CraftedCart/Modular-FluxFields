@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.reference;
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-
 public final class Names {
 
     //Blocks

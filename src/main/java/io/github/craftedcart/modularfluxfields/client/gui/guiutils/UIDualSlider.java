@@ -7,7 +7,6 @@ import org.lwjgl.opengl.Display;
 /**
  * Created by CraftedCart on 06/02/2016 (DD/MM/YYYY)
  */
-
 public class UIDualSlider extends UIComponent {
 
     public UIComponent minHandle;

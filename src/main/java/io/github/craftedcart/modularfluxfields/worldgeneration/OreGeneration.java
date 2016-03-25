@@ -13,7 +13,6 @@ import java.util.Random;
 /**
  * Created by CraftedCart on 26/11/2015 (DD/MM/YYYY)
  */
-
 public class OreGeneration implements IWorldGenerator {
 
     private WorldGenerator genOreAmethyst;

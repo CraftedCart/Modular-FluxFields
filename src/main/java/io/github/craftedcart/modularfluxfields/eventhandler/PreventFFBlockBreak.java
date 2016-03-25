@@ -17,11 +17,10 @@ import java.util.Set;
 /**
  * Created by CraftedCart on 25/11/2015 (DD/MM/YYYY)
  */
-
 public class PreventFFBlockBreak {
 
     public static ArrayList<ArrayList<Object>> ffProjectors = new ArrayList<ArrayList<Object>>();
-    private Set<ArrayList<Object>> hs = new HashSet<ArrayList<Object>>();
+    private Set<ArrayList<Object>> hs = new HashSet<>();
 
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
@@ -75,7 +74,9 @@ public class PreventFFBlockBreak {
                     }
                 }
 
-            } else { iterator.remove(); }
+            } else {
+                iterator.remove();
+            }
 
         }
     }

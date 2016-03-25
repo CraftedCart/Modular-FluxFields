@@ -14,7 +14,7 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
 
     public double power = 0;
     public double maxPower;
-    public double powerLastTick = -1; //Used to calculate the power usage / change
+    private double powerLastTick = -1; //Used to calculate the power usage / change
     public double powerUsage = 0;
     public boolean isSendingPower = false;
     private double powerDrawRate;
@@ -73,7 +73,7 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
      *
      * @param poweredBlock The Powered Block to draw power from
      */
-    protected void drawPower(TEPoweredBlock poweredBlock) {
+    void drawPower(TEPoweredBlock poweredBlock) {
 
         if (power < maxPower) { //If we have space for more power
 
@@ -118,7 +118,7 @@ public class TEPoweredBlock extends TileEntity implements IUpdatePlayerListBox {
      *
      * @param poweredBlock The Powered Block to send power to
      */
-    protected void sendPower(TEPoweredBlock poweredBlock) { //Send power to a powered block
+    void sendPower(TEPoweredBlock poweredBlock) { //Send power to a powered block
 
         double pcPower = poweredBlock.power;
 

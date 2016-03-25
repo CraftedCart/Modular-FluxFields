@@ -10,7 +10,6 @@ import java.util.Random;
 /**
  * Created by CraftedCart on 15/12/2015 (DD/MM/YYYY)
  */
-
 public class BlockOreRuby extends ModBlock {
 
     private int least_quantity = 1;

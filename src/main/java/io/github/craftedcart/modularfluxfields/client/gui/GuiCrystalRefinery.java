@@ -12,7 +12,6 @@ import net.minecraft.util.StatCollector;
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
-
 public class GuiCrystalRefinery extends GuiContainer {
 
     private IInventory playerInv;
@@ -38,7 +37,6 @@ public class GuiCrystalRefinery extends GuiContainer {
         //Draw power value
         double power = te.power;
         double maxPower = this.te.maxPower;
-        double powerUsage = this.te.powerUsage;
 
         drawRect(this.guiLeft, this.guiTop - 24, this.guiLeft + xSize, this.guiTop - 22, 0xFF212121);
         drawRect(this.guiLeft, this.guiTop - 24, (int) (this.guiLeft + (double) xSize * power / maxPower), this.guiTop - 22, 0xFF2196F3);

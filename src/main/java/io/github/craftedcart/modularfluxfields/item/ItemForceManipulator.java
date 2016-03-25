@@ -21,7 +21,6 @@ import org.lwjgl.opengl.GL11;
 /**
  * Created by CraftedCart on 02/03/2016 (DD/MM/YYYY)
  */
-
 public class ItemForceManipulator extends ModItem {
 
     public ItemForceManipulator() {

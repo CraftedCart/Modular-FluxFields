@@ -10,7 +10,6 @@ import java.util.Random;
 /**
  * Created by CraftedCart on 26/11/2015 (DD/MM/YYYY)
  */
-
 public class BlockOreAmethyst extends ModBlock {
 
     private int least_quantity = 1;

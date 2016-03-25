@@ -15,17 +15,16 @@ import java.util.List;
 /**
  * Created by CraftedCart on 20/12/2015 (DD/MM/YYYY)
  */
+class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler implements ICraftingHandler {
 
-public class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler implements ICraftingHandler {
-
-    public class CachedCrystalConstructorRecipe extends CachedRecipe
+    private class CachedCrystalConstructorRecipe extends CachedRecipe
     {
-        public ArrayList<PositionedStack> ingredients;
+        ArrayList<PositionedStack> ingredients;
         public PositionedStack result;
 
-        public CachedCrystalConstructorRecipe(int width, int height, Object[] items, ItemStack out) {
+        CachedCrystalConstructorRecipe(int width, int height, Object[] items, ItemStack out) {
             result = new PositionedStack(out, 119, 24);
-            ingredients = new ArrayList<PositionedStack>();
+            ingredients = new ArrayList<>();
             setIngredients(width, height, items);
         }
 
@@ -34,7 +33,7 @@ public class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler 
          * @param height How many slots tall the recipe is
          * @param items An ItemStack[] or ItemStack[][]
          */
-        public void setIngredients(int width, int height, Object[] items) {
+        void setIngredients(int width, int height, Object[] items) {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     if (items[y * width + x] == null)
@@ -56,7 +55,7 @@ public class NEICrystalConstructorCraftingHandler extends TemplateRecipeHandler 
             return result;
         }
 
-        public void computeVisuals() {
+        void computeVisuals() {
             for (PositionedStack p : ingredients)
                 p.generatePermutations();
         }

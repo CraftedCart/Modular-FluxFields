@@ -12,11 +12,10 @@ import net.minecraft.util.StatCollector;
 /**
  * Created by CraftedCart on 08/01/2016 (DD/MM/YYYY)
  */
-
 public class GuiFFProjectorBase extends UIDisplay {
 
-    protected int sidebarWidth = 150; //The width of the sidebar
-    protected final UIComponent workspace = new UIComponent(getRootComponent(),
+    int sidebarWidth = 150; //The width of the sidebar
+    private final UIComponent workspace = new UIComponent(getRootComponent(),
             "workspace",
             new PosXY(sidebarWidth, 24),
             new PosXY(0, 0),
@@ -25,9 +24,8 @@ public class GuiFFProjectorBase extends UIDisplay {
 
     protected TEFFProjector te;
     protected EntityPlayer player;
-    protected String title;
 
-    protected UILabel topBarTitle;
+    private UILabel topBarTitle;
 
     @Override
     public boolean doesGuiPauseGame() {
@@ -468,12 +466,11 @@ public class GuiFFProjectorBase extends UIDisplay {
 
     }
 
-    public UIComponent getWorkspace() {
+    UIComponent getWorkspace() {
         return workspace;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    void setTitle(String title) {
         topBarTitle.setText(title);
     }
 

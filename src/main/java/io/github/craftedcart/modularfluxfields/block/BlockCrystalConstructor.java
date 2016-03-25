@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 /**
  * Created by CraftedCart on 14/12/2015 (DD/MM/YYYY)
  */
-
 public class BlockCrystalConstructor extends ModBlock implements ITileEntityProvider {
 
     public BlockCrystalConstructor() {

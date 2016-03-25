@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 16/02/2016 (DD/MM/YYYY)
  */
-
 public class UIToggleBox extends UIButton {
 
     public boolean value = false;

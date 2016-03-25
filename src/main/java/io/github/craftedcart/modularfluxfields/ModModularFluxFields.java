@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
@@ -26,19 +25,17 @@ import java.io.IOException;
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
  */
-
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "after:NotEnoughItems")
 public class ModModularFluxFields
 {
-
-    private boolean shouldLoadNEIPlugin = false;
 
     @Mod.Instance
     public static ModModularFluxFields instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
+    private static IProxy proxy;
 
+    @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) throws IOException {
 
@@ -55,14 +52,6 @@ public class ModModularFluxFields
         ModTileEntities.init();
         NetworkHandler.init();
 
-        //NEI
-        if (event.getSide() == Side.CLIENT && Loader.isModLoaded("NotEnoughItems")) {
-            LogHelper.info("NEI found! Attempting to load NEI plugin");
-            shouldLoadNEIPlugin = true;
-        } else {
-            LogHelper.info("NEI not found, or this is running on a server. Modular FluxFields won't load the NEI plugin");
-        }
-
         LogHelper.info("Pre-Init Complete");
 
     }
@@ -78,15 +67,19 @@ public class ModModularFluxFields
         GameRegistry.registerWorldGenerator(new OreGeneration(), 0);
 
         //NEI
-        if (shouldLoadNEIPlugin) {
+        if (event.getSide() == Side.CLIENT && Loader.isModLoaded("NotEnoughItems")) {
+            LogHelper.info("NEI found! Attempting to load NEI plugin");
             MFFNEIPlugin.addSubsets();
             MFFNEIPlugin.addRecipeHandlers();
+        } else {
+            LogHelper.info("NEI not found, or this is running on a server. Modular FluxFields won't load the NEI plugin");
         }
 
         LogHelper.info("Init Complete");
 
     }
 
+    @SuppressWarnings("unused")
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 

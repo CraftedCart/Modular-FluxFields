@@ -18,7 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
  */
-
 public class BlockPowerCube extends ModBlock implements ITileEntityProvider {
 
     public BlockPowerCube() {

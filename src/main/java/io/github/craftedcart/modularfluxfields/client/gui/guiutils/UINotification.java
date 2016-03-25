@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 14/02/2016 (DD/MM/YYYY)
  */
-
 public class UINotification extends UIComponent {
 
     public UILabel uiLabel;

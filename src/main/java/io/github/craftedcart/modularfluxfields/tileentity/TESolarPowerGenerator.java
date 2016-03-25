@@ -5,7 +5,6 @@ import net.minecraft.world.EnumSkyBlock;
 /**
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
-
 public class TESolarPowerGenerator extends TEPowerGenerator {
 
     private double genRate;

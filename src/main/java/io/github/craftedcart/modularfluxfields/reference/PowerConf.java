@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.reference;
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
  */
-
 public final class PowerConf {
 
     public static final double powerCubeMaxPower = 100000000;

@@ -228,9 +228,7 @@ public class GuiMFFSettings extends UIDisplay {
                 public void execute() {
                     try {
                         Desktop.getDesktop().browse(new URI(Reference.websitePage));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
+                    } catch (IOException | URISyntaxException e) {
                         e.printStackTrace();
                     }
                 }
@@ -261,9 +259,7 @@ public class GuiMFFSettings extends UIDisplay {
                 public void execute() {
                     try {
                         Desktop.getDesktop().browse(new URI(Reference.gitHubPage));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
+                    } catch (IOException | URISyntaxException e) {
                         e.printStackTrace();
                     }
                 }
@@ -294,9 +290,7 @@ public class GuiMFFSettings extends UIDisplay {
                 public void execute() {
                     try {
                         Desktop.getDesktop().browse(new URI(Reference.issueTrackerPage));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
+                    } catch (IOException | URISyntaxException e) {
                         e.printStackTrace();
                     }
                 }
@@ -327,9 +321,7 @@ public class GuiMFFSettings extends UIDisplay {
                 public void execute() {
                     try {
                         Desktop.getDesktop().browse(new URI(Reference.licensePage));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
+                    } catch (IOException | URISyntaxException e) {
                         e.printStackTrace();
                     }
                 }

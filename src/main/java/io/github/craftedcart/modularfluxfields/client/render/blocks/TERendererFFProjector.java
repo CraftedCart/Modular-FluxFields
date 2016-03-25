@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL11;
 /**
  * Created by CraftedCart on 22/12/2015 (DD/MM/YYYY)
  */
-
 public class TERendererFFProjector extends TileEntitySpecialRenderer {
 
     @Override

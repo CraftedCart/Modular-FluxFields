@@ -2,7 +2,6 @@ package io.github.craftedcart.modularfluxfields.init;
 
 import io.github.craftedcart.modularfluxfields.ModModularFluxFields;
 import io.github.craftedcart.modularfluxfields.handler.GuiHandler;
-import io.github.craftedcart.modularfluxfields.utility.LogHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
@@ -16,7 +15,7 @@ import org.lwjgl.input.Keyboard;
  */
 public class ModKeyBindings {
 
-    public static KeyBinding settingsKeybind;
+    private static KeyBinding settingsKeybind;
 
     public static void init() {
         settingsKeybind = new KeyBinding("modularfluxfields:key.settings", Keyboard.KEY_F8, "key.categories.modularfluxfields");
@@ -28,7 +27,6 @@ public class ModKeyBindings {
     public void onKeyInput(InputEvent.KeyInputEvent event) {
 
         if (settingsKeybind.isPressed()) {
-            LogHelper.info("Opening modularfluxfields Settings GUI");
             EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
             player.openGui(ModModularFluxFields.instance, GuiHandler.modularfluxfieldsSettings_GUI, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
         }

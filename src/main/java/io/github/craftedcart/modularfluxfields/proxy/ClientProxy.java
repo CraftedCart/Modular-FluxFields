@@ -28,10 +28,9 @@ import java.io.IOException;
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
  */
-
 public class ClientProxy extends CommonProxy {
 
-    File depsPath = new File(Minecraft.getMinecraft().mcDataDir.getAbsolutePath(), "mods/CraftedCart");
+    private File depsPath = new File(Minecraft.getMinecraft().mcDataDir.getAbsolutePath(), "mods/CraftedCart");
 
     @Override
     public void getConfig(FMLPreInitializationEvent e) {

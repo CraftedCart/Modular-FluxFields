@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 /**
  * Created by CraftedCart on 08/02/2016 (DD/MM/YYYY)
  */
-
 public class UITextField extends UIComponent {
 
     public String value = "";

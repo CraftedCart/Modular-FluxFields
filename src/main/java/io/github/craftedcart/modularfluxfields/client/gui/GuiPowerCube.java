@@ -7,10 +7,9 @@ import net.minecraft.util.StatCollector;
 /**
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
-
 public class GuiPowerCube extends GuiScreen {
 
-    TEPowerCube pc;
+    private TEPowerCube pc;
 
     public GuiPowerCube(TEPowerCube pc) {
         this.pc = pc;
@@ -23,7 +22,6 @@ public class GuiPowerCube extends GuiScreen {
 
         double power = pc.power;
         double maxPower = pc.maxPower;
-        double powerUsage = pc.powerUsage;
 
         drawRect(this.width / 2 - 150, this.height / 2 - 1, this.width / 2 + 150, this.height / 2 + 1, 0xFF212121);
         drawRect(this.width / 2 - 150, this.height / 2 - 1, (int) (this.width / 2 - 150 + (double) 300 * power / maxPower), this.height / 2 + 1, 0xFF2196F3);

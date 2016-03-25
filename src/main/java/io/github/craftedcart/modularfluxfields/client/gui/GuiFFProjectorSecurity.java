@@ -18,7 +18,6 @@ import java.util.*;
 /**
  * Created by CraftedCart on 07/02/2016 (DD/MM/YYYY)
  */
-
 public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
 
     private Map<String, String[]> permittedPlayers = new HashMap<String, String[]>(); //Map containing players | Key: UUID, String[]: Player name, Group ID
@@ -28,18 +27,18 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
      * Perm 1: Should players be killed
      */
     private UINotificationManager notificationManager;
-    protected List<String> selectedPlayerUUIDs = new ArrayList<String>();
-    protected List<String> selectedGroupIDs = new ArrayList<String>();
-    protected PlayerData aggregateSelectedPlayerData;
-    protected GroupData aggregateSelectedGroupData;
+    private List<String> selectedPlayerUUIDs = new ArrayList<String>();
+    private List<String> selectedGroupIDs = new ArrayList<String>();
+    private PlayerData aggregateSelectedPlayerData;
+    private GroupData aggregateSelectedGroupData;
 
     private Map<String, BufferedImage> bodyImageCache = new HashMap<String, BufferedImage>();
 
-    protected UIComponent playerOptionsBodyImage;
-    protected UILabel playerOptionsNameLabel;
-    protected UILabel playerOptionsUUIDLabel;
-    protected UILabel playerOptionsGroupLabel;
-    protected UILabel groupNameLabel;
+    private UIComponent playerOptionsBodyImage;
+    private UILabel playerOptionsNameLabel;
+    private UILabel playerOptionsUUIDLabel;
+    private UILabel playerOptionsGroupLabel;
+    private UILabel groupNameLabel;
 
     /**
      * <b>Array possibilities:</b><br>
@@ -52,7 +51,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
      */
     private List<Object[]> undoHistory = new ArrayList<Object[]>();
 
-    protected Map<String, Boolean> permissionGroupDefaultPermissions = new HashMap<String, Boolean>(){{
+    private Map<String, Boolean> permissionGroupDefaultPermissions = new HashMap<String, Boolean>(){{
         put("gui.modularfluxfields:killPlayers", false);
         put("gui.modularfluxfields:allowSecurityModification", false);
     }};
@@ -882,12 +881,12 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
 
     }
 
-    protected void selectedPlayerUUIDsChanged() {
+    private void selectedPlayerUUIDsChanged() {
         aggregateSelectedPlayerData = getAggregatePlayerData(selectedPlayerUUIDs);
         updateSecurityOptions();
     }
 
-    protected void selectedGroupIDsChanged() {
+    private void selectedGroupIDsChanged() {
         aggregateSelectedGroupData = getAggregateGroupData(selectedGroupIDs);
         updateSecurityOptions();
     }
@@ -1052,9 +1051,9 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
 }
 
 class PlayerData {
-    protected String name = StatCollector.translateToLocal("gui.modularfluxfields:multiple");
-    protected String uuid = StatCollector.translateToLocal("gui.modularfluxfields:multiple");
-    protected String group = StatCollector.translateToLocal("gui.modularfluxfields:multiple");
+    String name = StatCollector.translateToLocal("gui.modularfluxfields:multiple");
+    String uuid = StatCollector.translateToLocal("gui.modularfluxfields:multiple");
+    String group = StatCollector.translateToLocal("gui.modularfluxfields:multiple");
 }
 
 class GroupData {

@@ -22,7 +22,6 @@ import java.io.InputStream;
 /**
  * Created by CraftedCart on 29/12/2015 (DD/MM/YYYY)
  */
-
 public class GuiUtils {
 
     public static TrueTypeFont font;

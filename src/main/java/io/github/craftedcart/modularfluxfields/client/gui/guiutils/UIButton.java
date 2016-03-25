@@ -5,7 +5,6 @@ import org.lwjgl.input.Mouse;
 /**
  * Created by CraftedCart on 16/02/2016 (DD/MM/YYYY)
  */
-
 public class UIButton extends UIComponent {
 
     public UIButton(UIComponent parentComponent, String name, PosXY topLeftPoint, PosXY bottomRightPoint,

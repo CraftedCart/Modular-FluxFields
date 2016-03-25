@@ -23,51 +23,24 @@ public class ModModels {
     public static Model powerRelayOutputRotateModel;
 
     public static void init() {
+        powerRelayModel = loadModel("modularfluxfields:models/block/powerRelay.obj");
+        powerRelayLowPolyModel = loadModel("modularfluxfields:models/block/powerRelayLowPoly.obj");
+        powerRelayOutputStaticModel = loadModel("modularfluxfields:models/block/powerRelayOutputStatic.obj");
+        powerRelayOutputRotateModel = loadModel("modularfluxfields:models/block/powerRelayOutputRotate.obj");
+    }
 
+    private static Model loadModel(String resourceLocation) {
         try {
-            LogHelper.info("Loading modularfluxfields:models/block/powerRelay.obj");
-            powerRelayModel = OBJLoader.loadModel(
+            LogHelper.info("Loading " + resourceLocation);
+            return OBJLoader.loadModel(
                     Minecraft.getMinecraft().getResourceManager().getResource(
-                            new ResourceLocation("modularfluxfields:models/block/powerRelay.obj")
+                            new ResourceLocation(resourceLocation)
                     ).getInputStream());
         } catch (IOException e) {
-            LogHelper.error("Failed to load modularfluxfields:models/block/powerRelay.obj");
+            LogHelper.error("Failed to load " + resourceLocation);
             e.printStackTrace();
+            throw new RuntimeException(e); //Forcibly stop Minecraft
         }
-
-        try {
-            LogHelper.info("Loading modularfluxfields:models/block/powerRelayLowPoly.obj");
-            powerRelayLowPolyModel = OBJLoader.loadModel(
-                    Minecraft.getMinecraft().getResourceManager().getResource(
-                            new ResourceLocation("modularfluxfields:models/block/powerRelayLowPoly.obj")
-                    ).getInputStream());
-        } catch (IOException e) {
-            LogHelper.error("Failed to load modularfluxfields:models/block/powerRelayLowPoly.obj");
-            e.printStackTrace();
-        }
-
-        try {
-            LogHelper.info("Loading modularfluxfields:models/block/powerRelayOutputStatic.obj");
-            powerRelayOutputStaticModel = OBJLoader.loadModel(
-                    Minecraft.getMinecraft().getResourceManager().getResource(
-                            new ResourceLocation("modularfluxfields:models/block/powerRelayOutputStatic.obj")
-                    ).getInputStream());
-        } catch (IOException e) {
-            LogHelper.error("Failed to load modularfluxfields:models/block/powerRelayOutputStatic.obj");
-            e.printStackTrace();
-        }
-
-        try {
-            LogHelper.info("Loading modularfluxfields:models/block/powerRelayOutputRotate.obj");
-            powerRelayOutputRotateModel = OBJLoader.loadModel(
-                    Minecraft.getMinecraft().getResourceManager().getResource(
-                            new ResourceLocation("modularfluxfields:models/block/powerRelayOutputRotate.obj")
-                    ).getInputStream());
-        } catch (IOException e) {
-            LogHelper.error("Failed to load modularfluxfields:models/block/powerRelayOutputRotate.obj");
-            e.printStackTrace();
-        }
-
     }
 
     public static void drawModel(Model m) {

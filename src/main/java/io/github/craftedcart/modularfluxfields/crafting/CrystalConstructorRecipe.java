@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 21/12/2015 (DD/MM/YYYY)
  */
-
 public class CrystalConstructorRecipe {
 
     public int width;
@@ -28,7 +27,7 @@ public class CrystalConstructorRecipe {
      * @param result What is outputted if the correct ingredient are in the correct places
      * @param ticksToCraft How long this takes to craft (in ticks)
      */
-    public CrystalConstructorRecipe(int width, int height, Item[] ingredients, ItemStack result, int ticksToCraft) {
+    CrystalConstructorRecipe(int width, int height, Item[] ingredients, ItemStack result, int ticksToCraft) {
         this.width = width;
         this.height = height;
         this.ingredients = ingredients;
@@ -38,43 +37,43 @@ public class CrystalConstructorRecipe {
 
     boolean doesRecipeMatch(ItemStack[] input) {
 
-        List<List<Integer>> slotsToTest = new ArrayList<List<Integer>>();
+        List<List<Integer>> slotsToTest = new ArrayList<>();
 
         //<editor-fold desc="Get the slots for the sized recipe">
         if (width == 2 && height == 2) {
             int[] offsets = new int[]{0, 1, 3, 4};
-            for (int i = 0; i < offsets.length; i++) {
+            for (int offset : offsets) {
                 List<Integer> slots = new ArrayList<Integer>();
-                slots.add(offsets[i]);
-                slots.add(1 + offsets[i]);
-                slots.add(3 + offsets[i]);
-                slots.add(4 + offsets[i]);
+                slots.add(offset);
+                slots.add(1 + offset);
+                slots.add(3 + offset);
+                slots.add(4 + offset);
                 slotsToTest.add(slots);
             }
 
         } else if (width == 3 && height == 2) {
             int[] offsets = new int[]{0, 3};
-            for (int i = 0; i < offsets.length; i++) {
+            for (int offset : offsets) {
                 List<Integer> slots = new ArrayList<Integer>();
-                slots.add(offsets[i]);
-                slots.add(1 + offsets[i]);
-                slots.add(2 + offsets[i]);
-                slots.add(3 + offsets[i]);
-                slots.add(4 + offsets[i]);
-                slots.add(5 + offsets[i]);
+                slots.add(offset);
+                slots.add(1 + offset);
+                slots.add(2 + offset);
+                slots.add(3 + offset);
+                slots.add(4 + offset);
+                slots.add(5 + offset);
                 slotsToTest.add(slots);
             }
 
         } else if (width == 2 && height == 3) {
             int[] offsets = new int[]{0, 1};
-            for (int i = 0; i < offsets.length; i++) {
+            for (int offset : offsets) {
                 List<Integer> slots = new ArrayList<Integer>();
-                slots.add(offsets[i]);
-                slots.add(1 + offsets[i]);
-                slots.add(3 + offsets[i]);
-                slots.add(4 + offsets[i]);
-                slots.add(6 + offsets[i]);
-                slots.add(7 + offsets[i]);
+                slots.add(offset);
+                slots.add(1 + offset);
+                slots.add(3 + offset);
+                slots.add(4 + offset);
+                slots.add(6 + offset);
+                slots.add(7 + offset);
                 slotsToTest.add(slots);
             }
 

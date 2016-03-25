@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 14/02/2016 (DD/MM/YYYY)
  */
-
 public class UINotificationManager extends UIComponent {
 
     private List<Integer> componentsToDestroy = new ArrayList<Integer>();

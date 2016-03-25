@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
-
 public class BlockCrystalRefinery extends ModBlock implements ITileEntityProvider {
 
     public BlockCrystalRefinery() {

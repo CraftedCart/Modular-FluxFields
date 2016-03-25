@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 10/01/2016 (DD/MM/YYYY)
  */
-
 public class UIGradientPanel extends UIComponent {
 
     protected byte gradientDirection = 0; //0: Vertical gradient | 1: Horizontal Gradient

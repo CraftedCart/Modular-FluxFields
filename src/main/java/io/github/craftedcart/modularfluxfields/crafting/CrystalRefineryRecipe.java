@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by CraftedCart on 21/12/2015 (DD/MM/YYYY)
  */
-
 public class CrystalRefineryRecipe {
 
     public Item ingredient;
@@ -21,7 +20,7 @@ public class CrystalRefineryRecipe {
      * @param result What is outputted if the correct ingredient is in the input slot
      * @param ticksToCraft How long this takes to craft (in ticks)
      */
-    public CrystalRefineryRecipe(Item ingredient, ItemStack result, int ticksToCraft) {
+    CrystalRefineryRecipe(Item ingredient, ItemStack result, int ticksToCraft) {
         this.ingredient = ingredient;
         this.result = result;
         this.ticksToCraft = ticksToCraft;
@@ -29,11 +28,7 @@ public class CrystalRefineryRecipe {
 
     boolean doesRecipeMatch(ItemStack input) {
 
-        if (input != null) {
-            return input.isItemEqual(new ItemStack(ingredient));
-        } else {
-            return false;
-        }
+        return input != null && input.isItemEqual(new ItemStack(ingredient));
 
     }
 

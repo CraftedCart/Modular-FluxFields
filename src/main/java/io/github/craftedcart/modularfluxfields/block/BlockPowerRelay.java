@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 /**
  * Created by CraftedCart on 25/02/2016 (DD/MM/YYYY)
  */
-
 public class BlockPowerRelay extends ModBlock implements ITileEntityProvider {
 
     public BlockPowerRelay() {

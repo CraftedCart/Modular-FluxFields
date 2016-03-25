@@ -5,7 +5,6 @@ import org.newdawn.slick.TrueTypeFont;
 /**
  * Created by CraftedCart on 09/01/2016 (DD/MM/YYYY)
  */
-
 public class UILabel extends UIComponent {
 
     protected TrueTypeFont font;

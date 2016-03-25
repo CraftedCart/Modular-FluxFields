@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 29/12/2015 (DD/MM/YYYY)
  */
-
 public class GuiFFProjectorPowerStats extends GuiFFProjectorBase {
 
     public GuiFFProjectorPowerStats(EntityPlayer player, TEFFProjector te) {
@@ -46,7 +45,7 @@ public class GuiFFProjectorPowerStats extends GuiFFProjectorBase {
             @Override
             public void execute() {
 
-                List<Double> graphPoints = new ArrayList<Double>();
+                List<Double> graphPoints = new ArrayList<>();
 
                 graphPoints.addAll(te.powerUsagePerTickForPastMinute);
 
@@ -72,7 +71,7 @@ public class GuiFFProjectorPowerStats extends GuiFFProjectorBase {
             @Override
             public void execute() {
 
-                List<Double> graphPoints = new ArrayList<Double>();
+                List<Double> graphPoints = new ArrayList<>();
 
                 graphPoints.addAll(te.powerUsagePerSecondForPastHalfHour);
 

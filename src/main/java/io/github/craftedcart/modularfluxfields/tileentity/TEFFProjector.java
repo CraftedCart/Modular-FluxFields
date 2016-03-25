@@ -43,8 +43,8 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     //Not so config-y stuff
     private int updateTime = 1;
     private int downTime = 0; //The ff projector is allowed a short grace period without power before everything is reset
-    public ArrayList<BlockPos> wallBlockList = new ArrayList<BlockPos>(); //The list of blockposes of the forcefield walls
-    public ArrayList<BlockPos> innerBlockList = new ArrayList<BlockPos>(); //The list of blockposes of the inner blocks
+    public ArrayList<BlockPos> wallBlockList = new ArrayList<>(); //The list of blockposes of the forcefield walls
+    public ArrayList<BlockPos> innerBlockList = new ArrayList<>(); //The list of blockposes of the inner blocks
     public int blockPlaceProgress = 0;
     private boolean doWorldLoadSetup = false; //Used to make sure a block of code only runs once on chunk load
     public boolean isPowered = false; //Does the FF Projector has enough power to keep running
@@ -53,20 +53,20 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     public int uptime = 0;
     public String owner = ""; //The owner UUID
     public String ownerName = ""; //The owner username
-    public List<List<String>> permittedPlayers = new ArrayList<List<String>>(); //The list of permitted players defined by the security tab on the gui
-    public List<List<Object>> permissionGroups = new ArrayList<List<Object>>();
+    public List<List<String>> permittedPlayers = new ArrayList<>(); //The list of permitted players defined by the security tab on the gui
+    public List<List<Object>> permissionGroups = new ArrayList<>();
     /* List containing lists of groups containing the group ID and its permissions (in that order) defined by the security tab on the gui
      * Perm 1: Boolean: Should player be killed
      */
-    public List<Object> generalPermissions = new ArrayList<Object>();
+    public List<Object> generalPermissions = new ArrayList<>();
     /* List containing general permissions defined by the security tab on the gui
      * Perm 1: Boolean: Should hostile mobs be killed
      * Perm 2: Boolean: Should peaceful mobs be killed
      */
-    public List<Entity> entityHitList = new ArrayList<Entity>(); //This is used by the TESR class to draw lines towards entities being attacked
-    public List<BlockPos> wallBlocksPlaced = new ArrayList<BlockPos>(); //This is used by the TESR class to draw lines towards blocks being placed
-    public List<Double> powerUsagePerTickForPastMinute = new ArrayList<Double>();
-    public List<Double> powerUsagePerSecondForPastHalfHour = new ArrayList<Double>();
+    public List<Entity> entityHitList = new ArrayList<>(); //This is used by the TESR class to draw lines towards entities being attacked
+    public List<BlockPos> wallBlocksPlaced = new ArrayList<>(); //This is used by the TESR class to draw lines towards blocks being placed
+    public List<Double> powerUsagePerTickForPastMinute = new ArrayList<>();
+    public List<Double> powerUsagePerSecondForPastHalfHour = new ArrayList<>();
     private int tickTimeSinceLastSecond = 0;
     private double powerUsageSinceLastSecond = 0;
 
@@ -159,11 +159,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if (index == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return index == 0;
     }
 
     @Override
@@ -202,11 +198,11 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         return this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName());
     }
 
-    public String getCustomName() {
+    private String getCustomName() {
         return this.customName;
     }
 
-    public void setCustomName(String customName) {
+    private void setCustomName(String customName) {
         this.customName = customName;
     }
     //</editor-fold>
@@ -330,7 +326,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         super.update();
 
         if (!doWorldLoadSetup) { //This only runs when the chunk loads
-            ArrayList<Object> al = new ArrayList<Object>();
+            ArrayList<Object> al = new ArrayList<>();
             al.add(this.getWorld()); //Add this world to the list
             al.add(this.getPos()); //Add this blockpos to the list
             PreventFFBlockBreak.ffProjectors.add(al); //Register itself with the event handler which prevents FF block breaking
@@ -340,7 +336,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
             setup(PowerConf.ffProjectorMaxPower, PowerConf.ffProjectorDrawRate);
 
             if (permissionGroups.size() == 0) { //Setup the everyone permission group
-                List<Object> everyoneGroup = new ArrayList<Object>();
+                List<Object> everyoneGroup = new ArrayList<>();
                 everyoneGroup.add("gui.modularfluxfields:everyone");
                 everyoneGroup.add(false);
                 permissionGroups.add(everyoneGroup);
@@ -417,7 +413,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         if (hasSecurityUpgrade && isPowered && blockPlaceProgress >= wallBlockList.size()) { //Security related stuff goes here
 
             //<editor-fold desc="Damage targeted players">
-            List<String> targetedPlayers = new ArrayList<String>();
+            List<String> targetedPlayers = new ArrayList<>();
 
             for (List<String> plr : permittedPlayers) {
 
@@ -487,6 +483,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     }
 
+    @SuppressWarnings("unchecked")
     private void damagePlayersInArea(boolean shouldTargetEveryone, BlockPos p1, BlockPos p2, List<String> players) {
 
         List<EntityPlayer> playersWithinAABB = worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(p1.add(this.getPos()), p2.add(this.getPos())));
@@ -525,6 +522,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     }
 
+    @SuppressWarnings("unchecked")
     private void damageEntitiesInArea(Class entityType, BlockPos p1, BlockPos p2) {
 
         List<Entity> entitiesWithinAABB = worldObj.getEntitiesWithinAABB(entityType, new AxisAlignedBB(p1.add(this.getPos()), p2.add(this.getPos())));
@@ -636,12 +634,12 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         //Read players
         if (tagCompound.hasKey("permittedPlayers")) {
             NBTTagCompound players = tagCompound.getCompoundTag("permittedPlayers");
-            List<List<String>> playersList = new ArrayList<List<String>>();
+            List<List<String>> playersList = new ArrayList<>();
 
             int index = 0;
             while (players.hasKey(String.valueOf(index))) {
 
-                List<String> playerData = new ArrayList<String>();
+                List<String> playerData = new ArrayList<>();
 
                 playerData.add(((NBTTagCompound) (players.getTag(String.valueOf(index)))).getString("uuid"));
                 playerData.add(((NBTTagCompound) (players.getTag(String.valueOf(index)))).getString("name"));
@@ -657,12 +655,12 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         //Read groups
         if (tagCompound.hasKey("permissionGroups")) {
             NBTTagCompound groups = tagCompound.getCompoundTag("permissionGroups");
-            List<List<Object>> groupsList = new ArrayList<List<Object>>();
+            List<List<Object>> groupsList = new ArrayList<>();
 
             int index = 0;
             while (groups.hasKey(String.valueOf(index))) {
 
-                List<Object> groupData = new ArrayList<Object>();
+                List<Object> groupData = new ArrayList<>();
 
                 groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getString("id"));
                 groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getBoolean("perm1")); //Get perm 1: Should kill players?
@@ -686,14 +684,14 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     private void writePowerStatsToNBT(NBTTagCompound tagCompound) {
 
-        List<Integer> powerUsagePerTickForPastMinuteForNBT = new ArrayList<Integer>();
+        List<Integer> powerUsagePerTickForPastMinuteForNBT = new ArrayList<>();
         for (Double item : powerUsagePerTickForPastMinute) {
             powerUsagePerTickForPastMinuteForNBT.add((int) (item * 100));
         }
         tagCompound.setIntArray("powerUsagePerTickForPastMinute", ArrayUtils.toPrimitive(
                 Arrays.copyOf(powerUsagePerTickForPastMinuteForNBT.toArray(), powerUsagePerTickForPastMinuteForNBT.toArray().length, Integer[].class)));
 
-        List<Integer> powerUsagePerSecondForPastHalfHourForNBT = new ArrayList<Integer>();
+        List<Integer> powerUsagePerSecondForPastHalfHourForNBT = new ArrayList<>();
         for (Double item : powerUsagePerSecondForPastHalfHour) {
             powerUsagePerSecondForPastHalfHourForNBT.add((int) (item * 100));
         }
@@ -708,7 +706,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     public void readPowerStatsFromNBT(NBTTagCompound tagCompound) {
 
         int[] powerUsagePerTickForPastMinuteFromNBT = tagCompound.getIntArray("powerUsagePerTickForPastMinute");
-        List<Double> powerUsagePerTickForPastMinuteFromNBTAsDoubleList = new ArrayList<Double>();
+        List<Double> powerUsagePerTickForPastMinuteFromNBTAsDoubleList = new ArrayList<>();
         for (int item : powerUsagePerTickForPastMinuteFromNBT) {
             powerUsagePerTickForPastMinuteFromNBTAsDoubleList.add(item / 100d);
         }
@@ -716,7 +714,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
         powerUsagePerTickForPastMinute.addAll(powerUsagePerTickForPastMinuteFromNBTAsDoubleList);
 
         int[] powerUsagePerSecondForPastHalfHourFromNBT = tagCompound.getIntArray("powerUsagePerSecondForPastHalfHour");
-        List<Double> powerUsagePerSecondForPastHalfHourFromNBTAsDoubleList = new ArrayList<Double>();
+        List<Double> powerUsagePerSecondForPastHalfHourFromNBTAsDoubleList = new ArrayList<>();
         for (int item : powerUsagePerSecondForPastHalfHourFromNBT) {
             powerUsagePerSecondForPastHalfHourFromNBTAsDoubleList.add(item / 100d);
         }
@@ -730,7 +728,8 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     public NBTTagIntArray getPowerUsagePerTickForPastMinuteFromNBT() {
 
-        List<Integer> powerUsagePerTickForPastMinuteForNBT = new ArrayList<Integer>();
+        List<Integer> powerUsagePerTickForPastMinuteForNBT;
+        powerUsagePerTickForPastMinuteForNBT = new ArrayList<>();
 
         for (Double item : powerUsagePerTickForPastMinute) {
             powerUsagePerTickForPastMinuteForNBT.add((int) (item * 100));
@@ -743,7 +742,7 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
 
     public NBTTagIntArray getPowerUsagePerSecondForPastHalfHourFromNBT() {
 
-        List<Integer> powerUsagePerSecondForPastHalfHourForNBT = new ArrayList<Integer>();
+        List<Integer> powerUsagePerSecondForPastHalfHourForNBT = new ArrayList<>();
 
         for (Double item : powerUsagePerSecondForPastHalfHour) {
             powerUsagePerSecondForPastHalfHourForNBT.add((int) (item * 100));

@@ -17,14 +17,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageFFProjectorGuiSaveSizing implements IMessage {
 
-    BlockPos pos;
+    private BlockPos pos;
 
-    int x1;
-    int y1;
-    int z1;
-    int x2;
-    int y2;
-    int z2;
+    private int x1;
+    private int y1;
+    private int z1;
+    private int x2;
+    private int y2;
+    private int z2;
 
     public MessageFFProjectorGuiSaveSizing() {}
 

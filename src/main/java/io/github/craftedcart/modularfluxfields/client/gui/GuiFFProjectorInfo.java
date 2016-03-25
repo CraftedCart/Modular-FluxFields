@@ -16,12 +16,11 @@ import java.io.InputStream;
 /**
  * Created by CraftedCart on 30/11/2015 (DD/MM/YYYY)
  */
-
 public class GuiFFProjectorInfo extends GuiFFProjectorBase {
 
-    public static int konamiCodeProgress = 0;
-    public static boolean upKeyDown = false;
-    public static boolean downKeyDown = false;
+    private static int konamiCodeProgress = 0;
+    private static boolean upKeyDown = false;
+    private static boolean downKeyDown = false;
 
     private MetaEventListener midiMetaEventListener;
 

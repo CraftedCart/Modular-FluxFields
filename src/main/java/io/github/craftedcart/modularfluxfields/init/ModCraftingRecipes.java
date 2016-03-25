@@ -13,7 +13,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 /**
  * Created by CraftedCart on 15/12/2015 (DD/MM/YYYY)
  */
-
 public class ModCraftingRecipes {
 
     public static void init() {

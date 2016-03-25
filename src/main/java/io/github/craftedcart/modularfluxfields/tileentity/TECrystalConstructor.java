@@ -20,7 +20,6 @@ import net.minecraft.util.IChatComponent;
 /**
  * Created by CraftedCart on 14/12/2015 (DD/MM/YYYY)
  */
-
 public class TECrystalConstructor extends TEPoweredBlock implements IInventory, ISidedInventory, IUpdatePlayerListBox {
 
     private ItemStack[] inventory;
@@ -31,8 +30,8 @@ public class TECrystalConstructor extends TEPoweredBlock implements IInventory, 
 
     public double speedMultiplier = 1;
     public double powerMultiplier = 1;
-    public double powerTimser = 1;
-    public double powerDivider = 1;
+    private double powerTimser = 1;
+    private double powerDivider = 1;
 
     private boolean doneWorldSetup = false;
 

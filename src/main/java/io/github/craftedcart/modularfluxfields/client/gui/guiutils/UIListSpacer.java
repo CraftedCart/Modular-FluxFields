@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 17/02/2016 (DD/MM/YYYY)
  */
-
 public class UIListSpacer extends UIComponent {
 
     public UIListSpacer(UIComponent parentComponent, String name, double height) {

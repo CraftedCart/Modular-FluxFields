@@ -20,9 +20,9 @@ import java.nio.file.Files;
 /**
  * Created by CraftedCart on 03/01/2016 (DD/MM/YYYY)
  */
-
 public class DependencyUtils {
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void downloadFileWithWindow(String url, File fileToDownloadTo) throws IOException {
         JFrame frame = new JFrame("downloadFrame");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

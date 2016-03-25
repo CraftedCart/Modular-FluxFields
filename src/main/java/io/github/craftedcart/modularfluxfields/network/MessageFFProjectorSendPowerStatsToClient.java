@@ -15,17 +15,16 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 /**
  * Created by CraftedCart on 30/12/2015 (DD/MM/YYYY)
  */
-
 public class MessageFFProjectorSendPowerStatsToClient implements IMessage {
 
-    BlockPos pos;
+    private BlockPos pos;
 
-    NBTTagIntArray powerUsagePerTickForPastMinute;
-    NBTTagIntArray powerUsagePerSecondForPastHalfHour;
+    private NBTTagIntArray powerUsagePerTickForPastMinute;
+    private NBTTagIntArray powerUsagePerSecondForPastHalfHour;
 
     public MessageFFProjectorSendPowerStatsToClient() {}
 
-    public MessageFFProjectorSendPowerStatsToClient(BlockPos pos, NBTTagIntArray powerUsagePerTickForPastMinute, NBTTagIntArray powerUsagePerSecondForPastHalfHour) {
+    MessageFFProjectorSendPowerStatsToClient(BlockPos pos, NBTTagIntArray powerUsagePerTickForPastMinute, NBTTagIntArray powerUsagePerSecondForPastHalfHour) {
         this.pos = pos;
         this.powerUsagePerTickForPastMinute = powerUsagePerTickForPastMinute;
         this.powerUsagePerSecondForPastHalfHour = powerUsagePerSecondForPastHalfHour;

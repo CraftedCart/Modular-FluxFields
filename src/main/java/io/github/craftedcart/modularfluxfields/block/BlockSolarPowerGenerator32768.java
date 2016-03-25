@@ -19,7 +19,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
-
 public class BlockSolarPowerGenerator32768 extends ModBlock implements ITileEntityProvider {
 
     public BlockSolarPowerGenerator32768() {

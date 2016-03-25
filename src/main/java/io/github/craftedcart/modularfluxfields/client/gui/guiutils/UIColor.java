@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 29/12/2015 (DD/MM/YYYY)
  */
-
 public class UIColor {
 
     public double r;

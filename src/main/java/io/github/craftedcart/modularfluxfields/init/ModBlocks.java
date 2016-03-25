@@ -14,7 +14,6 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-
 public class ModBlocks {
 
     //Reference Blocks

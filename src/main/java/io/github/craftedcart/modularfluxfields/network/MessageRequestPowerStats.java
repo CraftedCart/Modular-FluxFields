@@ -21,11 +21,10 @@ import java.util.UUID;
 /**
  * Created by CraftedCart on 30/12/2015 (DD/MM/YYYY)
  */
-
 public class MessageRequestPowerStats implements IMessage {
 
-    BlockPos pos;
-    EntityPlayer player;
+    private BlockPos pos;
+    private EntityPlayer player;
 
     public MessageRequestPowerStats() {}
 

@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
-
 public class ItemSpeedUpgrade extends ModItem {
 
     public ItemSpeedUpgrade() {

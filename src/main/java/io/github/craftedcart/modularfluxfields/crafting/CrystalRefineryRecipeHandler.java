@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 21/12/2015 (DD/MM/YYYY)
  */
-
 public class CrystalRefineryRecipeHandler {
 
     public static List<CrystalRefineryRecipe> recipes = new ArrayList<CrystalRefineryRecipe>();

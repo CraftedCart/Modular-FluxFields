@@ -21,6 +21,7 @@ import java.util.List;
 
 public class TERendererPowerCube extends TileEntitySpecialRenderer {
 
+    @SuppressWarnings("unchecked")
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTick, int destroyStage) {
 
@@ -47,11 +48,6 @@ public class TERendererPowerCube extends TileEntitySpecialRenderer {
             float r = MathUtils.lerp(blueR, redR, pcPowerPercent);
             float g = MathUtils.lerp(blueG, redG, pcPowerPercent);
             float b = MathUtils.lerp(blueB, redB, pcPowerPercent);
-            double pcPower2 = 0;
-            if (te.getWorld().getTileEntity(pos) instanceof TEPowerCube) {
-                pcPower2 = ((TEPowerCube) te.getWorld().getTileEntity(pos)).power; //Get Power Cube Power
-            }
-            float pcPowerPercent2 = (float) pcPower2 / (float) pcMaxPower;
             float r2 = MathUtils.lerp(blueR, redR, pcPowerPercent);
             float g2 = MathUtils.lerp(blueG, redG, pcPowerPercent);
             float b2 = MathUtils.lerp(blueB, redB, pcPowerPercent);

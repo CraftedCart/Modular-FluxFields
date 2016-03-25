@@ -15,7 +15,6 @@ import org.lwjgl.opengl.GL11;
 /**
  * Created by CraftedCart on 23/12/2015 (DD/MM/YYYY)
  */
-
 public class TERendererPowerGenerator extends TileEntitySpecialRenderer {
 
     @Override

@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 13/01/2016 (DD/MM/YYYY)
  */
-
 public class UILineGraph extends UIComponent {
 
     protected List<Double> graphPoints = new ArrayList<Double>();

@@ -20,7 +20,6 @@ import net.minecraft.util.IChatComponent;
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
-
 public class TECrystalRefinery extends TEPoweredBlock implements IInventory, ISidedInventory, IUpdatePlayerListBox {
 
     private ItemStack[] inventory;
@@ -31,8 +30,8 @@ public class TECrystalRefinery extends TEPoweredBlock implements IInventory, ISi
 
     public double speedMultiplier = 1;
     public double powerMultiplier = 1;
-    public double powerTimser = 1;
-    public double powerDivider = 1;
+    private double powerTimser = 1;
+    private double powerDivider = 1;
 
     private boolean doneWorldSetup = false;
 
@@ -125,11 +124,7 @@ public class TECrystalRefinery extends TEPoweredBlock implements IInventory, ISi
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if (index == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return index == 0;
     }
 
     @Override
@@ -168,7 +163,7 @@ public class TECrystalRefinery extends TEPoweredBlock implements IInventory, ISi
         return this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName());
     }
 
-    public String getCustomName() {
+    private String getCustomName() {
         return this.customName;
     }
 
@@ -240,20 +235,12 @@ public class TECrystalRefinery extends TEPoweredBlock implements IInventory, ISi
 
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        if (index == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return index == 0;
     }
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        if (index == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return index == 1;
     }
     //</editor-fold>
 

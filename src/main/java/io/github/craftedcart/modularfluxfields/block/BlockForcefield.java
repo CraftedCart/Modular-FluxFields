@@ -20,7 +20,6 @@ import java.util.Random;
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-
 public class BlockForcefield extends ModBlock implements ITileEntityProvider {
 
     public BlockForcefield() {

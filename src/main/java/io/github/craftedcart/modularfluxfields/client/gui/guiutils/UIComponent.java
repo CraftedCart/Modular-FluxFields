@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 09/01/2016 (DD/MM/YYYY)
  */
-
 public class UIComponent {
 
     public List<UIComponent> childUiComponents = new ArrayList<UIComponent>();

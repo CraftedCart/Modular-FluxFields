@@ -11,15 +11,14 @@ import net.minecraft.util.StatCollector;
 /**
  * Created by CraftedCart on 30/11/2015 (DD/MM/YYYY)
  */
-
 public class GuiFFProjectorSizing extends GuiFFProjectorBase {
 
-    public static int x1;
-    public static int x2;
-    public static int y1;
-    public static int y2;
-    public static int z1;
-    public static int z2;
+    private static int x1;
+    private static int x2;
+    private static int y1;
+    private static int y2;
+    private static int z1;
+    private static int z2;
 
     public GuiFFProjectorSizing(EntityPlayer player, TEFFProjector te) {
         this.te = te;

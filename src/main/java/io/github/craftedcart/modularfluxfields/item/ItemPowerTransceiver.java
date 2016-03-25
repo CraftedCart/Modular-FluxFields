@@ -5,7 +5,6 @@ import io.github.craftedcart.modularfluxfields.reference.Names;
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-
 public class ItemPowerTransceiver extends ModItem {
 
     public ItemPowerTransceiver() {

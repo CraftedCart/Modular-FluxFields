@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 09/01/2016 (DD/MM/YYYY)
  */
-
 public class AnchorPoint {
 
     public double xPercent;

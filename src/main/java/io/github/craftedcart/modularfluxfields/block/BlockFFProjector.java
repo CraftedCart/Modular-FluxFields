@@ -17,7 +17,6 @@ import net.minecraft.world.World;
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-
 public class BlockFFProjector extends ModBlock implements ITileEntityProvider {
 
     public BlockFFProjector() {

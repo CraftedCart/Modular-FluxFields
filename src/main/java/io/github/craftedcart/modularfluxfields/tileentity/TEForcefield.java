@@ -7,10 +7,9 @@ import net.minecraft.tileentity.TileEntity;
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-
 public class TEForcefield extends TileEntity implements IUpdatePlayerListBox {
 
-    public int decayTimer = 200; //10s
+    int decayTimer = 200; //10s
 
     @Override
     public void update() {

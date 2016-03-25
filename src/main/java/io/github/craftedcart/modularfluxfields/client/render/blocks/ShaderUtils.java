@@ -15,7 +15,6 @@ import java.nio.IntBuffer;
 /**
  * Created by CraftedCart on 25/02/2016 (DD/MM/YYYY)
  */
-
 public class ShaderUtils {
 
     static int specularShaderProgram;

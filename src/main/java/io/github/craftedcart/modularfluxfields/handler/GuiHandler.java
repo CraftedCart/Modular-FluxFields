@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 /**
  * Created by CraftedCart on 22/11/2015 (DD/MM/YYYY)
  */
-
 public class GuiHandler implements IGuiHandler {
 
     //Define GUI IDs

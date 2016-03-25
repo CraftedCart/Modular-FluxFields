@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 12/01/2016 (DD/MM/YYYY)
  */
-
 public class UIProgressBar extends UIComponent {
 
     public UIComponent uiFGBar;

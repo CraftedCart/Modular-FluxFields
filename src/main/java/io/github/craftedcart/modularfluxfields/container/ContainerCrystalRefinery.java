@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by CraftedCart on 28/11/2015 (DD/MM/YYYY)
  */
-
 public class ContainerCrystalRefinery extends Container {
 
     private TECrystalRefinery te;

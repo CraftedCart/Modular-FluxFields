@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * Created by CraftedCart on 09/01/2016 (DD/MM/YYYY)
  */
-
 public abstract class UIDisplay extends GuiScreen {
 
     protected UIRootComponent rootComponent = new UIRootComponent(this);

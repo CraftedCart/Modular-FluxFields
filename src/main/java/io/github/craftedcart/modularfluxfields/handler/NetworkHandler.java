@@ -9,7 +9,6 @@ import net.minecraftforge.fml.relauncher.Side;
 /**
  * Created by CraftedCart on 23/11/2015 (DD/MM/YYYY)
  */
-
 public class NetworkHandler {
 
     public static SimpleNetworkWrapper network;

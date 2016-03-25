@@ -7,10 +7,9 @@ import net.minecraft.util.StatCollector;
 /**
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
-
 public class GuiSolarPowerGenerator extends GuiScreen {
 
-    TEPowerGenerator pc;
+    private TEPowerGenerator pc;
 
     public GuiSolarPowerGenerator(TEPowerGenerator pc) {
         this.pc = pc;

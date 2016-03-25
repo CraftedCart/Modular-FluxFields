@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * Created by CraftedCart on 11/02/2016 (DD/MM/YYYY)
  */
-
 public class UIListBox extends UIComponent {
 
     public Map<String, UIComponent> componentMap = new HashMap<String, UIComponent>();

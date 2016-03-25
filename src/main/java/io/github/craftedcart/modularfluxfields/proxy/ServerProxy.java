@@ -5,7 +5,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 /**
  * Created by CraftedCart on 17/11/2015 (DD/MM/YYYY)
  */
-
 public class ServerProxy extends CommonProxy {
 
     @Override

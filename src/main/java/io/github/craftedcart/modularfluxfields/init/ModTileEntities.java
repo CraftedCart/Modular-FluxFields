@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-
 public class ModTileEntities {
 
     public static void init() {

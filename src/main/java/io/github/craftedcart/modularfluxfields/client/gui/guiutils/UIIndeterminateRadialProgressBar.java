@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 15/02/2016 (DD/MM/YYYY)
  */
-
 public class UIIndeterminateRadialProgressBar extends UIRadialProgressBar {
 
     public UIIndeterminateRadialProgressBar(UIComponent parentComponent, String name, PosXY topLeftPoint, PosXY bottomRightPoint,

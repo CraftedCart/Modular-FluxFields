@@ -14,7 +14,6 @@ import java.io.File;
 /**
  * Created by CraftedCart on 27/02/2016 (DD/MM/YYYY)
  */
-
 public class SelectGraphicsPreset {
 
     public static void askUser(final File configFile) {

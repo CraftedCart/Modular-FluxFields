@@ -20,11 +20,11 @@ import java.util.List;
 
 public class MessageFFProjectorGuiSaveSecurity implements IMessage {
 
-    BlockPos pos;
+    private BlockPos pos;
 
-    List<List<String>> permittedPlayers;
-    List<List<Object>> permissionGroups;
-    List<Object> generalPermissions;
+    private List<List<String>> permittedPlayers;
+    private List<List<Object>> permissionGroups;
+    private List<Object> generalPermissions;
 
     public MessageFFProjectorGuiSaveSecurity() {}
 
@@ -46,12 +46,12 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
 
         //Read players
         NBTTagCompound players = (NBTTagCompound) tag.getTag("permittedPlayers");
-        List<List<String>> playersList = new ArrayList<List<String>>();
+        List<List<String>> playersList = new ArrayList<>();
 
         int index = 0;
         while (players.hasKey(String.valueOf(index))) {
 
-            List<String> playerData = new ArrayList<String>();
+            List<String> playerData = new ArrayList<>();
 
             playerData.add(((NBTTagCompound) (players.getTag(String.valueOf(index)))).getString("uuid"));
             playerData.add(((NBTTagCompound) (players.getTag(String.valueOf(index)))).getString("name"));
@@ -65,12 +65,12 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
 
         //Read groups
         NBTTagCompound groups = (NBTTagCompound) tag.getTag("permissionGroups");
-        List<List<Object>> groupsList = new ArrayList<List<Object>>();
+        List<List<Object>> groupsList = new ArrayList<>();
 
         index = 0;
         while (groups.hasKey(String.valueOf(index))) {
 
-            List<Object> groupData = new ArrayList<Object>();
+            List<Object> groupData = new ArrayList<>();
 
             groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getString("id"));
             groupData.add(((NBTTagCompound) (groups.getTag(String.valueOf(index)))).getBoolean("perm1")); //Get group perm 1: Should kill players?
@@ -83,7 +83,7 @@ public class MessageFFProjectorGuiSaveSecurity implements IMessage {
 
         //Read general permissions
         NBTTagCompound perms = (NBTTagCompound) tag.getTag("generalPermissions");
-        List<Object> permsList = new ArrayList<Object>();
+        List<Object> permsList = new ArrayList<>();
         permsList.add(perms.getBoolean("perm1")); //Get general perm 1: Should kill hostile mobs?
         permsList.add(perms.getBoolean("perm2")); //Get general perm 2: Should kill peaceful mobs?
         this.generalPermissions = permsList;

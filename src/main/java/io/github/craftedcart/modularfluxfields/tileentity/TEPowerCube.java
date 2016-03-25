@@ -11,13 +11,13 @@ import java.util.List;
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
  */
-
 public class TEPowerCube extends TEPoweredBlock implements IUpdatePlayerListBox {
 
     private boolean doneWorldSetup = false;
     private int updateTime = 1;
     public List powerCubeLinks = new ArrayList<BlockPos>();
 
+    @SuppressWarnings("unchecked")
     @Override
     public void update() {
 

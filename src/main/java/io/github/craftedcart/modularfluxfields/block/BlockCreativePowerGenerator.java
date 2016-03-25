@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Created by CraftedCart on 23/12/2015 (DD/MM/YYYY)
  */
-
 public class BlockCreativePowerGenerator extends ModBlock implements ITileEntityProvider {
 
     public BlockCreativePowerGenerator() {

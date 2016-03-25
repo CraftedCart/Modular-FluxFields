@@ -3,7 +3,6 @@ package io.github.craftedcart.modularfluxfields.client.gui.guiutils;
 /**
  * Created by CraftedCart on 25/01/2015 (DD/MM/YYYY)
  */
-
 public class PosXY {
 
     protected double x;

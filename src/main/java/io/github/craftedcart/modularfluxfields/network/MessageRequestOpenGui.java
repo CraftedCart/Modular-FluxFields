@@ -1,7 +1,6 @@
 package io.github.craftedcart.modularfluxfields.network;
 
 import io.github.craftedcart.modularfluxfields.ModModularFluxFields;
-import io.github.craftedcart.modularfluxfields.tileentity.TEFFProjector;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,12 +20,11 @@ import java.util.UUID;
 /**
  * Created by CraftedCart on 30/11/2015 (DD/MM/YYYY)
  */
-
 public class MessageRequestOpenGui implements IMessage {
 
-    BlockPos pos;
-    EntityPlayer player;
-    int guiID;
+    private BlockPos pos;
+    private EntityPlayer player;
+    private int guiID;
 
     public MessageRequestOpenGui() {}
 
@@ -67,8 +65,6 @@ public class MessageRequestOpenGui implements IMessage {
             mainThread.addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
-
-                    TEFFProjector te = (TEFFProjector) ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.pos);
 
                     if (message.player != null) {
                         message.player.openGui(ModModularFluxFields.instance, message.guiID, message.player.worldObj, message.pos.getX(), message.pos.getY(), message.pos.getZ());

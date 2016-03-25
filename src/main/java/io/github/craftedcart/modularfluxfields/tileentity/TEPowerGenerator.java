@@ -5,7 +5,6 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 /**
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
-
 public class TEPowerGenerator extends TEPoweredBlock implements IUpdatePlayerListBox {
 
     @Override

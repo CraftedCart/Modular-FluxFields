@@ -15,24 +15,23 @@ import java.util.List;
 /**
  * Created by CraftedCart on 20/12/2015 (DD/MM/YYYY)
  */
+class NEICrystalRefineryCraftingHandler extends TemplateRecipeHandler implements ICraftingHandler {
 
-public class NEICrystalRefineryCraftingHandler extends TemplateRecipeHandler implements ICraftingHandler {
-
-    public class CachedCrystalRefineryRecipe extends CachedRecipe
+    private class CachedCrystalRefineryRecipe extends CachedRecipe
     {
-        public ArrayList<PositionedStack> ingredients;
+        ArrayList<PositionedStack> ingredients;
         public PositionedStack result;
 
-        public CachedCrystalRefineryRecipe(ItemStack item, ItemStack out) {
+        CachedCrystalRefineryRecipe(ItemStack item, ItemStack out) {
             result = new PositionedStack(out, 109, 24);
-            ingredients = new ArrayList<PositionedStack>();
+            ingredients = new ArrayList<>();
             setIngredient(item);
         }
 
         /**
          * @param itemStack The input item
          */
-        public void setIngredient(ItemStack itemStack) {
+        void setIngredient(ItemStack itemStack) {
             PositionedStack stack = new PositionedStack(itemStack, 41, 24, false);
             stack.setMaxSize(1);
             ingredients.add(stack);
@@ -47,7 +46,7 @@ public class NEICrystalRefineryCraftingHandler extends TemplateRecipeHandler imp
             return result;
         }
 
-        public void computeVisuals() {
+        void computeVisuals() {
             for (PositionedStack p : ingredients)
                 p.generatePermutations();
         }
