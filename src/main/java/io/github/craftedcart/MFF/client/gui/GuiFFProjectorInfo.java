@@ -357,10 +357,6 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
                         new AnchorPoint(0, 1));
                 vizComponent.setPanelBackgroundColor(UIColor.matBlue());
 
-                class VizData {
-                    double lifetime = 1;
-                }
-
                 final VizData vizData = new VizData();
 
                 vizComponent.setOnUpdateAction(new UIAction() {
@@ -418,4 +414,9 @@ public class GuiFFProjectorInfo extends GuiFFProjectorBase {
             GuiUtils.sequencer.close();
         }
     }
+
+    private class VizData {
+        double lifetime = 1;
+    }
+
 }

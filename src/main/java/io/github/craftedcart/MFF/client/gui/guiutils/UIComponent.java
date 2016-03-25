@@ -140,7 +140,8 @@ public class UIComponent {
     protected void checkMouseStateFromChildren() {
         boolean checkMouseOverChildComponent = false;
 
-        for (UIComponent component : childUiComponents) { //Loop through every component
+        for (int i = 0, childUiComponentsSize = childUiComponents.size(); i < childUiComponentsSize; i++) {
+            UIComponent component = childUiComponents.get(i); //Loop through every component
             if (component != null) {
                 if (component.mouseOver || component.mouseOverChildComponent) {
                     mouseOverChildComponent = true;
