@@ -19,14 +19,22 @@ public class ModModels {
 
     public static Model powerRelayModel;
     public static Model powerRelayLowPolyModel;
-    public static Model powerRelayOutputStaticModel;
-    public static Model powerRelayOutputRotateModel;
+    public static Model solarPowerGeneratorModel;
+    public static Model forcefieldProjectorModel;
+    public static Model powerCubeStaticModel;
+    public static Model powerCubePowerModel;
+    public static Model outputArmStaticModel;
+    public static Model outputArmRotateModel;
 
     public static void init() {
         powerRelayModel = loadModel("modularfluxfields:models/block/powerRelay.obj");
         powerRelayLowPolyModel = loadModel("modularfluxfields:models/block/powerRelayLowPoly.obj");
-        powerRelayOutputStaticModel = loadModel("modularfluxfields:models/block/powerRelayOutputStatic.obj");
-        powerRelayOutputRotateModel = loadModel("modularfluxfields:models/block/powerRelayOutputRotate.obj");
+        solarPowerGeneratorModel = loadModel("modularfluxfields:models/block/solarPowerGenerator.obj");
+        forcefieldProjectorModel = loadModel("modularfluxfields:models/block/forcefieldProjector.obj");
+        powerCubeStaticModel = loadModel("modularfluxfields:models/block/powerCubeStatic.obj");
+        powerCubePowerModel = loadModel("modularfluxfields:models/block/powerCubePower.obj");
+        outputArmStaticModel = loadModel("modularfluxfields:models/block/outputArmStatic.obj");
+        outputArmRotateModel = loadModel("modularfluxfields:models/block/outputArmRotate.obj");
     }
 
     private static Model loadModel(String resourceLocation) {

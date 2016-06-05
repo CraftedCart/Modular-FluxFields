@@ -174,3 +174,4 @@ gui.modularfluxfields:licenceExemptAviatorsOpenYourEyes=The MIDI file Open Your 
 
 #Debug
 gui.modularfluxfields:debug=Debug
+gui.modularfluxfields:reloadModels=Reload OBJ Models

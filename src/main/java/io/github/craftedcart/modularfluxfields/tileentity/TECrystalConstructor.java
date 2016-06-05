@@ -11,16 +11,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
 
 /**
  * Created by CraftedCart on 14/12/2015 (DD/MM/YYYY)
  */
-public class TECrystalConstructor extends TEPoweredBlock implements IInventory, ISidedInventory, IUpdatePlayerListBox {
+public class TECrystalConstructor extends TEPoweredBlock implements IInventory, ISidedInventory, ITickable {
 
     private ItemStack[] inventory;
     private String customName;
@@ -81,10 +77,14 @@ public class TECrystalConstructor extends TEPoweredBlock implements IInventory, 
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int index) {
-        ItemStack stack = this.getStackInSlot(index);
-        this.setInventorySlotContents(index, null);
-        return stack;
+    public ItemStack removeStackFromSlot(int index) {
+        if (inventory[index] != null) {
+            ItemStack itemstack = inventory[index];
+            inventory[index] = null;
+            return itemstack;
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -1,8 +1,8 @@
 package io.github.craftedcart.modularfluxfields.tileentity;
 
 import io.github.craftedcart.modularfluxfields.reference.PowerConf;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ITickable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)
  */
-public class TEPowerCube extends TEPoweredBlock implements IUpdatePlayerListBox {
+public class TEPowerCube extends TEPoweredBlock implements ITickable {
 
     private boolean doneWorldSetup = false;
     private int updateTime = 1;
-    public List powerCubeLinks = new ArrayList<BlockPos>();
+    public List powerCubeLinks = new ArrayList<>();
 
     @SuppressWarnings("unchecked")
     @Override
@@ -53,7 +53,7 @@ public class TEPowerCube extends TEPoweredBlock implements IUpdatePlayerListBox 
 
         //Get total power of connected Power Cubes
         double powerCubeLinksTotalPower = 0;
-        List powerCubeLinksToTransferEnergyTo = new ArrayList<BlockPos>();
+        List powerCubeLinksToTransferEnergyTo = new ArrayList<>();
         for (Iterator<Object> obj = powerCubeLinks.listIterator(); obj.hasNext();) {
             BlockPos pos = (BlockPos) obj.next();
             if (worldObj.getTileEntity(pos) != null) {

@@ -1,13 +1,13 @@
 package io.github.craftedcart.modularfluxfields.tileentity;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
 /**
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
-public class TEForcefield extends TileEntity implements IUpdatePlayerListBox {
+public class TEForcefield extends TileEntity implements ITickable {
 
     int decayTimer = 200; //10s
 

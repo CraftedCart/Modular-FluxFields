@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class UIRootComponent extends UIComponent {
 
-    protected UIDisplay uiDisplay;
-    protected boolean debugKeyHit = false;
-    protected int debugKeycode = 61; //Debug toggle key (F3)
-    protected UIComponent debugSelectedComponent = this;
+    private UIDisplay uiDisplay;
+    private boolean debugKeyHit = false;
+    private int debugKeycode = 61; //Debug toggle key (F3)
+    private UIComponent debugSelectedComponent = this;
     private boolean resizingDebugSidebar = false;
 
     /**
@@ -100,7 +100,7 @@ public class UIRootComponent extends UIComponent {
 
     }
 
-    protected void drawDebug() {
+    private void drawDebug() {
         final int w = Display.getWidth();
         final int h = Display.getHeight();
         final int mx = Mouse.getX();

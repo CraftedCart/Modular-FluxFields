@@ -2,6 +2,7 @@ package io.github.craftedcart.modularfluxfields.client.gui;
 
 import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
 import io.github.craftedcart.modularfluxfields.handler.ConfigurationHandler;
+import io.github.craftedcart.modularfluxfields.init.ModModels;
 import io.github.craftedcart.modularfluxfields.reference.MFFSettings;
 import io.github.craftedcart.modularfluxfields.reference.Reference;
 import io.github.craftedcart.modularfluxfields.utility.MathUtils;
@@ -404,35 +405,57 @@ public class GuiMFFSettings extends UIDisplay {
         settingsListBox.addItem("licenceExemptAviatorsOpenYourEyesLabel", licenceExemptAviatorsOpenYourEyesLabel);
         //</editor-fold>
 
-//        //<editor-fold desc="Divider 2">
-//        final UIComponent divider2 = new UIComponent(null,
-//                "divider2",
-//                new PosXY(0, 0),
-//                new PosXY(0, 2),
-//                new AnchorPoint(0, 0),
-//                new AnchorPoint(1, 0));
-//        divider2.setPanelBackgroundColor(UIColor.matGrey900());
-//        settingsListBox.addItem("divider2", divider2);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Debug Title">
-//        final UIComponent debugLabelComponent = new UIComponent(null,
-//                "debugLabelComponent",
-//                new PosXY(0, 0),
-//                new PosXY(0, 32),
-//                new AnchorPoint(0, 0),
-//                new AnchorPoint(1, 0));
-//        debugLabelComponent.setPanelBackgroundColor(UIColor.transparent());
-//
-//        final UILabel debugLabel = new UILabel(debugLabelComponent,
-//                "debugLabel",
-//                new PosXY(24, 6),
-//                new AnchorPoint(0, 0),
-//                GuiUtils.font);
-//        debugLabel.setText(StatCollector.translateToLocal("gui.modularfluxfields:debug"));
-//
-//        settingsListBox.addItem("debugLabelComponent", debugLabelComponent);
-//        //</editor-fold>
+        //<editor-fold desc="Divider 2">
+        final UIComponent divider2 = new UIComponent(null,
+                "divider2",
+                new PosXY(0, 0),
+                new PosXY(0, 2),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        divider2.setPanelBackgroundColor(UIColor.matGrey900());
+        settingsListBox.addItem("divider2", divider2);
+        //</editor-fold>
+
+        //<editor-fold desc="Debug Title">
+        final UIComponent debugLabelComponent = new UIComponent(null,
+                "debugLabelComponent",
+                new PosXY(0, 0),
+                new PosXY(0, 32),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        debugLabelComponent.setPanelBackgroundColor(UIColor.transparent());
+
+        final UILabel debugLabel = new UILabel(debugLabelComponent,
+                "debugLabel",
+                new PosXY(24, 6),
+                new AnchorPoint(0, 0),
+                GuiUtils.font);
+        debugLabel.setText(StatCollector.translateToLocal("gui.modularfluxfields:debug"));
+
+        settingsListBox.addItem("debugLabelComponent", debugLabelComponent);
+        //</editor-fold>
+
+        //<editor-fold desc="Reload models button">
+        final UITextButton reloadModelsButton = new UITextButton(null,
+                "reloadModelsButton",
+                new PosXY(0, 0),
+                new PosXY(0, 24),
+                new AnchorPoint(0, 0),
+                new AnchorPoint(1, 0));
+        reloadModelsButton.setPanelDefaultBackgroundColor(UIColor.matBlue());
+        reloadModelsButton.setPanelActiveBackgroundColor(UIColor.matBlueGrey300());
+        reloadModelsButton.setPanelHitBackgroundColor(UIColor.matBlueGrey700());
+        reloadModelsButton.uiLabel.setTextColor(UIColor.matWhite());
+        reloadModelsButton.uiLabel.setText(StatCollector.translateToLocal("gui.modularfluxfields:reloadModels"));
+        reloadModelsButton.setOnClickAction(new UIAction() {
+            @Override
+            public void execute() {
+                ModModels.init();
+            }
+        });
+
+        settingsListBox.addItem("reloadModelsButton", reloadModelsButton);
+        //</editor-fold>
 
     }
 

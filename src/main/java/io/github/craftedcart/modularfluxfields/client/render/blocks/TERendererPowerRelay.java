@@ -102,14 +102,14 @@ public class TERendererPowerRelay extends TileEntitySpecialRenderer {
 //                break;
         }
 
-        resourceLocation = new ResourceLocation("modularfluxfields:textures/blocks/powerRelayOutput.png");
+        resourceLocation = new ResourceLocation("modularfluxfields:textures/blocks/outputArm.png");
         Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
 
-        ModModels.drawModel(ModModels.powerRelayOutputStaticModel);
+        ModModels.drawModel(ModModels.outputArmStaticModel);
 
         GlStateManager.rotate((te.getWorld().getTotalWorldTime() + partialTick) * 3, 1, 0, 0);
 
-        ModModels.drawModel(ModModels.powerRelayOutputRotateModel);
+        ModModels.drawModel(ModModels.outputArmRotateModel);
 
         GlStateManager.popMatrix();
 

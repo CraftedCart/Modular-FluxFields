@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -26,7 +25,7 @@ import java.util.List;
  * Created by CraftedCart on 18/11/2015 (DD/MM/YYYY)
  */
 
-public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBox, IInventory {
+public class TEFFProjector extends TEPoweredBlock implements ITickable, IInventory {
 
     //Config-y stuff
     public int minX = -5;
@@ -116,10 +115,14 @@ public class TEFFProjector extends TEPoweredBlock implements IUpdatePlayerListBo
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int index) {
-        ItemStack stack = this.getStackInSlot(index);
-        this.setInventorySlotContents(index, null);
-        return stack;
+    public ItemStack removeStackFromSlot(int index) {
+        if (inventory[index] != null) {
+            ItemStack itemstack = inventory[index];
+            inventory[index] = null;
+            return itemstack;
+        } else {
+            return null;
+        }
     }
 
     @Override

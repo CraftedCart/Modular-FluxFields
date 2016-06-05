@@ -1,11 +1,11 @@
 package io.github.craftedcart.modularfluxfields.tileentity;
 
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.util.ITickable;
 
 /**
  * Created by CraftedCart on 24/12/2015 (DD/MM/YYYY)
  */
-public class TEPowerGenerator extends TEPoweredBlock implements IUpdatePlayerListBox {
+public class TEPowerGenerator extends TEPoweredBlock implements ITickable {
 
     @Override
     public void update() {

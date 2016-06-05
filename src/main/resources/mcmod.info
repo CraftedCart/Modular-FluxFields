@@ -4,13 +4,13 @@
       "name": "Modular FluxFields",
       "description": "Forcefields to protect your base!",
       "version": "1.0.0-Alpha3-Development",
-      "mcversion": "1.8",
+      "mcversion": "1.8.9",
       "url": "http://craftedcart.github.io/Modular-FluxFields",
       "updateUrl": "",
       "authorList": ["CraftedCart"],
       "credits": "FearLolzGuy, for moral support, and coming up with the concept",
       "logoFile": "/assets/modularfluxfields/MFFBanner.png",
       "screenshots": [],
-      "dependencies": ["NotEnoughItems"]
+      "dependencies": []
     }
 ]

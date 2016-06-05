@@ -64,7 +64,7 @@ public class ShaderUtils {
 
             IntBuffer logLength = ByteBuffer.allocateDirect(8).asIntBuffer();
             GL20.glGetShader(vertexShader, GL20.GL_INFO_LOG_LENGTH, logLength);
-            LogHelper.error(GL20.glGetShaderInfoLog(vertexShader, logLength.get(0))); //Get the co
+            LogHelper.error(GL20.glGetShaderInfoLog(vertexShader, logLength.get(0))); //Get the compile error
 
         } else {
             LogHelper.info("Successfully compiled the vertex shader");
