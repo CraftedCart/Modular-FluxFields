@@ -1,6 +1,10 @@
 package io.github.craftedcart.modularfluxfields.client.gui;
 
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
+import io.github.craftedcart.mcliquidui.component.UIComponent;
+import io.github.craftedcart.mcliquidui.component.UILabel;
+import io.github.craftedcart.mcliquidui.component.UIProgressBar;
+import io.github.craftedcart.mcliquidui.component.UIRadialProgressBar;
+import io.github.craftedcart.mcliquidui.util.*;
 import io.github.craftedcart.modularfluxfields.tileentity.TEFFProjector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

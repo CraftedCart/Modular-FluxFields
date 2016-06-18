@@ -1,11 +1,11 @@
 package io.github.craftedcart.modularfluxfields.client.gui;
 
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
+import io.github.craftedcart.mcliquidui.component.*;
+import io.github.craftedcart.mcliquidui.util.*;
 import io.github.craftedcart.modularfluxfields.handler.ConfigurationHandler;
 import io.github.craftedcart.modularfluxfields.init.ModModels;
 import io.github.craftedcart.modularfluxfields.reference.MFFSettings;
 import io.github.craftedcart.modularfluxfields.reference.Reference;
-import io.github.craftedcart.modularfluxfields.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.StatCollector;

@@ -42,6 +42,9 @@ repositories {
         name = "forge"
         url = "http://files.minecraftforge.net/maven"
     }
+    maven {
+        url "http://dl.bintray.com/craftedcart/CraftedCart-Java"
+    }
     mavenCentral()
 }
 
@@ -71,6 +74,7 @@ dependencies {
 //    provided "codechicken:CodeChickenCore:1.8-1.0.5.36:dev"
 //    provided "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
     compile "org.slick2d:slick2d-core:1.0.1"
+    compile "io.github.craftedcart.mcliquidui:MCLiquidUI:1.0.1-Minecraft1.8.9"
 }
 
 processResources {

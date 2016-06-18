@@ -1,6 +1,8 @@
 package io.github.craftedcart.modularfluxfields.client.gui;
 
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
+import io.github.craftedcart.mcliquidui.component.UIDualSlider;
+import io.github.craftedcart.mcliquidui.component.UILabel;
+import io.github.craftedcart.mcliquidui.util.*;
 import io.github.craftedcart.modularfluxfields.handler.NetworkHandler;
 import io.github.craftedcart.modularfluxfields.network.MessageFFProjectorGuiSaveSizing;
 import io.github.craftedcart.modularfluxfields.reference.FFProjectorConf;

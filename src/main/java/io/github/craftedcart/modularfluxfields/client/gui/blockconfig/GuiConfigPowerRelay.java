@@ -1,6 +1,7 @@
 package io.github.craftedcart.modularfluxfields.client.gui.blockconfig;
 
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
+import io.github.craftedcart.mcliquidui.component.*;
+import io.github.craftedcart.mcliquidui.util.*;
 import io.github.craftedcart.modularfluxfields.handler.NetworkHandler;
 import io.github.craftedcart.modularfluxfields.network.MessageSetInputSide;
 import io.github.craftedcart.modularfluxfields.network.MessageSetOutputSide;

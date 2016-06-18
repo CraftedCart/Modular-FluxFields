@@ -115,13 +115,6 @@ gui.modularfluxfields:now=Now
 gui.modularfluxfields:minsAgo=minutes ago
 gui.modularfluxfields:secsAgo=seconds ago
 
-gui.modularfluxfields:downloadingDeps=Downloading Dependencies
-gui.modularfluxfields:modularfluxfieldsDownloadingDeps=Modular FluxFields is now downloading dependencies
-gui.modularfluxfields:downloadFailed=Download failed
-gui.modularfluxfields:loadCannotContinue=Loading Minecraft cannot continue without the required dependencies for Modular FluxFields
-gui.modularfluxfields:quit=Quit
-gui.modularfluxfields:manualInstall=Manual Installation Guide
-
 #Stats
 stat.modularfluxfields:+100%Speed=§a+100% Speed
 stat.modularfluxfields:+25%PowerUsageTick=§c+25% Power Usage / tick

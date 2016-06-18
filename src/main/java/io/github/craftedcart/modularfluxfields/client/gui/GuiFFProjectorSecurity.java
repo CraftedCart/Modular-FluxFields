@@ -2,9 +2,10 @@ package io.github.craftedcart.modularfluxfields.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
+import io.github.craftedcart.mcliquidui.component.*;
+import io.github.craftedcart.mcliquidui.util.*;
 import io.github.craftedcart.modularfluxfields.tileentity.TEFFProjector;
-import io.github.craftedcart.modularfluxfields.utility.DependencyUtils;
+import io.github.craftedcart.mcliquidui.util.DependencyUtils;
 import io.github.craftedcart.modularfluxfields.utility.LogHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +40,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
     private UILabel playerOptionsUUIDLabel;
     private UILabel playerOptionsGroupLabel;
     private UILabel groupNameLabel;
+    private UIListBox playersListBox;
 
     /**
      * <b>Array possibilities:</b><br>
@@ -104,7 +106,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
                     GuiUtils.font);
             playersTitleLabel.setText(StatCollector.translateToLocal("gui.modularfluxfields:players"));
 
-            final UIListBox playersListBox = new UIListBox(getWorkspace(),
+            playersListBox = new UIListBox(getWorkspace(),
                     "playersListBox",
                     new PosXY(12, 48),
                     new PosXY(-12, -24),
@@ -253,6 +255,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
                     new AnchorPoint(0, 0),
                     new AnchorPoint(0, 0));
             playerOptionsBodyImage.setPanelBackgroundColor(UIColor.transparent());
+            playerOptionsBodyImage.setUnloadTextureWhenDone(true);
 
             playerOptionsNameLabel = new UILabel(playerOptionsPlayerInfo,
                     "playerOptionsNameLabel",
@@ -637,6 +640,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
                                         new AnchorPoint(0, 0),
                                         new AnchorPoint(0, 0));
                                 listItemPlayerFace.setPanelBackgroundColor(UIColor.transparent());
+                                listItemPlayerFace.setUnloadTextureWhenDone(true);
                                 final UILabel listItemPlayerNameLabel = new UILabel(listItem,
                                         "playerNameLabel",
                                         new PosXY(36, 4),
@@ -656,13 +660,15 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
                                     undoHistory.add(new Object[]{UndoAction.addPlayer, playerUUID});
                                 }
 
+
+                                //Get Crafatar face
                                 SecurityTaskManager.addTask(new UIAction() {
                                     @Override
                                     public void execute() {
                                         try {
 
                                             BufferedImage faceImage = DependencyUtils.httpGetImage("https://crafatar.com/avatars/" + playerUUID + "?overlay=true");
-                                            listItemPlayerFace.setQueuedImage(faceImage);
+                                            listItemPlayerFace.setBufferedImage(faceImage);
 
                                         } catch (IOException e) {
                                             e.printStackTrace();
@@ -896,7 +902,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
         //<editor-fold desc="Get player body render">
         if (selectedPlayerUUIDs.size() > 0) {
             if (bodyImageCache.containsKey(selectedPlayerUUIDs.get(0))) {
-                playerOptionsBodyImage.setQueuedImage(bodyImageCache.get(selectedPlayerUUIDs.get(0)));
+                playerOptionsBodyImage.setBufferedImage(bodyImageCache.get(selectedPlayerUUIDs.get(0)));
             } else {
 
                 SecurityTaskManager.addTask(new UIAction() {
@@ -908,7 +914,7 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
 
                             BufferedImage bodyImage = DependencyUtils.httpGetImage("https://crafatar.com/renders/body/" + uuidToGet + "?overlay=true");
                             if (selectedPlayerUUIDs.get(0).equals(uuidToGet)) {
-                                playerOptionsBodyImage.setQueuedImage(bodyImage);
+                                playerOptionsBodyImage.setBufferedImage(bodyImage);
                             }
                             bodyImageCache.put(uuidToGet, bodyImage);
 
@@ -1048,6 +1054,26 @@ public class GuiFFProjectorSecurity extends GuiFFProjectorBase {
 
     }
 
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+
+        if (playerOptionsBodyImage.image != null) {
+            playerOptionsBodyImage.image.release();
+
+            LogHelper.info("Unloaded playerOptionsBodyImage.image");
+        }
+
+        for (UIComponent component : playersListBox.childUiComponents) {
+            UIComponent playerFaceComponent = component.getChildUiComponentByName("playerFaceComponent");
+            UILabel playerNameLabel = (UILabel) component.getChildUiComponentByName("playerNameLabel");
+            if (playerFaceComponent.image != null) {
+                playerFaceComponent.image.release();
+
+                LogHelper.info("Unloaded playerFaceComponent.image for " + playerNameLabel.text);
+            }
+        }
+    }
 }
 
 class PlayerData {

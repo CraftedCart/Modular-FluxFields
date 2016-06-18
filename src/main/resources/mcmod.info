@@ -11,6 +11,6 @@
       "credits": "FearLolzGuy, for moral support, and coming up with the concept",
       "logoFile": "/assets/modularfluxfields/MFFBanner.png",
       "screenshots": [],
-      "dependencies": []
+      "dependencies": ["MCLiquidUI"]
     }
 ]

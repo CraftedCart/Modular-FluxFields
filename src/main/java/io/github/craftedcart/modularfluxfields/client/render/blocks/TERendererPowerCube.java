@@ -2,22 +2,14 @@ package io.github.craftedcart.modularfluxfields.client.render.blocks;
 
 import io.github.craftedcart.modularfluxfields.init.ModModels;
 import io.github.craftedcart.modularfluxfields.reference.MFFSettings;
-import io.github.craftedcart.modularfluxfields.reference.PowerConf;
 import io.github.craftedcart.modularfluxfields.tileentity.TEPowerCube;
-import io.github.craftedcart.modularfluxfields.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-
-import java.util.List;
 
 /**
  * Created by CraftedCart on 21/11/2015 (DD/MM/YYYY)

@@ -1,7 +1,8 @@
 package io.github.craftedcart.modularfluxfields.client.gui;
 
+import io.github.craftedcart.mcliquidui.component.*;
+import io.github.craftedcart.mcliquidui.util.*;
 import io.github.craftedcart.modularfluxfields.ModModularFluxFields;
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.*;
 import io.github.craftedcart.modularfluxfields.handler.GuiHandler;
 import io.github.craftedcart.modularfluxfields.handler.NetworkHandler;
 import io.github.craftedcart.modularfluxfields.network.MessageRequestOpenGui;
@@ -122,7 +123,7 @@ public class GuiFFProjectorBase extends UIDisplay {
         sidebarSizingButton.setOnClickAction(new UIAction() {
             @Override
             public void execute() {
-                player.openGui(ModModularFluxFields.instance, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI,te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+                player.openGui(ModModularFluxFields.instance, GuiHandler.FFProjector_Sizing_TILE_ENTITY_GUI, te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
             }
         });
 

@@ -1,10 +1,10 @@
 package io.github.craftedcart.modularfluxfields.client.gui;
 
 import com.google.common.collect.Lists;
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.AnchorPoint;
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.PosXY;
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.UIAction;
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.UILineGraph;
+import io.github.craftedcart.mcliquidui.util.AnchorPoint;
+import io.github.craftedcart.mcliquidui.util.PosXY;
+import io.github.craftedcart.mcliquidui.util.UIAction;
+import io.github.craftedcart.mcliquidui.component.UILineGraph;
 import io.github.craftedcart.modularfluxfields.handler.NetworkHandler;
 import io.github.craftedcart.modularfluxfields.network.MessageRequestPowerStats;
 import io.github.craftedcart.modularfluxfields.tileentity.TEFFProjector;

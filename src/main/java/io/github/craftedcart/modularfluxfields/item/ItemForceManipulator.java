@@ -1,7 +1,7 @@
 package io.github.craftedcart.modularfluxfields.item;
 
 import io.github.craftedcart.modularfluxfields.ModModularFluxFields;
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.UIColor;
+import io.github.craftedcart.mcliquidui.util.UIColor;
 import io.github.craftedcart.modularfluxfields.handler.GuiHandler;
 import io.github.craftedcart.modularfluxfields.reference.Names;
 import io.github.craftedcart.modularfluxfields.tileentity.TEPowerRelay;

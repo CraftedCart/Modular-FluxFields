@@ -21,8 +21,4 @@ abstract class CommonProxy implements IProxy {
         NetworkRegistry.INSTANCE.registerGuiHandler(ModModularFluxFields.instance, new GuiHandler());
     }
 
-    @Override
-    public void getDeps() throws IOException {
-        //No-Op (Yet?)
-    }
 }

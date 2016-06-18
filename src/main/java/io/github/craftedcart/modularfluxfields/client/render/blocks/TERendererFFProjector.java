@@ -1,25 +1,15 @@
 package io.github.craftedcart.modularfluxfields.client.render.blocks;
 
-import io.github.craftedcart.modularfluxfields.client.gui.guiutils.UIColor;
 import io.github.craftedcart.modularfluxfields.init.ModModels;
 import io.github.craftedcart.modularfluxfields.reference.MFFSettings;
 import io.github.craftedcart.modularfluxfields.tileentity.TEFFProjector;
-import io.github.craftedcart.modularfluxfields.tileentity.TEPoweredBlock;
-import io.github.craftedcart.modularfluxfields.utility.LogHelper;
-import io.github.craftedcart.modularfluxfields.utility.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.util.glu.GLU;
 
 /**
  * Created by CraftedCart on 22/12/2015 (DD/MM/YYYY)
